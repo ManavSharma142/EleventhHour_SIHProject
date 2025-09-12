@@ -6,6 +6,8 @@ var JWT_SECRET string
 var MONGODB_USERNAME string
 var MONGODB_PASSWORD string
 var MONGODB_CLUSTER string
+var GOOGLE_CLIENT_ID string
+var GOOGLE_CLIENT_SECRET string
 
 var Yellow = color.New(color.FgYellow).SprintFunc()
 var Red = color.New(color.FgRed).SprintFunc()

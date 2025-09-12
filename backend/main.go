@@ -27,17 +27,33 @@ func loadEnv() {
 }
 
 func main() {
+	// Load env
 	loadEnv()
 	utils.MONGODB_USERNAME = os.Getenv("MONGODB_USERNAME")
 	utils.MONGODB_PASSWORD = os.Getenv("MONGODB_PASSWORD")
 	utils.MONGODB_CLUSTER = os.Getenv("MONGODB_CLUSTER")
+	utils.JWT_SECRET = os.Getenv("JWT_SECRET")
+	utils.GOOGLE_CLIENT_ID = os.Getenv("GOOGLE_CLIENT_ID")
+	utils.GOOGLE_CLIENT_SECRET = os.Getenv("GOOGLE_CLIENT_SECRET")
+
+	// Init DB
 	database.DBinit()
 
+	// Init Google OAuth
+	auth.InitGoogleOAuth()
+
+	// Setup router
 	r := mux.NewRouter()
 	r.HandleFunc("/login", auth.Login).Methods("POST")
 	r.HandleFunc("/register", auth.Register).Methods("POST")
 	r.HandleFunc("/validate", auth.Validate).Methods("GET")
+	r.HandleFunc("/google/login", auth.GoogleLogin).Methods("GET")
+	r.HandleFunc("/google/callback", auth.GoogleCallback).Methods("GET")
+
+	// Wrap with CORS
 	corsWrappedRouter := router.CorsMiddleware(r)
+
+	// Start server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
