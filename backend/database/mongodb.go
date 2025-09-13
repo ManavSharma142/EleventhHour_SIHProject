@@ -18,6 +18,8 @@ type Data struct {
 	ID       any    `bson:"_id,omitempty"`
 	Username string `bson:"username"`
 	Password string `bson:"password"`
+	OAuth    string `bson:"oauth"`
+	Email    string `bson:"email"`
 }
 
 var dbcoll *mongo.Collection
@@ -58,7 +60,7 @@ func GetUserPassword(username string) (string, error) {
 	return result.Password, nil
 }
 
-func AddUser(username string, password string) error {
+func AddUser(username string, password string, oauthtoken string, email string) error {
 	filter := bson.M{"username": username}
 	var existing Data
 	dbcoll.FindOne(context.TODO(), filter).Decode(&existing)
@@ -71,6 +73,8 @@ func AddUser(username string, password string) error {
 	_, err := dbcoll.InsertOne(context.TODO(), bson.M{
 		"username": username,
 		"password": password,
+		"oauth":    oauthtoken,
+		"email":    email,
 	})
 	if err != nil {
 		log.Println("Error writing in DB:", err)
@@ -78,4 +82,21 @@ func AddUser(username string, password string) error {
 	}
 
 	return nil
+}
+
+func GetUserEmail(email string) (string, error) {
+	var result Data
+	filter := bson.M{"email": email}
+	err := dbcoll.FindOne(context.TODO(), filter).Decode(&result)
+	if err != nil {
+		log.Println("Error finding user:", err)
+	} else {
+		fmt.Printf("User found: %+v\n", result.ID)
+	}
+	//log.Println(result)
+	if result.Username == "" {
+		return "", errors.New("not exist")
+	}
+
+	return result.Username, nil
 }
