@@ -20,9 +20,12 @@ type Data struct {
 	Password string `bson:"password"`
 	OAuth    string `bson:"oauth"`
 	Email    string `bson:"email"`
+	SplitID  string `bson:"split"`
 }
 
-var dbcoll *mongo.Collection
+var Dbcoll *mongo.Collection
+var Splitcoll *mongo.Collection
+var Progresscoll *mongo.Collection
 
 func DBinit() {
 	uri := utils.MONGODB_CLUSTER
@@ -38,7 +41,11 @@ func DBinit() {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 	coll := client.Database("nothing").Collection("user")
-	dbcoll = coll
+	coll2 := client.Database("nothing").Collection("splits")
+	coll3 := client.Database("nothing").Collection("progress")
+	Progresscoll = coll3
+	Splitcoll = coll2
+	Dbcoll = coll
 	log.Println(utils.Green("Database initiated sucessfully"))
 
 }
@@ -46,7 +53,7 @@ func DBinit() {
 func GetUserPassword(username string) (string, error) {
 	var result Data
 	filter := bson.M{"username": username}
-	err := dbcoll.FindOne(context.TODO(), filter).Decode(&result)
+	err := Dbcoll.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		log.Println("Error finding user:", err)
 	} else {
@@ -63,18 +70,19 @@ func GetUserPassword(username string) (string, error) {
 func AddUser(username string, password string, oauthtoken string, email string) error {
 	filter := bson.M{"username": username}
 	var existing Data
-	dbcoll.FindOne(context.TODO(), filter).Decode(&existing)
+	Dbcoll.FindOne(context.TODO(), filter).Decode(&existing)
 	if existing.Username != "" {
 		log.Println("user already exists")
 		return errors.New("user already exists")
 	}
 
 	alldata[username] = password
-	_, err := dbcoll.InsertOne(context.TODO(), bson.M{
+	_, err := Dbcoll.InsertOne(context.TODO(), bson.M{
 		"username": username,
 		"password": password,
 		"oauth":    oauthtoken,
 		"email":    email,
+		"split":    "",
 	})
 	if err != nil {
 		log.Println("Error writing in DB:", err)
@@ -87,7 +95,7 @@ func AddUser(username string, password string, oauthtoken string, email string) 
 func GetUserEmail(email string) (string, error) {
 	var result Data
 	filter := bson.M{"email": email}
-	err := dbcoll.FindOne(context.TODO(), filter).Decode(&result)
+	err := Dbcoll.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
 		log.Println("Error finding user:", err)
 	} else {
