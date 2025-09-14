@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import TempHero from "./components/TempHero";
 import TempLogin from "./components/TempLogin";
 import TempRegister from "./components/TempRegister";
-import TempDashboard from "./components/TempDashboard";
+import TempDashboard from "./pages/TempDashboard";
 
 export default function App() {
   return (

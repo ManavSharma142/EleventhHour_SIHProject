@@ -1,3 +1,43 @@
+/* In src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-color: #0d40a5;
+  --secondary-color: #232f48;
+  --text-primary: #ffffff;
+  --text-secondary: #92a4c9;
+  --background-color: #111722;
+}
+
+body {
+  font-family: Inter, "Noto Sans", sans-serif;
+}
+
+@layer components {
+  .form-input {
+    @apply w-full h-12 px-3 text-base text-white bg-transparent border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] placeholder:text-[var(--text-secondary)];
+  }
+  .input-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] pointer-events-none;
+  }
+  .form-input-with-icon {
+    @apply pl-10;
+  }
+  .select-input {
+      @apply appearance-none bg-no-repeat;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2392a4c9' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-size: 1.5em 1.5em;
+  }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .calendar-day {
+    aspect-ratio: 1 / 1;
+  }
+}
