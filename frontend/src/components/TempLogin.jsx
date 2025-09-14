@@ -32,8 +32,7 @@ export default function LoginPage() {
   
   const handleGoogleLogin = () => {
     // Placeholder for your Google Sign-In logic
-    console.log("Redirecting to Google Sign-In...");
-    alert("Signing in with Google");
+    window.location.href = "http://localhost:8000/google/login";
   };
 
   return (
