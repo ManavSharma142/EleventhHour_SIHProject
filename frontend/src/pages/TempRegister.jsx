@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaUser, FaEnvelope, FaLock, FaBirthdayCake } from "react-icons/fa";
 import { MdWc, MdFitnessCenter, MdTrendingUp } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 
 // Reusable component for the brand logo SVG
 const FlexoraLogo = () => (
@@ -24,8 +25,11 @@ const FlexoraLogo = () => (
 );
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
+    username: "",
     email: "",
     password: "",
     age: "",
@@ -53,7 +57,7 @@ export default function SignUpPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (Number(formData.age) < 0) {
@@ -61,8 +65,26 @@ export default function SignUpPage() {
       return;
     }
 
-    console.log("Form submitted:", formData);
-    alert("Sign-up successful! Check the console for form data.");
+    try {
+      const res = await fetch("http://localhost:8000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+        }),
+      });
+
+      if (res.ok) {
+        navigate("/login");
+      } else {
+        alert("Registration failed");
+      }
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      alert("Something went wrong");
+    }
   };
 
   return (
@@ -75,9 +97,12 @@ export default function SignUpPage() {
             Flexora
           </h1>
         </div>
-        <button className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-md h-10 px-5 bg-transparent border border-white text-white text-sm font-bold hover:bg-white hover:text-[var(--background-color)] transition-colors duration-300">
+        <Link
+          to="/login"
+          className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-md h-10 px-5 bg-transparent border border-white text-white text-sm font-bold hover:bg-white hover:text-[var(--background-color)] transition-colors duration-300"
+        >
           Log In
-        </button>
+        </Link>
       </header>
 
       {/* Main */}
@@ -95,7 +120,7 @@ export default function SignUpPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-2">
-              {/* Name */}
+              {/* Name (not sent to backend) */}
               <div className="sm:col-span-2">
                 <label
                   className="block text-sm font-medium text-[var(--text-secondary)] mb-1"
@@ -111,6 +136,28 @@ export default function SignUpPage() {
                     type="text"
                     placeholder="Your name"
                     value={formData.name}
+                    onChange={handleChange}
+                    className="form-input form-input-with-icon"
+                  />
+                </div>
+              </div>
+
+              {/* Username */}
+              <div className="sm:col-span-2">
+                <label
+                  className="block text-sm font-medium text-[var(--text-secondary)] mb-1"
+                  htmlFor="username"
+                >
+                  Username
+                </label>
+                <div className="relative">
+                  <FaUser className="input-icon" />
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Choose a username"
+                    value={formData.username}
                     onChange={handleChange}
                     className="form-input form-input-with-icon"
                   />
@@ -291,7 +338,7 @@ export default function SignUpPage() {
             Already have an account?{" "}
             <a
               className="font-medium text-[var(--primary-color)] hover:text-opacity-80 underline"
-              href="#"
+              href="login"
             >
               Log In
             </a>

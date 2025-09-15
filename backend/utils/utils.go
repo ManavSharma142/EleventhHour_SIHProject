@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/fatih/color"
 	"github.com/gorilla/websocket"
+	"google.golang.org/genai"
 )
 
 var JWT_SECRET string
@@ -44,3 +45,4 @@ func ToPtr[T any](v T) *T {
 var LiveConn = make(map[*websocket.Conn]bool)
 var ConnUser = make(map[*websocket.Conn]string)
 var UserConn = make(map[string]*websocket.Conn)
+var Memory = make(map[string][]*genai.Content)

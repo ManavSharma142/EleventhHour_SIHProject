@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Reusable SVG component for the brand logo
 const FlexoraLogo = () => (
@@ -10,26 +11,42 @@ const FlexoraLogo = () => (
 
 // Reusable SVG component for the Google logo
 const GoogleLogo = () => (
-    <svg className="h-6 w-6" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <path d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" fill="#FFC107"></path>
-        <path d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" fill="#FF3D00"></path>
-        <path d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.651-3.356-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" fill="#4CAF50"></path>
-        <path d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C41.38,36.14,44,30.638,44,24C44,22.659,43.862,21.35,43.611,20.083z" fill="#1976D2"></path>
-    </svg>
+  <svg className="h-6 w-6" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <path d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" fill="#FFC107"></path>
+    <path d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" fill="#FF3D00"></path>
+    <path d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.651-3.356-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" fill="#4CAF50"></path>
+    <path d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C41.38,36.14,44,30.638,44,24C44,22.659,43.862,21.35,43.611,20.083z" fill="#1976D2"></path>
+  </svg>
 );
 
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Placeholder for your login logic
-    console.log("Logging in with:", { email, password });
-    alert(`Signing in with email: ${email}`);
+    try {
+      const res = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+        credentials: "include", // important if backend sets cookies
+      });
+
+      if (!res.ok) throw new Error("Invalid credentials");
+
+      const data = await res.json();
+      console.log("Login success:", data);
+      navigate("/app");
+    } catch (err) {
+      console.error("Login failed:", err);
+      alert("Login failed");
+    }
+
   };
-  
+
   const handleGoogleLogin = () => {
     // Placeholder for your Google Sign-In logic
     window.location.href = "http://localhost:8000/google/login";
@@ -53,12 +70,12 @@ export default function LoginPage() {
                 <a className="hover:text-white transition-colors duration-300" href="#">Nutrition</a>
                 <a className="hover:text-white transition-colors duration-300" href="#">Community</a>
               </nav>
-              <button className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-[#232f48] hover:bg-[#2A3751] transition-all duration-300 ease-in-out text-white text-sm font-bold shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_6px_20px_0_rgb(0,0,0,0.2)]">
+              <Link to="/signup" className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-[#232f48] hover:bg-[#2A3751] transition-all duration-300 ease-in-out text-white text-sm font-bold shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_6px_20px_0_rgb(0,0,0,0.2)]">
                 <span className="truncate">Sign Up</span>
-              </button>
+              </Link>
             </div>
           </header>
-          
+
           <main className="flex flex-1 items-center justify-center py-16">
             <div className="w-full max-w-md p-8">
               <div className="text-center mb-8">
@@ -68,17 +85,17 @@ export default function LoginPage() {
 
               <form className="space-y-6" onSubmit={handleLogin}>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="email">Email</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="username">Username</label>
                   <div className="relative">
-                    <input 
-                      id="email" 
-                      name="email" 
-                      type="email" 
-                      autoComplete="email" 
-                      required 
-                      placeholder="you@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                    <input
+                      id="username"
+                      name="username"
+                      type="text"
+                      autoComplete="username"
+                      required
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setusername(e.target.value)}
                       className="form-input block w-full rounded-lg border-transparent bg-[#1C2539] h-14 p-4 text-white placeholder-[#6C7A99] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent transition-all duration-300 ease-in-out shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_6px_20px_0_rgb(0,0,0,0.2)] focus:shadow-[0_6px_20px_0_rgb(13,64,165,0.3)]"
                     />
                   </div>
@@ -90,12 +107,12 @@ export default function LoginPage() {
                     <a className="text-sm text-[var(--primary-color)] hover:underline transition-colors duration-300" href="#">Forgot Password?</a>
                   </div>
                   <div className="mt-2 relative">
-                    <input 
-                      id="password" 
-                      name="password" 
-                      type="password" 
-                      autoComplete="current-password" 
-                      required 
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -121,7 +138,7 @@ export default function LoginPage() {
                   </div>
                 </div>
                 <div className="mt-6">
-                  <button 
+                  <button
                     type="button"
                     onClick={handleGoogleLogin}
                     className="flex w-full items-center justify-center gap-3 rounded-lg bg-[#232f48] h-12 px-5 text-base font-medium text-white shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:bg-[#2A3751] hover:shadow-[0_6px_20px_0_rgb(0,0,0,0.2)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-offset-[#0B111D] transition-all duration-300 ease-in-out"

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Button } from '../ui/button';
+import { Button } from '../ui/Button';
 import { Activity, Mail } from 'lucide-react';
 
 export function LandingFooter() {
