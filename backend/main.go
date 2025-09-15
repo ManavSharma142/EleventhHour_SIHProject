@@ -45,6 +45,20 @@ func main() {
 	utils.QDRANT_URL = os.Getenv("QDRANT_URL")
 	utils.QDRANT_API = os.Getenv("QDRANT_API")
 
+	utils.FRONTEND_URL = os.Getenv("FRONTEND_URL")
+	if utils.FRONTEND_URL == "" {
+		utils.FRONTEND_URL = "http://localhost:5173"
+	}
+	utils.BACKEND_URL = os.Getenv("BACKEND_URL")
+	if utils.BACKEND_URL == "" {
+		utils.BACKEND_URL = "http://localhost:8000"
+	}
+	utils.PROD = os.Getenv("PROD")
+	if utils.PROD == "true" {
+		utils.ProdBOOL = true
+	} else {
+		utils.ProdBOOL = false
+	}
 	database.DBinit()
 	auth.InitGoogleOAuth()
 
@@ -75,20 +89,6 @@ func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
-	}
-	utils.FRONTEND_URL = os.Getenv("FRONTEND_URL")
-	if utils.FRONTEND_URL == "" {
-		utils.FRONTEND_URL = "http://localhost:5173"
-	}
-	utils.BACKEND_URL = os.Getenv("BACKEND_URL")
-	if utils.BACKEND_URL == "" {
-		utils.BACKEND_URL = "http://localhost:8000"
-	}
-	utils.PROD = os.Getenv("PROD")
-	if utils.PROD == "true" {
-		utils.ProdBOOL = true
-	} else {
-		utils.ProdBOOL = false
 	}
 
 	srv := &http.Server{

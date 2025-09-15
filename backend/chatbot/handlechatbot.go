@@ -50,8 +50,8 @@ func HandleChatbot(w http.ResponseWriter, r *http.Request) {
 			log.Println(utils.Red(err))
 			break
 		}
-		log.Printf("Received message from %s: %s", username, msg.Text)
-		Chatbot(msg.Text, username)
+		AddToMemoryUSER(username, msg.Text)
+		Chatbot(utils.Memory[username], username)
 	}
 }
 

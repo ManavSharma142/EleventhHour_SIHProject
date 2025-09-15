@@ -31,9 +31,8 @@ var ToolDeciderAgent = genai.FunctionDeclaration{
 						Description: "Set to true if the getcurremtsplit tool should be used.",
 					},
 					"username": {
-						Type:        genai.TypeArray,
+						Type:        genai.TypeString,
 						Description: "username of the user whose current split is to be fetched",
-						Items:       &genai.Schema{Type: genai.TypeString},
 					},
 				},
 			},
@@ -46,9 +45,22 @@ var ToolDeciderAgent = genai.FunctionDeclaration{
 						Description: "Set to true if the getactivedays tool should be used.",
 					},
 					"username": {
-						Type:        genai.TypeArray,
+						Type:        genai.TypeString,
 						Description: "username of the user whose active day / streak data is to be fetched",
-						Items:       &genai.Schema{Type: genai.TypeString},
+					},
+				},
+			},
+			"getgooglefittoday": {
+				Type:        genai.TypeObject,
+				Description: "tool to get today's google fit data of user like steps, calories burnt",
+				Properties: map[string]*genai.Schema{
+					"usetool": {
+						Type:        genai.TypeBoolean,
+						Description: "Set to true if the getgooglefittoday tool should be used.",
+					},
+					"username": {
+						Type:        genai.TypeString,
+						Description: "username of the user whose google fit data is to be fetched",
 					},
 				},
 			},
