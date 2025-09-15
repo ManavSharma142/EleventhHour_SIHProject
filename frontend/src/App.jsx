@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+// Corrected import paths to point to the 'pages' directory
 import TempHero from "./components/TempHero";
 import TempLogin from "./components/TempLogin";
 import TempRegister from "./components/TempRegister";
