@@ -26,6 +26,8 @@ type Data struct {
 var Dbcoll *mongo.Collection
 var Splitcoll *mongo.Collection
 var Progresscoll *mongo.Collection
+var Activedayscoll *mongo.Collection
+var Flexcoinscoll *mongo.Collection
 
 func DBinit() {
 	uri := utils.MONGODB_CLUSTER
@@ -43,6 +45,10 @@ func DBinit() {
 	coll := client.Database("nothing").Collection("user")
 	coll2 := client.Database("nothing").Collection("splits")
 	coll3 := client.Database("nothing").Collection("progress")
+	coll4 := client.Database("nothing").Collection("activedays")
+	coll5 := client.Database("nothing").Collection("flexcoins")
+	Flexcoinscoll = coll5
+	Activedayscoll = coll4
 	Progresscoll = coll3
 	Splitcoll = coll2
 	Dbcoll = coll
@@ -107,4 +113,16 @@ func GetUserEmail(email string) (string, error) {
 	}
 
 	return result.Username, nil
+}
+func GetUser(username string) (*Data, error) {
+	var user Data
+	err := Dbcoll.FindOne(context.TODO(), bson.M{"username": username}).Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("user not found")
+		}
+		log.Println("DB error while fetching user:", err)
+		return nil, err
+	}
+	return &user, nil
 }

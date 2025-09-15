@@ -98,7 +98,6 @@ func GenerateAIWorkoutSplits(request WorkoutRequest) AIWorkoutSplit {
 			retryres := retryGenerateAIWorkoutSplits(request)
 			return utils.ToPtr(retryres), nil
 		}
-		workout.ID = uuid.New().String()
 		return workout, nil
 	})
 	workout, err := workoutFLow.Run(ctx, &request)
@@ -107,6 +106,7 @@ func GenerateAIWorkoutSplits(request WorkoutRequest) AIWorkoutSplit {
 		retryres := retryGenerateAIWorkoutSplits(request)
 		return retryres
 	}
+	workout.ID = "aisplitgen-" + uuid.New().String()
 	fmt.Println(utils.Cyan("Successfully generated workout splits"))
 	return *workout
 }
