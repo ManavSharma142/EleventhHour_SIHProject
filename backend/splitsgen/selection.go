@@ -79,14 +79,26 @@ func GetUserSelectedSplit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type dbschemaProgress struct {
+	Username string    `bson:"username"`
+	Day      string    `bson:"day"`
+	SplitID  string    `bson:"split_id"`
+	Exercise []any     `bson:"exercise"`
+	Updated  time.Time `bson:"updated"`
+}
+type fitcoinschema struct {
+	Username string `bson:"username"`
+	Flexcoin int    `bson:"flexcoin"`
+}
+
 func MarkDoneProgress(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	type Req struct {
-		Username string   `json:"username"`
-		Day      string   `json:"day"`
-		Exercise []string `json:"exercise"`
-		SplitID  string   `json:"split_id"`
+		Username string `json:"username"`
+		Day      string `json:"day"`
+		Exercise []any  `json:"exercise"`
+		SplitID  string `json:"split_id"`
 	}
 	var req Req
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -94,11 +106,49 @@ func MarkDoneProgress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	filter := bson.M{
+		"username": req.Username,
+		"split_id": req.SplitID,
+	}
+	if req.Day != "" {
+		filter["day"] = req.Day
+	}
+	flexcoin := 0
+	var progress dbschemaProgress
+	err := database.Progresscoll.FindOne(context.TODO(), filter).Decode(&progress)
+	if err != nil {
+		flexcoin = len(req.Exercise) * 6
+	} else {
+		flexcoin = len(req.Exercise)*6 - len(progress.Exercise)*6
+	}
+
+	//fmt.Println("Flexcoin earned:", flexcoin)
+	var fitcoinschemadb fitcoinschema
+	err = database.Flexcoinscoll.FindOne(context.TODO(), bson.M{"username": req.Username}).Decode(&fitcoinschemadb)
+	if err != nil {
+		_, err = database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": req.Username, "flexcoin": flexcoin})
+		if err != nil {
+			http.Error(w, "Failed to insert new flexcoin", http.StatusInternalServerError)
+			return
+		}
+	} else {
+		newflexcoin := fitcoinschemadb.Flexcoin + flexcoin
+		_, err = database.Flexcoinscoll.DeleteOne(ctx, bson.M{"username": req.Username})
+		if err != nil {
+			http.Error(w, "Failed to delete old flexcoin", http.StatusInternalServerError)
+			return
+		}
+		_, err = database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": req.Username, "flexcoin": newflexcoin})
+		if err != nil {
+			http.Error(w, "Failed to insert new flexcoin", http.StatusInternalServerError)
+			return
+		}
+	}
 
 	// First, delete any existing progress record for this user/day/split
-	_, err := database.Progresscoll.DeleteOne(ctx, bson.M{
+	_, err = database.Progresscoll.DeleteOne(ctx, bson.M{
 		"username": req.Username,
 		"day":      req.Day,
 		"split_id": req.SplitID,

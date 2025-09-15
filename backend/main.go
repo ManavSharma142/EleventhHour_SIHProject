@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"server/api"
 	"server/auth"
+	"server/chatbot"
 	"server/database"
 	"server/router"
 	"server/splitsgen"
@@ -47,23 +49,46 @@ func main() {
 	auth.InitGoogleOAuth()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/login", auth.Login).Methods("POST")
-	r.HandleFunc("/register", auth.Register).Methods("POST")
-	r.HandleFunc("/validate", auth.Validate).Methods("GET")
-	r.HandleFunc("/google/login", auth.GoogleLogin).Methods("GET")
-	r.HandleFunc("/google/callback", auth.GoogleCallback).Methods("GET")
+	r.HandleFunc("/login", auth.Login).Methods("POST")                   //for normal login
+	r.HandleFunc("/register", auth.Register).Methods("POST")             //for normal register
+	r.HandleFunc("/validate", auth.Validate).Methods("GET")              //for validating JWT token and getting user details
+	r.HandleFunc("/google/login", auth.GoogleLogin).Methods("GET")       //for google login
+	r.HandleFunc("/google/callback", auth.GoogleCallback).Methods("GET") //for google oauth callback
 
-	r.HandleFunc("/ai/workoutsplits", splitsgen.GenerateWorkoutSplits).Methods("POST")
-	r.HandleFunc("/workouts/selected", splitsgen.GetUserSelectedSplit).Methods("GET")
-	r.HandleFunc("/workouts/select", splitsgen.SelectWorkoutSplit).Methods("POST")
-	r.HandleFunc("/workouts/markdone", splitsgen.MarkDoneProgress).Methods("POST")
-	r.HandleFunc("/workouts/progress", splitsgen.GetUserProgress).Methods("GET")
+	r.HandleFunc("/ai/workoutsplits", splitsgen.GenerateWorkoutSplits).Methods("POST") //for generating workout splits using AI
+	r.HandleFunc("/workouts/selected", splitsgen.GetUserSelectedSplit).Methods("GET")  //for getting user selected split
+	r.HandleFunc("/workouts/select", splitsgen.SelectWorkoutSplit).Methods("POST")     //for selecting a workout split
+	r.HandleFunc("/workouts/markdone", splitsgen.MarkDoneProgress).Methods("POST")     //for marking progress (Lock)
+	r.HandleFunc("/workouts/progress", splitsgen.GetUserProgress).Methods("GET")       //for getting user progress
+
+	r.HandleFunc("/googlefit", auth.GoogleFitTodayHandler).Methods("GET") //for getting today's Google Fit data
+
+	r.HandleFunc("/flexcoin", api.FlexCoinHandler).Methods("GET") //for getting flexcoin
+
+	r.HandleFunc("/activedays", api.ActiveDaysHandler).Methods("GET") //for getting active days
+	r.HandleFunc("/streak", api.StreakHandler).Methods("GET")         //for getting info for streak and heatmap
+
+	r.HandleFunc("/wss/chatbot", chatbot.HandleChatbot) //for chatbot
 
 	corsWrappedRouter := router.CorsMiddleware(r)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
+	}
+	utils.FRONTEND_URL = os.Getenv("FRONTEND_URL")
+	if utils.FRONTEND_URL == "" {
+		utils.FRONTEND_URL = "http://localhost:5173"
+	}
+	utils.BACKEND_URL = os.Getenv("BACKEND_URL")
+	if utils.BACKEND_URL == "" {
+		utils.BACKEND_URL = "http://localhost:8000"
+	}
+	utils.PROD = os.Getenv("PROD")
+	if utils.PROD == "true" {
+		utils.ProdBOOL = true
+	} else {
+		utils.ProdBOOL = false
 	}
 
 	srv := &http.Server{
