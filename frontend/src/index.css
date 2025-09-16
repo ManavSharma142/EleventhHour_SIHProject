@@ -41,3 +41,7 @@ body {
     aspect-ratio: 1 / 1;
   }
 }
+.color-empty { fill: #1e293b; }
+.color-scale-1 { fill: #10b981; }
+.color-scale-2 { fill: #059669; }
+.color-scale-3 { fill: #047857; }
