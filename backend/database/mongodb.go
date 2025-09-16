@@ -21,6 +21,12 @@ type Data struct {
 	OAuth    string `bson:"oauth"`
 	Email    string `bson:"email"`
 	SplitID  string `bson:"split"`
+	Name     string `bson:"name"`
+	Age      string `bson:"age"`
+	Gender   string `bson:"gender"`
+	Goal     string `bson:"goal"`
+	Exp      string `bson:"exp"`
+	Pic      string `bson:"profilepic"`
 }
 
 var Dbcoll *mongo.Collection
@@ -73,7 +79,7 @@ func GetUserPassword(username string) (string, error) {
 	return result.Password, nil
 }
 
-func AddUser(username string, password string, oauthtoken string, email string) error {
+func AddUser(username string, password string, oauthtoken string, email string, name string, age string, gender string, fitnessgoal string, experience string, profilepic string) error {
 	filter := bson.M{"username": username}
 	var existing Data
 	Dbcoll.FindOne(context.TODO(), filter).Decode(&existing)
@@ -84,11 +90,17 @@ func AddUser(username string, password string, oauthtoken string, email string) 
 
 	alldata[username] = password
 	_, err := Dbcoll.InsertOne(context.TODO(), bson.M{
-		"username": username,
-		"password": password,
-		"oauth":    oauthtoken,
-		"email":    email,
-		"split":    "",
+		"username":   username,
+		"password":   password,
+		"oauth":      oauthtoken,
+		"email":      email,
+		"split":      "",
+		"name":       name,
+		"age":        age,
+		"gender":     gender,
+		"goal":       fitnessgoal,
+		"exp":        experience,
+		"profilepic": profilepic,
 	})
 	if err != nil {
 		log.Println("Error writing in DB:", err)
