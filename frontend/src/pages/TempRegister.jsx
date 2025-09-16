@@ -73,6 +73,12 @@ export default function SignUpPage() {
         body: JSON.stringify({
           username: formData.username,
           password: formData.password,
+          name: formData.name,
+          email: formData.email,
+          age: formData.age,
+          gender: formData.gender,
+          fitnessGoal: formData.fitnessGoal,
+          experience: formData.experience,
         }),
       });
 

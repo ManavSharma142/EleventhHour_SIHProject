@@ -1,4 +1,4 @@
-package auth
+package connect
 
 import (
 	"context"
@@ -6,10 +6,12 @@ import (
 	"log"
 	"net/http"
 
+	auth "server/auth"
 	"server/database"
 	"server/utils"
 
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
@@ -27,9 +29,9 @@ type UserData struct {
 
 var googleOAuthConfig *oauth2.Config
 
-func InitGoogleOAuth() {
+func InitGoogleFitConnect() {
 	googleOAuthConfig = &oauth2.Config{
-		RedirectURL:  utils.BACKEND_URL + "/google/callback",
+		RedirectURL:  utils.BACKEND_URL + "/connect/googlefit/callback",
 		ClientID:     utils.GOOGLE_CLIENT_ID,
 		ClientSecret: utils.GOOGLE_CLIENT_SECRET,
 		Scopes: []string{
@@ -44,7 +46,7 @@ func InitGoogleOAuth() {
 }
 
 func GoogleLogin(w http.ResponseWriter, r *http.Request) {
-	state := uuid.New().String() // ✅ unique CSRF state
+	state := uuid.New().String()
 	http.SetCookie(w, &http.Cookie{
 		Name:     "oauthstate",
 		Value:    state,
@@ -96,49 +98,7 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if user exists
-	username, err := database.GetUserEmail(userData.Email)
-	if err == nil {
-		// ✅ Existing user → issue JWT
-		tokenJWT := utils.GenerateJWTSecret(username)
-		setAuthCookie(w, tokenJWT)
-		http.Redirect(w, r, utils.FRONTEND_URL+"/app", http.StatusFound)
-		return
-	}
-
-	// New user → save to DB (store refresh token too)
-	username = utils.GenerateUID(userData.Name)
-	err = database.AddUser(
-		username,
-		uuid.New().String(), // random password placeholder
-		token.RefreshToken,  // ✅ store refresh, not just access
-		userData.Email,
-		userData.Name,
-		"",
-		"",
-		"",
-		"",
-		userData.Picture,
-	)
-	if err != nil {
-		log.Printf("Failed to add user: %v", err)
-		http.Error(w, "User registration failed", http.StatusInternalServerError)
-		return
-	}
-
-	tokenJWT := utils.GenerateJWTSecret(username)
-	setAuthCookie(w, tokenJWT)
-
+	username := auth.GetUsername(r)
+	database.Dbcoll.UpdateOne(context.TODO(), bson.M{"username": username}, bson.M{"$set": bson.M{"oauth": token.RefreshToken}})
 	http.Redirect(w, r, utils.FRONTEND_URL+"/app", http.StatusFound)
-}
-
-func setAuthCookie(w http.ResponseWriter, token string) {
-	http.SetCookie(w, &http.Cookie{
-		Name:     "authToken",
-		Value:    token,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   utils.ProdBOOL, // change to true in production
-		SameSite: http.SameSiteLaxMode,
-	})
 }

@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"server/api"
+	"server/api/connect"
 	"server/auth"
 	"server/chatbot"
 	"server/database"
@@ -61,6 +62,7 @@ func main() {
 	}
 	database.DBinit()
 	auth.InitGoogleOAuth()
+	connect.InitGoogleFitConnect()
 
 	r := mux.NewRouter()
 	r.HandleFunc("/login", auth.Login).Methods("POST")                   //for normal login
@@ -76,13 +78,18 @@ func main() {
 	r.HandleFunc("/workouts/progress", splitsgen.GetUserProgress).Methods("GET")       //for getting user progress
 
 	r.HandleFunc("/googlefit", auth.GoogleFitTodayHandler).Methods("GET") //for getting today's Google Fit data
+	r.HandleFunc("/connect/googlefit", connect.GoogleLogin).Methods("GET")
+	r.HandleFunc("/connect/googlefit/callback", connect.GoogleCallback).Methods("GET")
 
 	r.HandleFunc("/flexcoin", api.FlexCoinHandler).Methods("GET") //for getting flexcoin
 
 	r.HandleFunc("/activedays", api.ActiveDaysHandler).Methods("GET") //for getting active days
 	r.HandleFunc("/streak", api.StreakHandler).Methods("GET")         //for getting info for streak and heatmap
 
-	r.HandleFunc("/wss/chatbot", chatbot.HandleChatbot) //for chatbot
+	r.HandleFunc("/wss/chatbot", chatbot.HandleChatbot) //for chatbot WebSocket connection
+
+	r.HandleFunc("/profile", api.GetUserProfile).Methods("GET")        //for getting user profile
+	r.HandleFunc("/profile/update", api.UpdateProfile).Methods("POST") //for updating user profile
 
 	corsWrappedRouter := router.CorsMiddleware(r)
 

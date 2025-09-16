@@ -28,6 +28,7 @@ type DailyWorkout struct {
 	ExerciseDesc     string `json:"exercisedesc" jsonschema:"description=Description of exercise how to perform it in brief"`
 	Sets             int    `json:"sets" jsonschema:"description=number of sets"`
 	Repetitions      int    `json:"repetitions" jsonschema:"description=number of repetitions"`
+	Link             string `json:"link" jsonschema:"description=youtube url of exercise video"`
 }
 
 type RAGQueries struct {
@@ -68,30 +69,35 @@ func GenerateAIWorkoutSplits(request WorkoutRequest) AIWorkoutSplit {
 
 		workout, _, err := genkit.GenerateData[AIWorkoutSplit](ctx, g,
 			ai.WithPrompt(prompt), ai.WithTools(getCustomDataTool), ai.WithSystem(`
-			You are a professional fitness trainer specializing in student-friendly workout plans. 
-			Your task is to generate a weekly workout split strictly in JSON format matching the provided schema. 
-			Always follow these rules:
-			Before finalizing your plan, you MUST call the getCustomData tool at least once. 
+				Return ONLY valid JSON matching this schema:
 
-			1. Use only valid JSON with the fields: day, workouts → (title, exercisecategory, exercisedesc, sets, repetitions). 
-			- Do not add extra fields.
-			- Title must be unique for that day if same title clash find a alternative name or give {title}1 {title}2 {title}3 and so on.
-			Always return exactly the number of days requested by the user (DaysPerWeek). 
-			If DaysPerWeek = 7, return exactly 7 days (Monday through Sunday) and dont use rest put some exercise. 
-			If any of those days are rest, include them as 'Rest' but do not skip the day.
+				AIWorkoutSplit {
+				day: [
+					{
+					day: "Monday|Tuesday|...|Sunday",
+					workouts: [
+						{
+						title: string,
+						exercisecategory: string,
+						exercisedesc: string,
+						sets: int,
+						repetitions: int,
+						link: string
+						}
+					]
+					}
+				],
+				id: string
+				}
 
-			2. Make 3–7 exercises per workout day depending on the user's time and goal.
-
-			3. The "title" and "exercisecategory" should match (e.g., Chest day → Chest category). 
-			If the day is "Recovery", give a single workout.
-
-			4. Use the tool ONLY to fetch relevant workout details (exercise descriptions, variations, etc.), then modify/adapt the response to fit user requirements try to add similar exercises if criteria matches before producing final JSON. 
-			Do not directly output raw tool responses.
-			5. if tool response is relevant use it to create the workout plan as per user requirements.
-			5. If the tool returns nothing useful, create the workout plan yourself based on fitness best practices.
-
-			Your output must be strictly valid JSON, no markdown or explanations.
-			`),
+				Rules:
+				- Use exact field names (no typos, no extra fields).
+				- Always return exactly DaysPerWeek days.
+				- 3–7 exercises per day (except Rest → 1 workout with empty exercisedesc, sets=0, reps=0, link="").
+				- Titles within a day must be unique (append numbers if needed).
+				- Call getCustomData at least once; adapt info, never output raw.
+				- Output must be strict JSON only, no markdown or text.
+				`),
 		)
 		if err != nil {
 			fmt.Println(utils.Red("Error generating workout splits:", err))
