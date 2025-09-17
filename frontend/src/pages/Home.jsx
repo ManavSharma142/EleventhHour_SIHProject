@@ -1,372 +1,670 @@
-// // import React, { useEffect, useState } from "react";
-// // import CalendarHeatmap from "react-calendar-heatmap";
-// // import "react-calendar-heatmap/dist/styles.css";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Home,
+  Dumbbell,
+  Apple,
+  Users,
+  Coins,
+  User,
+  Flame,
+  Footprints,
+  TrendingUp,
+  Send,
+  Sparkles,
+  Target,
+  Zap,
+  Award,
+  Activity,
+  Calendar,
+} from "lucide-react";
+import ActivityHeatmap from "../components/ActivityHeatmap";
+import useWebSocket from 'react-use-websocket';
 
-// // function Home() {
-// //   const username = "dhananjaymishra8338wzr77RB";
-
-// //   const [steps, setSteps] = useState(0);
-// //   const [calories, setCalories] = useState(0);
-// //   const [streak, setStreak] = useState({
-// //     total_active_days: 0,
-// //     current_streak: 0,
-// //     max_streak: 0,
-// //     active_days: []
-// //   });
-
-// //   useEffect(() => {
-// //     // Fetch steps + calories
-// //     fetch(`http://localhost:8000/googlefit?username=${username}`)
-// //       .then(res => res.json())
-// //       .then(data => {
-// //         setSteps(data.steps);
-// //         setCalories(data.cal);
-// //       })
-// //       .catch(err => console.error("GoogleFit Error:", err));
-
-// //     // Fetch streaks
-// //     fetch(`http://localhost:8000/streak?username=${username}`)
-// //       .then(res => res.json())
-// //       .then(data => setStreak(data))
-// //       .catch(err => console.error("Streak Error:", err));
-// //   }, [username]);
-
-// //   return (
-// //     <div className="home-container" style={{ padding: "20px", color: "white", background: "#0f172a", minHeight: "100vh" }}>
-      
-// //       {/* Motivational Quote */}
-// //       <div style={{ textAlign: "center", marginBottom: "20px" }}>
-// //         <h2>"Never Give Up!"</h2>
-// //       </div>
-
-// //       {/* Steps + Calories */}
-// //       <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-// //         <div style={{ flex: 1, background: "#1e293b", padding: "20px", borderRadius: "12px", textAlign: "center" }}>
-// //           <h3>Steps Count</h3>
-// //           <p style={{ fontSize: "28px", color: "lime" }}>{steps}</p>
-// //         </div>
-// //         <div style={{ flex: 1, background: "#1e293b", padding: "20px", borderRadius: "12px", textAlign: "center" }}>
-// //           <h3>Calorie Burn</h3>
-// //           <p style={{ fontSize: "28px", color: "orange" }}>{calories}</p>
-// //         </div>
-// //       </div>
-
-// //       {/* Mental Wellness */}
-// //       <div style={{ background: "#1e293b", padding: "20px", borderRadius: "12px", marginBottom: "20px" }}>
-// //         <h3>Mental Wellness</h3>
-// //         <p>Give your mind space to breathe</p>
-// //         <button style={{ marginTop: "10px", padding: "10px 20px", borderRadius: "8px", background: "#2563eb", color: "white" }}>
-// //           Explore
-// //         </button>
-// //       </div>
-
-// //       {/* Heatmap */}
-// //       <div style={{ background: "#1e293b", padding: "20px", borderRadius: "12px", marginBottom: "20px" }}>
-// //         <h3>Progress</h3>
-// //         <p>Total Active Days: {streak.total_active_days}</p>
-// //         <p>Current Streak: {streak.current_streak}</p>
-// //         <p>Max Streak: {streak.max_streak}</p>
-
-// //         <CalendarHeatmap
-// //           startDate={new Date(new Date().getFullYear(), 0, 1)}
-// //           endDate={new Date()}
-// //           values={streak.active_days.map(day => ({
-// //             date: day.date,
-// //             count: day.count
-// //           }))}
-// //           classForValue={value => {
-// //             if (!value) return "color-empty";
-// //             return `color-scale-${value.count}`;
-// //           }}
-// //         />
-// //       </div>
-
-// //       {/* Leaderboard */}
-// //       <div style={{ background: "#1e293b", padding: "20px", borderRadius: "12px" }}>
-// //         <h3>Leaderboard</h3>
-// //         <ul>
-// //           <li>Manav Sharma - 696969 XP</li>
-// //           <li>Khali - 10000 XP</li>
-// //           <li>John Cena - 6000 XP</li>
-// //           <li>Dhananjay Mishra - -1000 XP</li>
-// //         </ul>
-// //       </div>
-// //     </div>
-// //   );
-// // }
-
-// // export default Home;
-// // src/pages/Home.jsx
-// // src/pages/Home.jsx
-// import React, { useEffect, useState } from "react";
-// import "./Home.css"; // Import the CSS file
-
-// // --- Helper function to get the color class based on count ---
-// // This makes the heatmap data-driven.
-// const getClassForCount = (count) => {
-//   if (count === 0) {
-//     return "color-empty";
-//   }
-//   if (count >= 1 && count < 3) {
-//     return "color-scale-1";
-//   }
-//   if (count >= 3 && count < 6) {
-//     return "color-scale-2";
-//   }
-//   if (count >= 6 && count < 9) {
-//     return "color-scale-3";
-//   }
-//   return "color-scale-4";
-// };
-
-// // --- Helper function to render the heatmap grid ---
-// // It now takes your active_days data and intelligently renders the grid.
-// const renderHeatmapGrid = (activeDays) => {
-//   const TOTAL_SQUARES = 112; // 7 rows * 16 cols
-  
-//   // Get the last 112 days from your data
-//   const daysData = activeDays.slice(-TOTAL_SQUARES);
-
-//   // Create an array of 112 squares, filling with empty data if needed
-//   const gridSquares = Array.from({ length: TOTAL_SQUARES }, (_, index) => {
-//     const dataIndex = index - (TOTAL_SQUARES - daysData.length);
-//     const dayData = daysData[dataIndex];
-    
-//     if (dayData) {
-//       // We have data for this square
-//       return { count: dayData.count || 0 };
-//     } else {
-//       // This square is empty (no data yet)
-//       return { count: 0 };
-//     }
-//   });
-
-//   return (
-//     <div className="heatmap-grid">
-//       {gridSquares.map((square, index) => (
-//         <div
-//           key={index}
-//           className={`heatmap-day ${getClassForCount(square.count)}`}
-//           title={`Count: ${square.count}`} // Tooltip on hover
-//         ></div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// // --- Dummy data for Leaderboard ---
-// const dummyLeaderboard = [
-//   { name: 'Manav Sharma', xp: '696969xp' },
-//   { name: 'Khali', xp: '10000xp' },
-//   { name: 'John Cena', xp: '6000xp' },
-//   { name: 'Dhananjay Mishra', xp: '~1000xp' },
-// ];
-
-// function Home() {
-//   const username = "dhananjaymishra8338wzr77RB";
-
-//   const [steps, setSteps] = useState(0);
-//   const [calories, setCalories] = useState(0);
-//   const [streak, setStreak] = useState({
-//     total_active_days: 0,
-//     current_streak: 0,
-//     max_streak: 0,
-//     active_days: []
-//   });
-  
-//   // Your data fetching logic (no changes needed)
-//   useEffect(() => {
-//     fetch(`http://localhost:8000/googlefit?username=${username}`)
-//       .then(res => res.json())
-//       .then(data => {
-//         setSteps(data.steps);
-//         setCalories(data.cal);
-//       })
-//       .catch(err => console.error("GoogleFit Error:", err));
-
-//     fetch(`http://localhost:8000/streak?username=${username}`)
-//       .then(res => res.json())
-//       .then(data => setStreak(data))
-//       .catch(err => console.error("Streak Error:", err));
-//   }, [username]);
-
-//   // The JSX layout is identical to before
-//   return (
-//     <div className="home-dashboard">
-//       <header className="dashboard-header">
-//         <div className="quote-bar">
-//           A Motivational Quote (Eg: Never Give Up)
-//         </div>
-//       </header>
-
-//       <div className="dashboard-grid">
-        
-//         <div className="card stats-card steps-card">
-//           <div className="stats-icon">🚶‍♂️</div>
-//           <div className="stats-info">
-//             <span className="stats-title">Steps Count</span>
-//             <span className="stats-value">{steps}</span>
-//           </div>
-//         </div>
-
-//         <div className="card stats-card calories-card">
-//           <div className="stats-icon">🔥</div>
-//           <div className="stats-info">
-//             <span className="stats-title">Calorie Burn</span>
-//             <span className="stats-value">{calories}</span>
-//           </div>
-//         </div>
-
-//         <div className="card wellness-card">
-//           <h4>Mental Wellness</h4>
-//           <p>Give your mind space to breath</p>
-//           <button className="btn btn-explore">
-//             Explore
-//           </button>
-//         </div>
-
-//         <div className="card workout-card">
-//           <h4>Today's Workout</h4>
-//           <p className="workout-title">WeekDay - Title</p>
-//           <p className="workout-example">Example: Monday - Chest.</p>
-//           <div className="workout-buttons">
-//             <button className="btn btn-start">Start</button>
-//             <button className="btn btn-generate">Generate a new split</button>
-//           </div>
-//         </div>
-
-//         <div className="card leaderboard-card">
-//           <h4>Leaderboard</h4>
-//           <ul className="leaderboard-list">
-//             {dummyLeaderboard.map((user, index) => (
-//               <li key={index}>
-//                 <span>{user.name}</span>
-//                 <span className={index === 0 ? 'xp-top' : 'xp-normal'}>{user.xp}</span>
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-
-//         <div className="card heatmap-card">
-//           <div className="heatmap-stats">
-//             <span>Total Active Days - {streak.total_active_days}</span>
-//             <span>Current Streak - {streak.current_streak}</span>
-//           </div>
-//           <p>Progress</p>
-//           {/* This now smartly renders using your API data! */}
-//           {renderHeatmapGrid(streak.active_days)}
-//         </div>
-        
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Home;
-import React from "react";
-import "./Home.css";
-
-export default function Home() {
-  // Example user data – replace with real user info or from localStorage
-  const username = localStorage.getItem("username") || "dhananjaymishra8338wzr77RB";
-  const flexcoins = localStorage.getItem("flexcoins") || 1259;
+// The CircularProgress component is a helper for the visual elements
+const CircularProgress = ({ percentage, color, size = 120, strokeWidth = 8 }) => {
+  const radius = (size - strokeWidth * 2) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDasharray = circumference;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="home-dashboard">
-      {/* === Sidebar === */}
-      <aside className="sidebar">
-        <div className="sidebar-logo">Flexora</div>
-        <nav className="sidebar-nav">
-          <a href="/home" className="active">Home</a>
-          <a href="/workout">Workout</a>
-          <a href="/nutrition">Nutrition</a>
-          <a href="/community">Community</a>
-          <a href="/flexcoins">FlexCoins</a>
+    <div className="absolute inset-0 flex items-center justify-center">
+      <svg width={size} height={size} className="transform -rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="transparent"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth={strokeWidth}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="transparent"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={strokeDasharray}
+          strokeDashoffset={strokeDashoffset}
+          className="transition-all duration-1000 ease-out"
+          style={{
+            filter: `drop-shadow(0 0 12px ${color}60)`
+          }}
+        />
+      </svg>
+    </div>
+  );
+};
+
+export default function ModernFitnessDashboard() {
+  // Use a variable for the username to make it easier to change
+  const username = "dhananjaymishra269FBL11kl";
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://prod-sih-eleventhour-backend.onrender.com/wss/chatbot?username=${username}`);
+  const [flexcoins] = useState(1259);
+  const [stepsCount, setStepsCount] = useState(0);
+  const [targetSteps, setTargetSteps] = useState(0);
+  const [calorieCount, setCalorieCount] = useState(0);
+  const [targetCalories, setTargetCalories] = useState(0);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [chatInput, setChatInput] = useState("");
+  const [messages, setMessages] = useState([
+    { type: "bot", text: "Hey! I'm your AI fitness companion. How can I help you today?" }
+  ]);
+  const messagesEndRef = useRef(null);
+  const [workoutSplit, setWorkoutSplit] = useState(null);
+
+  useEffect(() => {
+    if (lastJsonMessage?.text) {
+      const cleanedMsg = lastJsonMessage.text
+        .replace(/^"|"$/g, "") // remove surrounding quotes
+        .replace(/\\n/g, "<br/>") // replace \n with <br/>
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+        .trim();
+
+      setMessages((prev) => [...prev, { type: "bot", text: cleanedMsg }]);
+    }
+  }, [lastJsonMessage]);
+
+  // === NEW: Fetch and set data from Go backend ===
+  useEffect(() => {
+    // Fetch steps and calories
+    fetch(`http://localhost:8000/googlefit?username=${username}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setTargetSteps(data.steps);
+        setTargetCalories(parseInt(data.cal, 10));
+      })
+      .catch(error => {
+        console.error("Failed to fetch Google Fit data:", error);
+      });
+
+    // Fetch workout split
+    fetch(`http://localhost:8000/workouts/selected?username=technicaldm1186xun3Bj`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setWorkoutSplit(data);
+      })
+      .catch(error => {
+        console.error("Failed to fetch workout data:", error);
+      });
+  }, [username]); // The username dependency ensures this runs if the username changes
+
+  // === MODIFIED: Animate counters based on fetched data ===
+  useEffect(() => {
+    const stepsTimer = setTimeout(() => {
+      const stepsInterval = setInterval(() => {
+        setStepsCount(prev => {
+          const increment = Math.ceil((targetSteps - prev) / 8);
+          if (prev + increment >= targetSteps) {
+            clearInterval(stepsInterval);
+            return targetSteps;
+          }
+          return prev + increment;
+        });
+      }, 40);
+    }, 300);
+
+    const caloriesTimer = setTimeout(() => {
+      const caloriesInterval = setInterval(() => {
+        setCalorieCount(prev => {
+          const increment = Math.ceil((targetCalories - prev) / 8);
+          if (prev + increment >= targetCalories) {
+            clearInterval(caloriesInterval);
+            return targetCalories;
+          }
+          return prev + increment;
+        });
+      }, 40);
+    }, 300);
+
+    return () => {
+      clearTimeout(stepsTimer);
+      clearTimeout(caloriesTimer);
+    };
+  }, [targetSteps, targetCalories]); // Dependencies are now the fetched target values
+
+  // Scroll to the bottom of the messages list on new message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  
+const handleSendMessage = () => {
+  if (!chatInput.trim()) return;
+
+  // Add user message locally
+  setMessages(prev => [...prev, { type: "user", text: chatInput }]);
+
+  // Send to backend WebSocket as JSON
+  sendJsonMessage({ text: chatInput });
+
+  // Clear the input
+  setChatInput("");
+};
+
+  // Find today's workout to display dynamically
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const todayWorkout = workoutSplit?.day.find(d => d.day === today);
+
+  // Calculate percentage for circular progress bars
+  const stepsPercentage = targetSteps ? Math.min(100, (stepsCount / 10000) * 100) : 0;
+  const caloriesPercentage = targetCalories ? Math.min(100, (calorieCount / 2500) * 100) : 0;
+
+  return (
+    <div className="flex h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0D1421] to-[#111827] text-white overflow-hidden">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+      </div>
+
+      {/* === Enhanced Sidebar === */}
+      <aside className="w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-6 flex flex-col fixed top-0 left-0 h-full z-10 shadow-2xl">
+        {/* Logo with animation */}
+        <div className="flex items-center gap-4 mb-12 group cursor-pointer">
+          <div className="relative">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+              <Dumbbell className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+          </div>
+          <div>
+            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+            <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
+          </div>
+        </div>
+
+        {/* Time Display */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
+          <div className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </div>
+          <div className="text-sm text-gray-400">
+            {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
+          </div>
+        </div>
+
+        {/* Enhanced Navigation */}
+        <nav className="flex-1 space-y-3">
+          {[
+            { icon: Home, label: "Dashboard", active: true, color: "from-blue-500 to-cyan-500" },
+            { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500" },
+            { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500" },
+            { icon: Users, label: "Community", color: "from-purple-500 to-pink-500" },
+            { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500" },
+          ].map(({ icon: Icon, label, active, color }) => (
+            <div
+              key={label}
+              className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
+                ${active
+                  ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                  : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
+                }`}
+            >
+              {active && (
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+              )}
+              <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
+                <Icon className="w-5 h-5 relative z-10" />
+              </div>
+              <span className="font-semibold relative z-10">{label}</span>
+              {active && <div className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
+            </div>
+          ))}
         </nav>
-        <div className="sidebar-user">
-          <div>{username}</div>
-          <div>FlexCoins: {flexcoins}</div>
+
+        {/* Enhanced Profile */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+          <div className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+              <User className="w-6 h-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-white truncate text-sm">
+                {username}
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-400">
+                <Coins className="w-3 h-3 text-amber-400" />
+                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                <span>FlexCoins</span>
+              </div>
+            </div>
+          </div>
         </div>
       </aside>
 
-      {/* === Main Content === */}
-      <main className="dashboard-main">
-        {/* Left Section */}
-        <div className="dashboard-left">
-          {/* Quote bar */}
-          <div className="quote-bar">
-            <p>“Push harder than yesterday if you want a different tomorrow.”</p>
-          </div>
-
-          {/* Stats row */}
-          <div className="stats-row">
-            <div className="stats-circle">
-              <h3>Steps</h3>
-              <p className="steps-value">8,452</p>
-            </div>
-            <div className="stats-circle">
-              <h3>Calories</h3>
-              <p className="calories-value">1,259</p>
+      {/* === Enhanced Main Content === */}
+      <main className="flex-1 grid grid-cols-12 gap-8 p-8 ml-72 h-screen overflow-hidden">
+        {/* Left Section - Enhanced */}
+        <div className="col-span-8 space-y-8 overflow-y-auto pr-4 scrollbar-hide">
+          {/* Header with greeting */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-2">
+                  Welcome back! 👋
+                </h1>
+                <p className="text-gray-400 text-lg">Ready to crush your goals today?</p>
+              </div>
+              <div className="flex items-center gap-3">
+              </div>
             </div>
           </div>
 
-          {/* Mental Wellness */}
-          <div className="card">
-            <h3>Mental Wellness</h3>
-            <p>Mindfulness tips and stress relief techniques.</p>
-            <button className="btn-explore">Explore</button>
-          </div>
-
-          {/* Workout */}
-          <div className="card">
-            <h3>Workout</h3>
-            <p>Personalized training routines to fit your goals.</p>
-            <div className="workout-buttons">
-              <button className="btn-start">Start</button>
-              <button className="btn-generate">Generate</button>
+          {/* Motivational Quote - Enhanced */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-3xl blur-xl"></div>
+            <div className="relative bg-gradient-to-r from-gray-800/60 to-gray-700/60 backdrop-blur-xl rounded-3xl p-6 border border-white/10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="text-lg font-semibold text-white mb-1">Daily Motivation</div>
+                  <div className="text-gray-300 italic">"The only bad workout is the one that didn't happen."</div>
+                  <div className="text-sm text-gray-500 mt-1">— Fitness Wisdom</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Heatmap */}
-          <div className="card">
-            <h3>Heatmap</h3>
-            <div className="heatmap-grid">
-              {Array.from({ length: 64 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`heatmap-day ${
-                    ["color-scale-1", "color-scale-2", "color-scale-3", "color-scale-4", "color-empty"][
-                      Math.floor(Math.random() * 5)
-                    ]
-                  }`}
-                />
-              ))}
+          {/* Enhanced Stats Cards */}
+          <div className="grid grid-cols-2 gap-8">
+            {/* Steps Card - Redesigned */}
+            <div
+              className="relative group cursor-pointer"
+              onMouseEnter={() => setHoveredCard('steps')}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              {/* Glow behind card */}
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+
+              {/* Card content */}
+              <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10 group-hover:border-green-500/30 transition-all duration-500 transform group-hover:scale-105">
+
+                {/* Circular Progress behind */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <CircularProgress percentage={stepsPercentage} color="#10B981" size={260} strokeWidth={6} />
+                </div>
+
+                {/* Foreground Content */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="mb-6 relative">
+                    <div className="absolute inset-0 bg-green-500/30 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <div className="relative w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
+                      <Footprints className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-white mb-4 tracking-wide">
+                    Daily Steps
+                  </h3>
+
+                  <div className="text-center">
+                    <p className="text-4xl font-black bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2">
+                      {stepsCount.toLocaleString()}
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      of {targetSteps.toLocaleString()} steps
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Calories Card - Redesigned */}
+            <div
+              className="relative group cursor-pointer"
+              onMouseEnter={() => setHoveredCard('calories')}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              {/* Glow behind card */}
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+
+              {/* Card content */}
+              <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10 group-hover:border-orange-500/30 transition-all duration-500 transform group-hover:scale-105">
+
+                {/* Circular Progress behind */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <CircularProgress percentage={caloriesPercentage} color="#F97316" size={260} strokeWidth={6} />
+                </div>
+
+                {/* Foreground Content */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="mb-6 relative">
+                    <div className="absolute inset-0 bg-orange-500/30 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <div className="relative w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center">
+                      <Flame className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-white mb-4 tracking-wide">
+                    Calories Burned
+                  </h3>
+
+                  <div className="text-center">
+                    <p className="text-4xl font-black bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2">
+                      {calorieCount.toLocaleString()}
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      of {targetCalories.toLocaleString()} cal goal
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Leaderboard */}
-          <div className="card leaderboard-card">
-            <h3>Leaderboard</h3>
-            <ul className="leaderboard-list">
-              <li><span>Arjun</span><span className="xp-top">450 XP</span></li>
-              <li><span>Riya</span><span>320 XP</span></li>
-              <li><span>Manav</span><span>280 XP</span></li>
-              <li><span>Ayesha</span><span>200 XP</span></li>
-            </ul>
+          {/* Enhanced Workout + Mental Wellness Section */}
+          <div className="grid grid-cols-5 gap-6">
+            {/* Today's Workout - Enhanced */}
+            <div className="col-span-3 relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-3xl blur-2xl"></div>
+              <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+                      <Target className="w-6 h-6 text-blue-400" />
+                      Today's Focus
+                    </h3>
+                    <div className="space-y-2">
+                      <div className="px-3 py-1 bg-blue-500/20 rounded-full w-fit">
+                        {todayWorkout?.workouts[0]?.title ? (
+                          <span className="text-blue-400 text-sm font-semibold">
+                            {todayWorkout?.day} • {todayWorkout?.workouts[0]?.title}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 text-sm font-semibold">
+                            No workout scheduled for today
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-gray-400">
+                        {todayWorkout?.workouts[0]?.exercisedesc || "Enjoy your rest day or generate a new workout!"}
+                        💪
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-white">45</div>
+                    <div className="text-xs text-gray-400">minutes</div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <button className="w-full group relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-blue-500/30 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]">
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                      <Zap className="w-6 h-6 group-hover:animate-pulse" />
+                      Start Workout
+                    </span>
+                  </button>
+
+                  <button className="w-full group relative overflow-hidden bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-600 text-black font-bold text-lg px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-yellow-500/30 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]">
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                      <Sparkles className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+                      Generate New Split
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Mental Wellness - Enhanced */}
+            <div className="col-span-2 relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-3xl blur-2xl"></div>
+              <div className="relative h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Sparkles className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3 text-center">Mental Wellness</h3>
+                <p className="text-gray-400 text-center mb-6 text-sm leading-relaxed">
+                  Take a moment to center yourself and find your inner strength
+                </p>
+                <button className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30">
+                  <span className="flex items-center gap-2">
+                    Explore Mindfulness
+                    <Calendar className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Enhanced Activity Heatmap */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-blue-500/5 rounded-3xl blur-2xl"></div>
+            <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+              <ActivityHeatmap />
+            </div>
+          </div>
+
+          {/* Enhanced Leaderboard */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 via-orange-500/10 to-red-500/10 rounded-3xl blur-2xl"></div>
+            <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+              <div className="flex items-center gap-3 mb-6">
+                <Award className="w-6 h-6 text-yellow-400" />
+                <h3 className="text-2xl font-bold text-white">Weekly Leaderboard</h3>
+              </div>
+              <div className="space-y-4">
+                {[
+                  { name: "Manav Sharma", xp: 696969, rank: 1, color: "from-yellow-400 to-orange-400" },
+                  { name: "Khalil", xp: 100000, rank: 2, color: "from-gray-300 to-gray-400" },
+                  { name: "John Cena", xp: 6000, rank: 3, color: "from-amber-600 to-yellow-600" },
+                  { name: "Dhananjay Mishra", xp: -1000, rank: 4, color: "from-red-400 to-pink-400" },
+                ].map((user, index) => (
+                  <div key={user.name} className="flex items-center justify-between p-4 bg-gray-700/30 rounded-2xl border border-white/5 hover:bg-gray-700/50 transition-all duration-300 group/item">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 bg-gradient-to-r ${user.color} rounded-xl flex items-center justify-center font-bold text-black text-lg`}>
+                        {user.rank}
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold">{user.name}</div>
+                        <div className="text-sm text-gray-400">Fitness Enthusiast</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`text-lg font-bold bg-gradient-to-r ${user.color} bg-clip-text text-transparent`}>
+                        {user.xp >= 0 ? '+' : ''}{user.xp.toLocaleString()} XP
+                      </div>
+                      <div className="text-xs text-gray-500">this week</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Section - Chatbot */}
-        <div className="dashboard-right">
-          <h3>GymBro</h3>
-          <div className="chatbot-messages">
-            <div><strong>GymBro:</strong> Welcome back, champ! 💪</div>
-            <div><strong>You:</strong> Suggest a chest workout</div>
-            <div><strong>GymBro:</strong> Sure! Bench press, push-ups & dips 🔥</div>
-          </div>
-          <div className="chatbot-input">
-            <input type="text" placeholder="Ask GymBro..." />
-            <button>Send</button>
+        {/* Enhanced Chatbot Section */}
+        <div className="col-span-4 relative group overflow-y-auto">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-3xl blur-2xl"></div>
+          {/* Main chat window with flexbox layout */}
+          <div className="relative h-full flex flex-col bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden">
+
+            {/* Chat Header */}
+            <div className="p-6 border-b border-white/10 shrink-0">
+              <div className="flex items-center gap-4">
+                {/* Enhanced AI Avatar */}
+                <div className="relative">
+                  <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="28"
+                      height="28"
+                      viewBox="0 0 132 132"
+                      fill="none"
+                      className="text-white"
+                    >
+                      <path
+                        d="M103.556 103.556C97.1129 110 86.7416 110 66 110C45.2582 110 34.8873 110 28.4436 103.556C22 97.1129 22 86.7416 22 66C22 45.2582 22 34.8873 28.4436 28.4436C34.8873 22 45.2582 22 66 22C86.7416 22 97.1129 22 103.556 28.4436C110 34.8873 110 45.2582 110 66C110 86.7416 110 97.1129 103.556 103.556Z"
+                        stroke="currentColor"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M63.1411 43.2406C64.1228 40.5865 67.8771 40.5865 68.8589 43.2406L73.2611 55.1364C73.8787 56.8056 75.1943 58.1212 76.8636 58.7389L88.7595 63.1411C91.4133 64.1228 91.4133 67.8771 88.7595 68.8589L76.8636 73.2611C75.1943 73.8787 73.8787 75.1943 73.2611 76.8636L68.8589 88.7595C67.8771 91.4133 64.1228 91.4133 63.1411 88.7595L58.7389 76.8636C58.1212 75.1943 56.8056 73.8787 55.1364 73.2611L43.2406 68.8589C40.5865 67.8771 40.5865 64.1228 43.2406 63.1411L55.1364 58.7389C56.8056 58.1212 58.1212 56.8056 58.7389 55.1364L63.1411 43.2406Z"
+                        stroke="currentColor"
+                        strokeWidth="6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-40 animate-pulse"></div>
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-800 animate-pulse"></div>
+                </div>
+
+                <div className="flex-1">
+                  <h3 className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
+                    Gym Bro
+                  </h3>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="text-gray-400">AI Chat Bot</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gray-700/50 hover:bg-gray-600/50 rounded-xl flex items-center justify-center cursor-pointer transition-colors duration-200">
+                    <TrendingUp className="w-4 h-4 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Messages Area - This is the key change. */}
+            {/* The flex-1 makes it grow to fill available space, and overflow-y-auto makes it scroll. */}
+            <div className="flex-1 p-6 space-y-6 overflow-y-auto scrollbar-hide">
+              <div className="flex flex-col justify-centre space-y-2">
+                {messages.map((message, index) => (
+                  <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[85%] ${
+                      message.type === 'user'
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-4'
+                        : 'bg-gradient-to-r from-gray-700/80 to-gray-600/80 text-white border border-white/10 mr-4'
+                      } px-5 py-4 rounded-3xl shadow-xl backdrop-blur-sm relative group`}>
+                      {/* Message glow effect */}
+                      {message.type === 'user' && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl blur-xl opacity-30 group-hover:opacity-40 transition-opacity duration-300"></div>
+                      )}
+
+                      <div className="relative z-10">
+                        <p className="text-sm leading-relaxed">{message.text}</p>
+                        {message.type === 'bot' && (
+                          <div className="flex items-center gap-2 mt-3 text-xs text-gray-400">
+                            <Sparkles className="w-3 h-3" />
+                            <span>AI Assistant</span>
+                            <span>•</span>
+                            <span>Just now</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+
+                {/* Typing indicator */}
+                <div className="flex justify-start">
+                  <div className="bg-gray-700/50 px-5 py-4 rounded-3xl border border-white/10 backdrop-blur-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+                      </div>
+                      <span className="text-xs text-gray-400">GymBro is typing...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Input Area */}
+            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-700/50 shrink-0">
+              <div className="flex gap-4">
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder="Ask me anything about fitness, nutrition, or your goals..."
+                    className="w-full bg-gray-700/50 border border-white/20 rounded-2xl px-6 py-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/50 focus:bg-gray-600/50 transition-all duration-300 backdrop-blur-sm"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-2xl opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                </div>
+
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!chatInput.trim()}
+                  className="group relative w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl hover:shadow-blue-500/30"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+                  <Send className="relative z-10 w-5 h-5 mx-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                </button>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="flex gap-2 mt-4 flex-wrap">
+                {[
+                  "💪 Today's workout",
+                  "🥗 Meal suggestions",
+                  "📊 Progress report",
+                  "🎯 Set new goals"
+                ].map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setChatInput(action.split(' ').slice(1).join(' '))}
+                    className="text-xs bg-gray-700/30 hover:bg-gray-600/50 text-gray-300 hover:text-white px-3 py-2 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-200 backdrop-blur-sm"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -11,6 +11,8 @@ import {
     List,
     Grid,
 } from "lucide-react";
+import { motion } from "framer-motion";
+
 
 export default function Workout() {
     const [splitData, setSplitData] = useState([]);
@@ -49,49 +51,56 @@ export default function Workout() {
     return (
         <div className="min-h-screen flex bg-[#060F1B] bg-[radial-gradient(circle_at_center,_#0D1B2A,_#060F1B)] text-white">
             {/* Sidebar */}
-            <aside className="w-64 bg-[#0D1728]/70 backdrop-blur-md border-r border-white/5 p-6 flex flex-col fixed top-0 left-0 h-full shadow-lg">
-                {/* Logo */}
-                <div className="flex items-center gap-3 mb-10">
-                    <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md">
-                        <Dumbbell className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-xl font-extrabold tracking-wide">Flexora</span>
-                </div>
+      <motion.aside
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        className="w-64 bg-[#0D1728]/70 backdrop-blur-md border-r border-white/5 p-6 flex flex-col fixed top-0 left-0 h-full shadow-lg"
+      >
+        {/* Logo */}
+        <div className="flex items-center gap-3 mb-10">
+          <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-md">
+            <Dumbbell className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xl font-extrabold tracking-wide">Flexora</span>
+        </div>
 
-                {/* Navigation */}
-                <nav className="flex-1 space-y-2">
-                    {[
-                        { icon: Home, label: "Home" },
-                        { icon: Dumbbell, label: "Workout", active: true },
-                        { icon: Apple, label: "Nutrition" },
-                        { icon: Users, label: "Community" },
-                        { icon: Coins, label: "FlexCoins" },
-                    ].map(({ icon: Icon, label, active }) => (
-                        <div
-                            key={label}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition 
-                ${active
-                                    ? "bg-blue-600 text-white"
-                                    : "text-slate-300 hover:text-white hover:bg-slate-700"
-                                }`}
-                        >
-                            <Icon className="w-5 h-5" />
-                            <span>{label}</span>
-                        </div>
-                    ))}
-                </nav>
+        {/* Navigation */}
+        <nav className="flex-1 space-y-2">
+          {[
+            { icon: Home, label: "Home" },
+            { icon: Dumbbell, label: "Workout", active: true },
+            { icon: Apple, label: "Nutrition" },
+            { icon: Users, label: "Community" },
+            { icon: Coins, label: "FlexCoins" },
+          ].map(({ icon: Icon, label, active }) => (
+            <motion.div
+              key={label}
+              whileHover={{ scale: 1.05 }}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition 
+                ${
+                  active
+                    ? "bg-blue-600 text-white shadow"
+                    : "text-slate-300 hover:text-white hover:bg-slate-700/60"
+                }`}
+            >
+              <Icon className="w-5 h-5" />
+              <span>{label}</span>
+            </motion.div>
+          ))}
+        </nav>
 
-                {/* Profile */}
-                <div className="flex items-center gap-3 p-4 bg-[#111B2C] rounded-xl mt-6">
-                    <div className="w-11 h-11 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold shadow">
-                        <User className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <div className="font-semibold">Username</div>
-                        <div className="text-xs text-slate-400">FlexCoins: 1259</div>
-                    </div>
-                </div>
-            </aside>
+        {/* Profile */}
+        <div className="flex items-center gap-3 p-4 bg-[#111B2C] rounded-xl mt-6 shadow-inner">
+          <div className="w-11 h-11 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold shadow">
+            <User className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="font-semibold">Username</div>
+            <div className="text-xs text-slate-400">FlexCoins: 1259</div>
+          </div>
+        </div>
+      </motion.aside>
 
             {/* Main */}
             <main className="flex-1 ml-60 p-10">
