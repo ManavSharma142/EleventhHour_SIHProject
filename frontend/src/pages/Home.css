@@ -1,0 +1,345 @@
+/* ---------- Global ---------- */
+.home-dashboard {
+  display: flex;
+  background: #0b0f19;
+  color: white;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 220px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 10px;
+}
+
+.sidebar-logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #60a5fa;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 15px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+  background: #1e293b;
+  color: #fff;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid #1e293b;
+}
+
+.sidebar-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.sidebar-user-info {
+  font-size: 13px;
+}
+
+.sidebar-user-info span {
+  display: block;
+  color: #9ca3af;
+}
+
+/* ---------- Main Area ---------- */
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Quote bar */
+.quote-bar {
+  background: #1f2937;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+/* Grid layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 20px;
+}
+
+/* ---------- Stats Cards (Steps + Calories) ---------- */
+.stats-card {
+  background: #111827;
+  border-radius: 50%;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.5);
+}
+
+.stats-card .stats-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.stats-card .stats-title {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.stats-card .stats-value {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.steps-card .stats-value {
+  color: #22c55e;
+}
+
+.calories-card .stats-value {
+  color: #f97316;
+}
+
+/* ---------- Wellness Card ---------- */
+.wellness-card {
+  background: #111827;
+  padding: 20px;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.wellness-card h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.wellness-card p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #9ca3af;
+}
+
+.btn-explore {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-explore:hover {
+  background: #1d4ed8;
+}
+
+/* ---------- Workout Card ---------- */
+.workout-card {
+  background: #111827;
+  padding: 20px;
+  border-radius: 14px;
+  grid-column: span 2;
+}
+
+.workout-card h4 {
+  margin-bottom: 10px;
+}
+
+.workout-example {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.workout-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-start {
+  background: #22c55e;
+  color: black;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-generate {
+  background: #facc15;
+  color: black;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ---------- Leaderboard Card ---------- */
+.leaderboard-card {
+  background: #111827;
+  padding: 20px;
+  border-radius: 14px;
+  border: 2px solid #2563eb;
+}
+
+.leaderboard-card h4 {
+  margin-bottom: 10px;
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.leaderboard-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.leaderboard-list span {
+  font-size: 14px;
+}
+
+.xp-top {
+  color: #facc15;
+}
+
+.xp-normal {
+  color: #fff;
+}
+
+/* ---------- Heatmap Card ---------- */
+.heatmap-card {
+  background: #111827;
+  padding: 20px;
+  border-radius: 14px;
+  grid-column: span 2;
+}
+
+.heatmap-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 4px;
+}
+
+.heatmap-day {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.color-empty {
+  background: #1f2937;
+}
+
+.color-scale-1 {
+  background: #4ade80;
+}
+
+.color-scale-2 {
+  background: #22c55e;
+}
+
+.color-scale-3 {
+  background: #15803d;
+}
+
+.color-scale-4 {
+  background: #166534;
+}
+
+/* ---------- Chatbot ---------- */
+.chatbot {
+  background: #111827;
+  border-radius: 14px;
+  padding: 15px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 280px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.chatbot-input {
+  display: flex;
+  gap: 6px;
+}
+
+.chatbot-input input {
+  flex: 1;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+.chatbot-input button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}

@@ -39,7 +39,7 @@ export default function LoginPage() {
 
       const data = await res.json();
       console.log("Login success:", data);
-      navigate("/app");
+      navigate("/home");
     } catch (err) {
       console.error("Login failed:", err);
       alert("Login failed");
