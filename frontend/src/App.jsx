@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Landing } from './pages/Landing';
 import LoginPage from './pages/TempLogin';
 import SignUpPage from './pages/TempRegister';
+import WorkoutPage from './pages/WorkoutSplitGenPage';
+import Workout from './pages/Workout';
+
+
 function App() {
   return (
     <Router>
@@ -12,6 +16,9 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/split-generator" element={<WorkoutPage />} />
+          <Route path='/workout' element={<Workout />} />
+          
         </Routes>
       </div>
     </Router>
