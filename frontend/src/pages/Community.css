@@ -1,0 +1,75 @@
+/* Community.css */
+.community {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Sidebar */
+.community .sidebar {
+  background: var(--sidebar);
+  color: var(--sidebar-foreground);
+  border-right: 1px solid var(--sidebar-border);
+}
+
+.community .logo {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.community .nav-item {
+  transition: background 0.2s;
+}
+.community .nav-item:hover {
+  background: var(--sidebar-accent);
+}
+.community .nav-item.active {
+  background: var(--sidebar-primary);
+  color: var(--sidebar-primary-foreground);
+}
+
+/* Cards */
+.community .card {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+}
+.community .btn-link {
+  color: var(--primary);
+}
+
+/* Breadcrumb */
+.community .breadcrumb {
+  color: var(--muted);
+}
+
+/* Chat */
+.community .chat {
+  background: var(--popover);
+  border-left: 1px solid var(--border);
+}
+.community .subtitle {
+  color: var(--muted-foreground);
+}
+.community .avatar {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.community .bubble {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.community .reply {
+  color: var(--muted);
+}
+.community .chat-input {
+  border: 1px solid var(--border);
+  background: var(--input);
+  color: var(--foreground);
+}
+.community .chat-send {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.community .chat-send:hover {
+  opacity: 0.9;
+}
