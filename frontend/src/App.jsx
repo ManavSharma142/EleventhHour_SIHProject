@@ -8,6 +8,9 @@ import Dashboard from "./pages/Home";
 // import Workout from "./pages/Workout";
 import WorkoutPage from './pages/WorkoutSplitGenPage';
 import Workout from './pages/Workout';
+import Community from './pages/Community';
+import Nutrition from './pages/Nutrition';
+
 
 
 
@@ -22,6 +25,8 @@ function App() {
           <Route path="/app" element={<Dashboard />} />
           <Route path="/split-generator" element={<WorkoutPage />} />
           <Route path='/workout' element={<Workout />} />
+          <Route path='/community' element={<Community />} />
+          <Route path='/nutrition' element={<Nutrition />} />
           {}
           
         </Routes>
