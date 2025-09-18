@@ -25,32 +25,56 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:8000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-        credentials: "include", // important if backend sets cookies
-      });
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
 
-      if (!res.ok) throw new Error("Invalid credentials");
+    if (!res.ok) throw new Error("Invalid credentials");
 
-      const data = await res.json();
-      console.log("Login success:", data);
-      navigate("/home");
-    } catch (err) {
-      console.error("Login failed:", err);
-      alert("Login failed");
+    const data = await res.json();
+    console.log("Login success:", data);
+
+    // ✅ Save token to localStorage
+    if (data.token) {
+      localStorage.setItem("token", data.token);
     }
 
+    navigate("/app");
+  } catch (err) {
+    console.error("Login failed:", err);
+    alert("Login failed");
+  }
+};
+
+
+const handleGoogleLogin = () => {
+  const popup = window.open(
+    "https://prod-sih-eleventhour-backend.onrender.com/google/login",
+    "googleLogin",
+    "width=500,height=600"
+  );
+
+  const receiveMessage = (event) => {
+    if (event.origin !== window.location.origin) return;
+
+    const { token, username } = event.data;
+    if (token) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+    }
+
+    window.removeEventListener("message", receiveMessage);
+    popup.close();
+    window.location.href = "/app";
   };
 
-  const handleGoogleLogin = () => {
-    // Placeholder for your Google Sign-In logic
-    window.location.href = "http://localhost:8000/google/login";
-  };
+  window.addEventListener("message", receiveMessage);
+};
 
   return (
     <div className="bg-[#0B111D] text-white font-sans">

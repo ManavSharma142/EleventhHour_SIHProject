@@ -64,6 +64,7 @@ func GetUserSelectedSplit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "No split selected for this user", http.StatusNotFound)
 		return
 	}
+
 	var result struct {
 		WorkoutPlan AIWorkoutSplit `bson:"workoutPlan"`
 	}

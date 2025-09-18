@@ -81,37 +81,46 @@ export default function ModernFitnessDashboard() {
 
   const navigate = useNavigate();
   
-  useEffect(() => {
-    const getUsername = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/validate", {
-          credentials: "include", // ⬅ send cookies
-        });
+useEffect(() => {
+  const getUsername = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
-        if (!res.ok) throw new Error("Failed to validate user");
+    try {
+      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-        const data = await res.json();
+      if (!res.ok) throw new Error("Failed to validate user");
 
-        if (data?.status === "error") {
-          navigate("/login");
-          return;
-        }
+      const data = await res.json();
 
-        if (data?.username) {
-          setusername(data.username);
-          console.log("Username:", data.username);
-          getflexcoins(data.username)
-        } else {
-          navigate("/login");
-        }
-      } catch (err) {
-        console.error("Error validating user:", err);
+      if (data?.status === "error") {
+        navigate("/login");
+        return;
+      }
+
+      if (data?.username) {
+        setusername(data.username);
+        console.log("Username:", data.username);
+        getflexcoins(data.username);
+      } else {
         navigate("/login");
       }
-    };
+    } catch (err) {
+      console.error("Error validating user:", err);
+      navigate("/login");
+    }
+  };
 
-    getUsername();
-  }, []);
+  getUsername();
+}, []);
 
   useEffect(() => {
     if (lastJsonMessage?.text) {
@@ -128,8 +137,11 @@ export default function ModernFitnessDashboard() {
 
   // === NEW: Fetch and set data from Go backend ===
   useEffect(() => {
+    if (username === ""){
+      return
+    }
     // Fetch steps and calories
-    fetch(`http://localhost:8000/googlefit?username=${username}`)
+    fetch(`https://prod-sih-eleventhour-backend.onrender.com/googlefit?username=${username}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -145,7 +157,7 @@ export default function ModernFitnessDashboard() {
       });
 
     // Fetch workout split
-    fetch(`http://localhost:8000/workouts/selected?username=technicaldm1186xun3Bj`)
+    fetch(`https://prod-sih-eleventhour-backend.onrender.com/workouts/selected?username=${username}}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -162,10 +174,9 @@ export default function ModernFitnessDashboard() {
 const getflexcoins = async (username) => {
   try {
     const response = await fetch(
-      `http://localhost:8000/flexcoin?username=${username}`,
+      `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
       {
         method: "GET",
-        credentials: "include", // include cookies if needed
         headers: {
           "Content-Type": "application/json",
         },
