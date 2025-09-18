@@ -60,7 +60,7 @@ export default function FlexoraApp() {
         return;
       }
       try {
-        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+        const res = await fetch("http://localhost:8000/validate", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -94,7 +94,7 @@ export default function FlexoraApp() {
 
   const handleselectsplit = async () => {
     try {
-      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/workouts/select", {
+      const res = await fetch("http://localhost:8000/workouts/select", {
         method: "POST",                // use POST
         headers: {
           "Content-Type": "application/json"
@@ -114,7 +114,7 @@ export default function FlexoraApp() {
   const getflexcoins = async (username) => {
     try {
       const response = await fetch(
-        `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+        `http://localhost:8000/flexcoin?username=${username}`,
         {
           method: "GET",
           headers: {
@@ -154,7 +154,7 @@ export default function FlexoraApp() {
     setGeneratedSplit(null);
 
     try {
-      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/ai/workoutsplits", {
+      const res = await fetch("http://localhost:8000/ai/workoutsplits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
