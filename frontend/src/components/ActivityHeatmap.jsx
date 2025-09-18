@@ -34,7 +34,7 @@ export default function ActivityHeatmap() {
         return;
       }
       try {
-        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+        const res = await fetch("http://localhost:8000/validate", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export default function ActivityHeatmap() {
     async function fetchData() {
       try {
         const res = await fetch(
-          `https://prod-sih-eleventhour-backend.onrender.com/streak?username=${username}`
+          `http://localhost:8000/streak?username=${username}`
         )
         const data = await res.json()
 
