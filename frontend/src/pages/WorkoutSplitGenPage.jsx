@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Home, Dumbbell, Apple, Users, Play, Coins, User, Sparkles, Target, Clock, Calendar, Activity, ChevronRight, Zap, Award, TrendingUp } from "lucide-react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 // Mock PopularSplits component since it's imported but not defined
@@ -45,86 +45,92 @@ export default function FlexoraApp() {
   const [particles, setParticles] = useState([]);
 
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [flexcoins,setflexcoins] = useState(0);
+  const [flexcoins, setflexcoins] = useState(0);
   const [done, setDone] = useState(false)
 
-  const [username,setusername] = useState("")
+  const [username, setusername] = useState("")
   const navigate = useNavigate();
 
 
-useEffect(() => {
-  const getUsername = async () => {
-    try {
-      const res = await fetch("http://localhost:8000/validate", {
-        credentials: "include", // ⬅ send cookies
-      });
-
-      if (!res.ok) throw new Error("Failed to validate user");
-
-      const data = await res.json();
-
-      if (data?.status === "error") {
+  useEffect(() => {
+    const getUsername = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
         navigate("/login");
         return;
       }
+      try {
+        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
-      if (data?.username) {
-        setusername(data.username);
-        console.log("Username:", data.username);
-        getflexcoins(data.username)
-      } else {
+        if (!res.ok) throw new Error("Failed to validate user");
+
+        const data = await res.json();
+
+        if (data?.status === "error") {
+          navigate("/login");
+          return;
+        }
+
+        if (data?.username) {
+          setusername(data.username);
+          console.log("Username:", data.username);
+          getflexcoins(data.username)
+        } else {
+          navigate("/login");
+        }
+      } catch (err) {
+        console.error("Error validating user:", err);
         navigate("/login");
       }
-    } catch (err) {
-      console.error("Error validating user:", err);
-      navigate("/login");
+    };
+
+    getUsername();
+  }, []);
+
+  const handleselectsplit = async () => {
+    try {
+      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/workouts/select", {
+        method: "POST",                // use POST
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: username,
+          split_id: generatedSplit.id
+        }),       // if you are using cookies/session auth
+      });
+
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error selecting split:", error);
     }
   };
+  const getflexcoins = async (username) => {
+    try {
+      const response = await fetch(
+        `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  getUsername();
-}, []);
-
-const handleselectsplit = async () => {
-  try {
-    const res = await fetch("http://localhost:8000/workouts/select", {
-      method: "POST",                // use POST
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: username,
-        split_id: generatedSplit.id
-      }),
-      credentials: "include"         // if you are using cookies/session auth
-    });
-
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.error("Error selecting split:", error);
-  }
-};
-const getflexcoins = async (username) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8000/flexcoin?username=${username}`,
-      {
-        method: "GET",
-        credentials: "include", // include cookies if needed
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const data = await response.json();
-    setflexcoins(data.coins)
-    return data; // This will be the response from your API
-  } catch (error) {
-    console.error("Error fetching flexcoins:", error);
-    return null;
-  }
-};
+      const data = await response.json();
+      setflexcoins(data.coins)
+      return data; // This will be the response from your API
+    } catch (error) {
+      console.error("Error fetching flexcoins:", error);
+      return null;
+    }
+  };
   // Create floating particles for background animation
   useEffect(() => {
     const newParticles = Array.from({ length: 15 }, (_, i) => ({
@@ -148,7 +154,7 @@ const getflexcoins = async (username) => {
     setGeneratedSplit(null);
 
     try {
-      const res = await fetch("http://localhost:8000/ai/workoutsplits", {
+      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/ai/workoutsplits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -210,7 +216,7 @@ const getflexcoins = async (username) => {
         <nav className="flex-1 space-y-3">
           {[
             { icon: Home, label: "Dashboard", color: "from-blue-500 to-cyan-500", page: "/app" },
-            { icon: Dumbbell, label: "Workouts",active: true, color: "from-green-500 to-emerald-500", page: "/workout" },
+            { icon: Dumbbell, label: "Workouts", active: true, color: "from-green-500 to-emerald-500", page: "/workout" },
             { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
             { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
             { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
@@ -292,8 +298,8 @@ const getflexcoins = async (username) => {
                   key={id}
                   onClick={() => setActiveTab(id)}
                   className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${activeTab === id
-                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
                     }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -465,13 +471,13 @@ const getflexcoins = async (username) => {
               </div>
             )}
             {done && (<div className="flex justify-center pt-4">
-            <button
-              onClick={handleselectsplit}
-              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-2xl font-bold shadow-2xl shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 flex items-center gap-3 hover:scale-105">
-              <Play className="w-5 h-5" />
-              Select This Split
+              <button
+                onClick={handleselectsplit}
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-2xl font-bold shadow-2xl shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 flex items-center gap-3 hover:scale-105">
+                <Play className="w-5 h-5" />
+                Select This Split
 
-            </button>
+              </button>
             </div>)}
 
 

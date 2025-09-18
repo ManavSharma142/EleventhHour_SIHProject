@@ -33,7 +33,7 @@ export default function ModernWorkout() {
     const [filter, setFilter] = useState("");
     const [completedExercises, setCompletedExercises] = useState(new Set());
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [flexcoins,setflexcoins] = useState(0);
+    const [flexcoins, setflexcoins] = useState(0);
 
 
     const [username, setusername] = useState("")
@@ -41,9 +41,17 @@ export default function ModernWorkout() {
 
     useEffect(() => {
         const getUsername = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/login");
+                return;
+            }
             try {
-                const res = await fetch("http://localhost:8000/validate", {
-                    credentials: "include", // ⬅ send cookies
+                const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 });
 
                 if (!res.ok) throw new Error("Failed to validate user");
@@ -71,32 +79,31 @@ export default function ModernWorkout() {
 
         getUsername();
     }, []);
-const getflexcoins = async (username) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8000/flexcoin?username=${username}`,
-      {
-        method: "GET",
-        credentials: "include", // include cookies if needed
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const getflexcoins = async (username) => {
+        try {
+            const response = await fetch(
+                `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
-    const data = await response.json();
-    setflexcoins(data.coins)
-    return data; // This will be the response from your API
-  } catch (error) {
-    console.error("Error fetching flexcoins:", error);
-    return null;
-  }
-};
+            const data = await response.json();
+            setflexcoins(data.coins)
+            return data; // This will be the response from your API
+        } catch (error) {
+            console.error("Error fetching flexcoins:", error);
+            return null;
+        }
+    };
     // Mock data for demonstration
     async function fetchWorkout(user) {
         try {
             const res = await fetch(
-                `http://localhost:8000/workouts/selected?username=${user}`
+                `https://prod-sih-eleventhour-backend.onrender.com/workouts/selected?username=${user}`
             );
             const data = await res.json();
             setSplitData(data.day || []);
@@ -248,9 +255,9 @@ const getflexcoins = async (username) => {
                         <button className="p-3 bg-slate-800/60 hover:bg-slate-700/60 rounded-xl transition-all">
                             <Bell className="w-5 h-5" />
                         </button>
-                        <Link 
-                        to={"/logworkout"}
-                        className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-emerald-500/25 transition-all">
+                        <Link
+                            to={"/logworkout"}
+                            className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-emerald-500/25 transition-all">
                             <Play className="w-4 h-4" />
                             Quick Start
                         </Link>
@@ -323,8 +330,8 @@ const getflexcoins = async (username) => {
 
                                 <div className="mt-6 space-y-3">
                                     <Link
-                                    to={"/split-generator"}
-                                    className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold py-3 rounded-xl shadow-lg hover:shadow-amber-500/25 transition-all flex items-center justify-center gap-2">
+                                        to={"/split-generator"}
+                                        className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold py-3 rounded-xl shadow-lg hover:shadow-amber-500/25 transition-all flex items-center justify-center gap-2">
                                         <RotateCcw className="w-4 h-4" />
                                         Generate New Split
                                     </Link>

@@ -154,14 +154,22 @@ export default function Nutrition() {
   const [expandedCard, setExpandedCard] = useState(null);
   const [username, setusername] = useState("")
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [flexcoins,setflexcoins] = useState(0);
+  const [flexcoins, setflexcoins] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getUsername = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
       try {
-        const res = await fetch("http://localhost:8000/validate", {
-          credentials: "include", // ⬅ send cookies
+        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         if (!res.ok) throw new Error("Failed to validate user");
@@ -354,27 +362,26 @@ export default function Nutrition() {
   const toggleCard = (index) => {
     setExpandedCard(expandedCard === index ? null : index);
   };
-const getflexcoins = async (username) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8000/flexcoin?username=${username}`,
-      {
-        method: "GET",
-        credentials: "include", // include cookies if needed
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  const getflexcoins = async (username) => {
+    try {
+      const response = await fetch(
+        `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const data = await response.json();
-    setflexcoins(data.coins)
-    return data; // This will be the response from your API
-  } catch (error) {
-    console.error("Error fetching flexcoins:", error);
-    return null;
-  }
-};
+      const data = await response.json();
+      setflexcoins(data.coins)
+      return data; // This will be the response from your API
+    } catch (error) {
+      console.error("Error fetching flexcoins:", error);
+      return null;
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0D1421] to-[#111827] text-white flex relative overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">

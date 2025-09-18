@@ -41,6 +41,7 @@ func HandleChatbot(w http.ResponseWriter, r *http.Request) {
 		delete(utils.LiveConn, conn)
 		delete(utils.UserConn, username)
 		delete(utils.ConnUser, conn)
+		delete(utils.Memory, username)
 		conn.Close()
 	}()
 	for {

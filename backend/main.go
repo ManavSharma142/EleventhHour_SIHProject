@@ -65,6 +65,7 @@ func main() {
 	connect.InitGoogleFitConnect()
 
 	r := mux.NewRouter()
+	r.HandleFunc("/ping", api.Ping).Methods("GET")
 	r.HandleFunc("/login", auth.Login).Methods("POST")                   //for normal login
 	r.HandleFunc("/register", auth.Register).Methods("POST")             //for normal register
 	r.HandleFunc("/validate", auth.Validate).Methods("GET")              //for validating JWT token and getting user details

@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -101,8 +102,8 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		// ✅ Existing user → issue JWT
 		tokenJWT := utils.GenerateJWTSecret(username)
-		setAuthCookie(w, tokenJWT)
-		http.Redirect(w, r, utils.FRONTEND_URL+"/app", http.StatusFound)
+		redirectURL := fmt.Sprintf("%s/oauth-success#token=%s&username=%s", utils.FRONTEND_URL, tokenJWT, username)
+		http.Redirect(w, r, redirectURL, http.StatusFound)
 		return
 	}
 
@@ -127,18 +128,6 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tokenJWT := utils.GenerateJWTSecret(username)
-	setAuthCookie(w, tokenJWT)
-
-	http.Redirect(w, r, utils.FRONTEND_URL+"/app", http.StatusFound)
-}
-
-func setAuthCookie(w http.ResponseWriter, token string) {
-	http.SetCookie(w, &http.Cookie{
-		Name:     "authToken",
-		Value:    token,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   utils.ProdBOOL, // change to true in production
-		SameSite: http.SameSiteLaxMode,
-	})
+	redirectURL := fmt.Sprintf("%s/oauth-success#token=%s&username=%s", utils.FRONTEND_URL, tokenJWT, username)
+	http.Redirect(w, r, redirectURL, http.StatusFound)
 }

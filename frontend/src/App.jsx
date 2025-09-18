@@ -10,6 +10,8 @@ import Nutrition from './pages/Nutrition';
 import Community from './pages/Community';
 import UserProfile from './pages/UserProfile';
 import LogWorkout from './pages/Logpage';
+import OAuthSuccess from './pages/Oauth';
+
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
           <Route path='/nutrition' element={<Nutrition />} />
           <Route path='/profile' element={<UserProfile />} />
           <Route path='/logworkout' element={<LogWorkout />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
           
         </Routes>
       </div>

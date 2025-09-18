@@ -63,19 +63,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     "authToken",
-		Value:    token,
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
-		Expires:  time.Now().Add(24 * time.Hour),
-	})
-
 	log.Println("Login successful for:", data.Username)
 
 	// Send only status response, no token in body
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"status": "done"})
+	json.NewEncoder(w).Encode(map[string]string{"status": "done", "token": token})
 }

@@ -28,9 +28,17 @@ export default function ActivityHeatmap() {
 
   useEffect(() => {
     const getUsername = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
       try {
-        const res = await fetch("http://localhost:8000/validate", {
-          credentials: "include", // ⬅ send cookies
+        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         if (!res.ok) throw new Error("Failed to validate user");
@@ -52,7 +60,7 @@ export default function ActivityHeatmap() {
     async function fetchData() {
       try {
         const res = await fetch(
-          `http://localhost:8000/streak?username=${username}`
+          `https://prod-sih-eleventhour-backend.onrender.com/streak?username=${username}`
         )
         const data = await res.json()
 

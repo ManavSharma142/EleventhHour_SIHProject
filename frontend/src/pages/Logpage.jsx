@@ -34,9 +34,17 @@ export default function LogWorkout() {
 
     useEffect(() => {
         const getUsername = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/login");
+                return;
+            }
             try {
-                const res = await fetch("http://localhost:8000/validate", {
-                    credentials: "include", // ⬅ send cookies
+                const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 });
 
                 if (!res.ok) throw new Error("Failed to validate user");
@@ -69,7 +77,7 @@ export default function LogWorkout() {
         try {
             setLoading(true);
             console.log('Fetching selected split for:', user);
-            const response = await fetch(`http://localhost:8000/workouts/selected?username=${user}`);
+            const response = await fetch(`https://prod-sih-eleventhour-backend.onrender.com/workouts/selected?username=${user}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch selected split');
             }
@@ -109,7 +117,7 @@ export default function LogWorkout() {
 
         try {
             const res = await fetch(
-                `http://localhost:8000/activedays?username=${username}&count=${count}`,
+                `https://prod-sih-eleventhour-backend.onrender.com/activedays?username=${username}&count=${count}`,
                 {
                     method: "GET",
                     credentials: "include" // include cookies if needed
@@ -126,7 +134,7 @@ export default function LogWorkout() {
     const fetchWorkoutProgress = async () => {
         try {
             console.log('Fetching progress for:', { username, splitId, currentDay });
-            const response = await fetch(`http://localhost:8000/workouts/progress?username=${username}&split_id=${splitId}&day=${currentDay}`);
+            const response = await fetch(`https://prod-sih-eleventhour-backend.onrender.com/workouts/progress?username=${username}&split_id=${splitId}&day=${currentDay}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch workout progress');
             }
@@ -200,7 +208,7 @@ export default function LogWorkout() {
             const currentProgress = workoutProgressData.length > 0 ? workoutProgressData[0].exercise : [];
             const updatedExercise = [...currentProgress, exerciseData];
 
-            const response = await fetch('http://localhost:8000/workouts/markdone', {
+            const response = await fetch('https://prod-sih-eleventhour-backend.onrender.com/workouts/markdone', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -268,11 +276,11 @@ export default function LogWorkout() {
     };
     // Sample exercise videos
     const exerciseVideos = {
-        "bench press": "dQw4w9WgXcQ",
-        "squats": "aX-YuvQkSRE",
-        "deadlift": "op9kVnSso6Q",
-        "overhead press": "2yjwXTZQDDI",
-        "barbell row": "9efgcAjQe7E"
+        "bench press": "sa",
+        "squats": "aX-d",
+        "deadlift": "op9kVddnSso6Q",
+        "overhead press": "2yjwddXTZQDDI",
+        "barbell row": "9efgcAddjQe7E"
     }
 
     // Initialize data on component mount
@@ -319,10 +327,9 @@ export default function LogWorkout() {
 const getflexcoins = async (username) => {
   try {
     const response = await fetch(
-      `http://localhost:8000/flexcoin?username=${username}`,
+      `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
       {
         method: "GET",
-        credentials: "include", // include cookies if needed
         headers: {
           "Content-Type": "application/json",
         },
