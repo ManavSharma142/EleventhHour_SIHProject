@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, use } from "react"
 
 export default function ActivityHeatmap() {
   const [activityData, setActivityData] = useState([])
@@ -24,12 +24,35 @@ export default function ActivityHeatmap() {
     }
     return days
   }
+  const [username, setusername] = useState("")
 
+  useEffect(() => {
+    const getUsername = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/validate", {
+          credentials: "include", // ⬅ send cookies
+        });
+
+        if (!res.ok) throw new Error("Failed to validate user");
+
+        const data = await res.json();
+
+        if (data?.username) {
+          setusername(data.username);
+          console.log("Username:", data.username);
+        }
+      } catch (err) {
+        console.error("Error validating user:", err);
+      }
+    };
+
+    getUsername();
+  }, []);
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch(
-          "http://localhost:8000/streak?username=technicaldm1186xun3Bj"
+          `http://localhost:8000/streak?username=${username}`
         )
         const data = await res.json()
 
@@ -61,7 +84,7 @@ export default function ActivityHeatmap() {
       }
     }
     fetchData()
-  }, [])
+  }, [username])
 
   const getActivityColor = (level) => {
     const colors = {
