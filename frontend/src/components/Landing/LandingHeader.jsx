@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Activity } from 'lucide-react';
+import { Dumbbell } from 'lucide-react';
 
 export function LandingHeader() {
   return (
@@ -13,16 +13,16 @@ export function LandingHeader() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.div className="flex items-center space-x-3" whileHover={{ scale: 1.05 }}>
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Activity className="w-5 h-5 text-white" />
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+              <Dumbbell className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
             </div>
             <span className="text-xl font-semibold text-white">Flexora</span>
           </motion.div>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-white/80 hover:text-white transition-colors">Features</a>
-            <a href="#community" className="text-white/80 hover:text-white transition-colors">Community</a>
+            <a href="/app" className="text-white/80 hover:text-white transition-colors">Features</a>
+            <a href="/community" className="text-white/80 hover:text-white transition-colors">Community</a>
           </nav>
         </div>
       </div>

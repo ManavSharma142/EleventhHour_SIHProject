@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { Link } from 'react-router-dom';
+import imgg from '../figma/frame_safari_dark.png'
 
 export function LandingHero() {
   return (
@@ -19,7 +20,7 @@ export function LandingHero() {
       <div className="container mx-auto text-center relative z-10">
         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <motion.h1 
-            className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6"
+            className="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -42,7 +43,7 @@ export function LandingHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            Personalized workout plans, AI-powered suggestions, and comprehensive 
+            Personalized workout plans, <span className='text-[#e6be0f] font-semibold text-lg'>AI-powered</span> suggestions, and comprehensive 
             progress tracking for both gym and home workouts. Your fitness journey, 
             redefined.
           </motion.p>
@@ -60,6 +61,23 @@ export function LandingHero() {
               Login
             </Link>
           </motion.div>
+<div className="relative mt-20 w-full max-w-4xl mx-auto">
+  {/* Glow background */}
+  <div
+    className="absolute inset-0 rounded-3xl blur-3xl opacity-50"
+    style={{
+      background:
+        'conic-gradient(from 0deg, red, orange, yellow, green, blue, purple, pink, red)'
+    }}
+  ></div>
+
+  {/* Image */}
+  <img
+    src={imgg}
+    alt=""
+    className="relative rounded-3xl w-full h-auto object-cover shadow-3xl hover:scale-[1.02] transition-transform duration-500"
+  />
+</div>
         </motion.div>
       </div>
     </section>
