@@ -28,7 +28,7 @@ export default function LoginPage() {
 const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/login", {
+    const res = await fetch("http://localhost:8000/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -54,7 +54,7 @@ const handleLogin = async (e) => {
 
 const handleGoogleLogin = () => {
   const popup = window.open(
-    "https://prod-sih-eleventhour-backend.onrender.com/google/login",
+    "http://localhost:8000/google/login",
     "googleLogin",
     "width=500,height=600"
   );

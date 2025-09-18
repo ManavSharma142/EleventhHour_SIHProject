@@ -66,7 +66,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/register", {
+      const res = await fetch("http://localhost:8000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

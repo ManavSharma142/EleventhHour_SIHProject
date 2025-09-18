@@ -47,7 +47,7 @@ export default function ModernWorkout() {
                 return;
             }
             try {
-                const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+                const res = await fetch("http://localhost:8000/validate", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export default function ModernWorkout() {
     const getflexcoins = async (username) => {
         try {
             const response = await fetch(
-                `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+                `http://localhost:8000/flexcoin?username=${username}`,
                 {
                     method: "GET",
                     headers: {
@@ -103,7 +103,7 @@ export default function ModernWorkout() {
     async function fetchWorkout(user) {
         try {
             const res = await fetch(
-                `https://prod-sih-eleventhour-backend.onrender.com/workouts/selected?username=${user}`
+                `http://localhost:8000/workouts/selected?username=${user}`
             );
             const data = await res.json();
             setSplitData(data.day || []);

@@ -174,7 +174,7 @@ export default function Community() {
         return;
       }
       try {
-        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+        const res = await fetch("http://localhost:8000/validate", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -209,7 +209,7 @@ export default function Community() {
   const getflexcoins = async (username) => {
     try {
       const response = await fetch(
-        `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+        `http://localhost:8000/flexcoin?username=${username}`,
         {
           method: "GET",
           headers: {

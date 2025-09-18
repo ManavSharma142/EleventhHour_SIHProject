@@ -90,7 +90,7 @@ useEffect(() => {
     }
 
     try {
-      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
+      const res = await fetch("http://localhost:8000/validate", {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -141,7 +141,7 @@ useEffect(() => {
       return
     }
     // Fetch steps and calories
-    fetch(`https://prod-sih-eleventhour-backend.onrender.com/googlefit?username=${username}`)
+    fetch(`http://localhost:8000/googlefit?username=${username}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -157,7 +157,7 @@ useEffect(() => {
       });
 
     // Fetch workout split
-    fetch(`https://prod-sih-eleventhour-backend.onrender.com/workouts/selected?username=${username}}`)
+    fetch(`http://localhost:8000/workouts/selected?username=${username}}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -174,7 +174,7 @@ useEffect(() => {
 const getflexcoins = async (username) => {
   try {
     const response = await fetch(
-      `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
+      `http://localhost:8000/flexcoin?username=${username}`,
       {
         method: "GET",
         headers: {
