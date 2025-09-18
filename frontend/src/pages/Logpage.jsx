@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Button } from "../components/ui/Button"
 import { Input } from "../components/ui/Input"
 import { Card } from "../components/ui/Card"
-import { Play, User, Home, Dumbbell, Apple, Users, Coins, Clock, Plus, Trash2, Pause, Square, Search, ChevronDown, Star, Trophy, Flame, Target, Activity, Zap, BarChart3, Settings, Bell, Share2, Heart, TrendingUp } from "lucide-react"
+import { Play, User, Home, Dumbbell, Apple, Users, Coins, Clock, Plus, Trash2, Pause, Square, Search, ChevronDown, Star, Trophy, Flame, Target, Activity, Zap, BarChart3, Settings, Bell, Share2, Heart, TrendingUp, Menu, X } from "lucide-react"
 import { use } from "react"
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -31,6 +31,9 @@ export default function LogWorkout() {
     const [username, setusername] = useState("")
     const [currentTime, setCurrentTime] = useState(new Date());
     const [flexcoins,setflexcoins] = useState(0);
+    
+    // Mobile state
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     useEffect(() => {
         const getUsername = async () => {
@@ -442,61 +445,68 @@ const getflexcoins = async (username) => {
                 <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-500/20 via-cyan-500/10 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
                 <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-purple-500/20 via-pink-500/10 to-orange-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
                 <div className="absolute top-1/3 left-1/3 w-72 h-72 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
-
             </div>
+
+            {/* Mobile Overlay */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
 
             {/* Advanced Stats Modal */}
             {showStatsModal && (
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl shadow-2xl border border-slate-700/50 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-4 sm:p-8 rounded-3xl shadow-2xl border border-slate-700/50 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Workout Analytics</h2>
+                            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Workout Analytics</h2>
                             <Button onClick={() => setShowStatsModal(false)} variant="ghost" className="rounded-2xl">
-                                <span className="text-2xl">&times;</span>
+                                <X className="w-5 h-5" />
                             </Button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6 mb-8">
-                            <div className="p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl border border-blue-500/30">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
+                            <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl border border-blue-500/30">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <TrendingUp className="w-8 h-8 text-blue-300" />
+                                    <TrendingUp className="w-6 sm:w-8 h-6 sm:h-8 text-blue-300" />
                                     <div>
-                                        <h3 className="text-lg font-bold text-blue-300">Total Volume</h3>
-                                        <p className="text-3xl font-bold text-white">{totalVolume.toLocaleString()}</p>
-                                        <p className="text-sm text-blue-400">lbs lifted</p>
+                                        <h3 className="text-base sm:text-lg font-bold text-blue-300">Total Volume</h3>
+                                        <p className="text-2xl sm:text-3xl font-bold text-white">{totalVolume.toLocaleString()}</p>
+                                        <p className="text-xs sm:text-sm text-blue-400">lbs lifted</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl border border-green-500/30">
+                            <div className="p-4 sm:p-6 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl border border-green-500/30">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <Activity className="w-8 h-8 text-green-300" />
+                                    <Activity className="w-6 sm:w-8 h-6 sm:h-8 text-green-300" />
                                     <div>
-                                        <h3 className="text-lg font-bold text-green-300">Intensity</h3>
-                                        <p className="text-3xl font-bold text-white capitalize">{workoutIntensity}</p>
-                                        <p className="text-sm text-green-400">current level</p>
+                                        <h3 className="text-base sm:text-lg font-bold text-green-300">Intensity</h3>
+                                        <p className="text-2xl sm:text-3xl font-bold text-white capitalize">{workoutIntensity}</p>
+                                        <p className="text-xs sm:text-sm text-green-400">current level</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30">
+                            <div className="p-4 sm:p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <Clock className="w-8 h-8 text-purple-300" />
+                                    <Clock className="w-6 sm:w-8 h-6 sm:h-8 text-purple-300" />
                                     <div>
-                                        <h3 className="text-lg font-bold text-purple-300">Duration</h3>
-                                        <p className="text-3xl font-bold text-white">{formatTime(timer)}</p>
-                                        <p className="text-sm text-purple-400">active time</p>
+                                        <h3 className="text-base sm:text-lg font-bold text-purple-300">Duration</h3>
+                                        <p className="text-2xl sm:text-3xl font-bold text-white">{formatTime(timer)}</p>
+                                        <p className="text-xs sm:text-sm text-purple-400">active time</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-2xl border border-orange-500/30">
+                            <div className="p-4 sm:p-6 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-2xl border border-orange-500/30">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <Flame className="w-8 h-8 text-orange-300" />
+                                    <Flame className="w-6 sm:w-8 h-6 sm:h-8 text-orange-300" />
                                     <div>
-                                        <h3 className="text-lg font-bold text-orange-300">Est. Calories</h3>
-                                        <p className="text-3xl font-bold text-white">{Math.round(timer * 4.2)}</p>
-                                        <p className="text-sm text-orange-400">burned</p>
+                                        <h3 className="text-base sm:text-lg font-bold text-orange-300">Est. Calories</h3>
+                                        <p className="text-2xl sm:text-3xl font-bold text-white">{Math.round(timer * 4.2)}</p>
+                                        <p className="text-xs sm:text-sm text-orange-400">burned</p>
                                     </div>
                                 </div>
                             </div>
@@ -504,20 +514,20 @@ const getflexcoins = async (username) => {
 
                         {/* Personal Records */}
                         <div className="mb-6">
-                            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                                <Trophy className="w-6 h-6 text-amber-400" />
+                            <h3 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
+                                <Trophy className="w-5 sm:w-6 h-5 sm:h-6 text-amber-400" />
                                 Personal Records
                             </h3>
                             <div className="space-y-3">
-                                <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-xl">
+                                <div className="flex items-center justify-between p-3 sm:p-4 bg-slate-700/20 rounded-xl">
                                     <span className="font-medium text-slate-300">Bench Press</span>
                                     <span className="font-bold text-amber-300">225 lbs</span>
                                 </div>
-                                <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-xl">
+                                <div className="flex items-center justify-between p-3 sm:p-4 bg-slate-700/20 rounded-xl">
                                     <span className="font-medium text-slate-300">Squats</span>
                                     <span className="font-bold text-amber-300">315 lbs</span>
                                 </div>
-                                <div className="flex items-center justify-between p-4 bg-slate-700/20 rounded-xl">
+                                <div className="flex items-center justify-between p-3 sm:p-4 bg-slate-700/20 rounded-xl">
                                     <span className="font-medium text-slate-300">Deadlift</span>
                                     <span className="font-bold text-amber-300">405 lbs</span>
                                 </div>
@@ -536,11 +546,11 @@ const getflexcoins = async (username) => {
 
             {/* Rest Timer Overlay */}
             {isResting && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
-                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl shadow-2xl border border-slate-700/50 text-center">
-                        <Clock className="w-16 h-16 text-blue-400 mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold mb-2">Rest Time</h3>
-                        <div className="text-6xl font-mono font-bold text-blue-300 mb-4">{formatTime(restTimer)}</div>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 sm:p-8 rounded-3xl shadow-2xl border border-slate-700/50 text-center max-w-sm w-full">
+                        <Clock className="w-12 sm:w-16 h-12 sm:h-16 text-blue-400 mx-auto mb-4" />
+                        <h3 className="text-xl sm:text-2xl font-bold mb-2">Rest Time</h3>
+                        <div className="text-4xl sm:text-6xl font-mono font-bold text-blue-300 mb-4">{formatTime(restTimer)}</div>
                         <Button onClick={() => setIsResting(false)} className="bg-blue-500 hover:bg-blue-600">
                             Skip Rest
                         </Button>
@@ -549,33 +559,41 @@ const getflexcoins = async (username) => {
             )}
 
             {/* Enhanced Sidebar */}
-            <aside className="w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-6 flex flex-col fixed top-0 left-0 h-full z-10 shadow-2xl">
+            <aside className={`w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-4 sm:p-6 flex flex-col fixed top-0 left-0 h-full z-50 shadow-2xl transform transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                {/* Mobile Close Button */}
+                <Button 
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="lg:hidden absolute top-4 right-4 p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
+                >
+                    <X className="w-5 h-5" />
+                </Button>
+
                 {/* Logo with animation */}
-                <div className="flex items-center gap-4 mb-12 group cursor-pointer">
+                <div className="flex items-center gap-4 mb-8 sm:mb-12 group cursor-pointer">
                     <div className="relative">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-                            <Dumbbell className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
+                        <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+                            <Dumbbell className="w-5 sm:w-6 h-5 sm:h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                     </div>
                     <div>
-                        <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+                        <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
                         <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
                     </div>
                 </div>
 
                 {/* Time Display */}
-                <div className="mb-6 p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
+                    <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                         {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
-                    <div className="text-sm text-gray-400">
+                    <div className="text-xs sm:text-sm text-gray-400">
                         {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
                     </div>
                 </div>
 
                 {/* Enhanced Navigation */}
-                <nav className="flex-1 space-y-3">
+                <nav className="flex-1 space-y-2 sm:space-y-3">
                     {[
                         { icon: Home, label: "Dashboard", color: "from-blue-500 to-cyan-500", page: "/app" },
                         { icon: Dumbbell, label: "Workouts", active: true, color: "from-green-500 to-emerald-500", page: "/workout" },
@@ -586,7 +604,8 @@ const getflexcoins = async (username) => {
                         <Link
                             to={page}
                             key={label}
-                            className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
+                            onClick={() => setIsSidebarOpen(false)}
+                            className={`group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                                   ${active
                                     ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
                                     : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
@@ -596,9 +615,9 @@ const getflexcoins = async (username) => {
                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
                             )}
                             <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
-                                <Icon className="w-5 h-5 relative z-10" />
+                                <Icon className="w-4 sm:w-5 h-4 sm:h-5 relative z-10" />
                             </div>
-                            <span className="font-semibold relative z-10">{label}</span>
+                            <span className="font-semibold relative z-10 text-sm sm:text-base">{label}</span>
                             {active && <div className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
                         </Link>
                     ))}
@@ -607,12 +626,12 @@ const getflexcoins = async (username) => {
                 {/* Enhanced Profile */}
                 <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                    <div className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
-                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
-                            <User className="w-6 h-6" />
+                    <div className="relative flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+                            <User className="w-5 sm:w-6 h-5 sm:h-6" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <div className="font-bold text-white truncate text-sm">
+                            <div className="font-bold text-white truncate text-xs sm:text-sm">
                                 {username}
                             </div>
                             <div className="flex items-center gap-2 text-xs text-gray-400">
@@ -626,9 +645,34 @@ const getflexcoins = async (username) => {
             </aside>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col relative z-10 ml-72">
-                {/* Enhanced Header */}
-                <header className="bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-8 shadow-xl">
+            <div className="flex-1 flex flex-col relative z-10 lg:ml-72">
+                {/* Mobile Header with Menu Button */}
+                <div className="lg:hidden bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-4 flex items-center justify-between shadow-xl">
+                    <Button 
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
+                    >
+                        <Menu className="w-5 h-5" />
+                    </Button>
+                    <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-blue-400" />
+                        <span className="text-lg font-mono font-bold text-white">{formatTime(timer)}</span>
+                    </div>
+                    <div className="flex gap-2">
+                        {!isTimerRunning ? (
+                            <Button onClick={startTimer} size="sm" className="bg-green-500 hover:bg-green-600 rounded-xl">
+                                <Play className="w-4 h-4" />
+                            </Button>
+                        ) : (
+                            <Button onClick={pauseTimer} size="sm" className="bg-amber-500 hover:bg-amber-600 rounded-xl">
+                                <Pause className="w-4 h-4" />
+                            </Button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Enhanced Header - Desktop */}
+                <header className="hidden lg:block bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-6 xl:p-8 shadow-xl">
                     <div className="flex items-center justify-between">
                         <div className="flex-1">
                             <div className="text-sm text-slate-400 mb-2 flex items-center gap-2">
@@ -638,10 +682,10 @@ const getflexcoins = async (username) => {
                                 <ChevronDown className="w-3 h-3 rotate-270" />
                                 <span className="text-white font-medium">Log Workout</span>
                             </div>
-                            <h1 className="text-5xl font-bold bg-white bg-clip-text text-transparent mb-2">
+                            <h1 className="text-3xl xl:text-5xl font-bold bg-white bg-clip-text text-transparent mb-2">
                                 {currentDay} Workout
                             </h1>
-                            <p className="text-slate-400 text-lg">
+                            <p className="text-slate-400 text-base xl:text-lg">
                                 {selectedSplit ?
                                     selectedSplit.day.find(day => day.day === currentDay)?.workouts.map(w => w.exercisecategory).join(', ') || 'Loading...'
                                     : 'Loading...'
@@ -650,12 +694,12 @@ const getflexcoins = async (username) => {
 
                             {/* Day Selector */}
                             {selectedSplit && (
-                                <div className="flex gap-2 mt-4">
+                                <div className="flex gap-2 mt-4 flex-wrap">
                                     {selectedSplit.day.map((day) => (
                                         <Button
                                             key={day.day}
                                             onClick={() => changeDay(day.day)}
-                                            className={`px-4 py-2 rounded-xl transition-all duration-300 ${currentDay === day.day
+                                            className={`px-3 xl:px-4 py-2 rounded-xl transition-all duration-300 text-sm ${currentDay === day.day
                                                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
                                                 : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:text-white'
                                                 }`}
@@ -668,30 +712,31 @@ const getflexcoins = async (username) => {
                         </div>
 
                         {/* Enhanced Timer and Controls */}
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-4 bg-gradient-to-r from-slate-800/60 to-slate-800/40 px-8 py-4 rounded-3xl shadow-2xl backdrop-blur-sm border border-slate-600/20">
-                                <Clock className="w-7 h-7 text-blue-400" />
-                                <span className="text-4xl font-mono font-bold text-white">{formatTime(timer)}</span>
+                        <div className="flex items-center gap-4 xl:gap-6">
+                            <div className="flex items-center gap-3 xl:gap-4 bg-gradient-to-r from-slate-800/60 to-slate-800/40 px-4 xl:px-8 py-3 xl:py-4 rounded-3xl shadow-2xl backdrop-blur-sm border border-slate-600/20">
+                                <Clock className="w-5 xl:w-7 h-5 xl:h-7 text-blue-400" />
+                                <span className="text-2xl xl:text-4xl font-mono font-bold text-white">{formatTime(timer)}</span>
                             </div>
 
-                            <div className="flex gap-3">
+                            <div className="flex gap-2 xl:gap-3">
                                 {!isTimerRunning ? (
-                                    <Button onClick={startTimer} className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-2xl px-8 py-4 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300">
-                                        <Play className="w-5 h-5 mr-2" />
-                                        Start Workout
+                                    <Button onClick={startTimer} className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-2xl px-4 xl:px-8 py-3 xl:py-4 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300">
+                                        <Play className="w-4 xl:w-5 h-4 xl:h-5 mr-2" />
+                                        <span className="hidden xl:inline">Start Workout</span>
+                                        <span className="xl:hidden">Start</span>
                                     </Button>
                                 ) : (
-                                    <Button onClick={pauseTimer} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-2xl px-8 py-4 shadow-lg shadow-amber-500/25">
-                                        <Pause className="w-5 h-5 mr-2" />
-                                        Pause
+                                    <Button onClick={pauseTimer} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-2xl px-4 xl:px-8 py-3 xl:py-4 shadow-lg shadow-amber-500/25">
+                                        <Pause className="w-4 xl:w-5 h-4 xl:h-5 mr-2" />
+                                        <span className="hidden xl:inline">Pause</span>
                                     </Button>
                                 )}
-                                <Button onClick={stopTimer} variant="outline" className="rounded-2xl px-8 py-4 border-2 border-slate-600/50 hover:border-slate-500 backdrop-blur-sm">
-                                    <Square className="w-5 h-5 mr-2" />
-                                    Stop
+                                <Button onClick={stopTimer} variant="outline" className="rounded-2xl px-4 xl:px-8 py-3 xl:py-4 border-2 border-slate-600/50 hover:border-slate-500 backdrop-blur-sm">
+                                    <Square className="w-4 xl:w-5 h-4 xl:h-5 mr-2" />
+                                    <span className="hidden xl:inline">Stop</span>
                                 </Button>
-                                <Button className="rounded-2xl px-6 py-4 bg-slate-800/40 hover:bg-slate-700/50 backdrop-blur-sm border border-slate-600/30">
-                                    <Share2 className="w-5 h-5" />
+                                <Button className="rounded-2xl px-3 xl:px-6 py-3 xl:py-4 bg-slate-800/40 hover:bg-slate-700/50 backdrop-blur-sm border border-slate-600/30">
+                                    <Share2 className="w-4 xl:w-5 h-4 xl:h-5" />
                                 </Button>
                             </div>
                         </div>
@@ -699,7 +744,7 @@ const getflexcoins = async (username) => {
                 </header>
 
                 {/* Enhanced Content */}
-                <div className="flex-1 p-8 grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <div className="flex-1 p-4 sm:p-6 xl:p-8 grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 xl:gap-8">
                     {/* Loading State */}
                     {loading && (
                         <div className="xl:col-span-3 flex items-center justify-center py-20">
@@ -729,20 +774,50 @@ const getflexcoins = async (username) => {
                     {/* Enhanced Workout Table */}
                     {!loading && !error && (
                         <div className="xl:col-span-2">
-                            <Card className="bg-slate-800/20 backdrop-blur-2xl border-slate-700/30 shadow-2xl rounded-3xl overflow-hidden">
-                                <div className="p-8">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h2 className="text-3xl font-bold text-white">Today's Exercises</h2>
-                                        <div className="flex gap-3">
-                                            <Button onClick={addExercise} className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl shadow-lg shadow-blue-500/25 px-6 py-3">
-                                                <Plus className="w-5 h-5 mr-2" />
-                                                Add Exercise
+                            {/* Mobile Day Selector */}
+                            {selectedSplit && (
+                                <div className="lg:hidden mb-4">
+                                    <div className="flex gap-2 overflow-x-auto pb-2">
+                                        {selectedSplit.day.map((day) => (
+                                            <Button
+                                                key={day.day}
+                                                onClick={() => changeDay(day.day)}
+                                                className={`px-4 py-2 rounded-xl transition-all duration-300 text-sm whitespace-nowrap ${currentDay === day.day
+                                                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                                                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:text-white'
+                                                    }`}
+                                            >
+                                                {day.day}
                                             </Button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <Card className="bg-slate-800/20 backdrop-blur-2xl border-slate-700/30 shadow-2xl rounded-3xl overflow-hidden">
+                                <div className="p-4 sm:p-6 xl:p-8">
+                                    <div className="flex items-center justify-between mb-6 xl:mb-8">
+                                        <div>
+                                            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 lg:hidden">
+                                                {currentDay} Workout
+                                            </h2>
+                                            <h2 className="hidden lg:block text-3xl font-bold text-white">Today's Exercises</h2>
+                                            <p className="text-slate-400 text-sm lg:hidden">
+                                                {selectedSplit ?
+                                                    selectedSplit.day.find(day => day.day === currentDay)?.workouts.map(w => w.exercisecategory).join(', ') || 'Loading...'
+                                                    : 'Loading...'
+                                                }
+                                            </p>
                                         </div>
+                                        <Button onClick={addExercise} className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl shadow-lg shadow-blue-500/25 px-4 sm:px-6 py-2 sm:py-3">
+                                            <Plus className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
+                                            <span className="hidden sm:inline">Add Exercise</span>
+                                            <span className="sm:hidden">Add</span>
+                                        </Button>
                                     </div>
 
-                                    {/* Enhanced Table Header */}
-                                    <div className="grid grid-cols-11 gap-4 mb-8 pb-4 border-b border-slate-700/30">
+                                    {/* Desktop Table Header */}
+                                    <div className="hidden lg:grid grid-cols-11 gap-4 mb-8 pb-4 border-b border-slate-700/30">
                                         <div className="col-span-1 text-sm font-semibold text-slate-400 uppercase tracking-wider">#</div>
                                         <div className="col-span-4 text-sm font-semibold text-slate-400 uppercase tracking-wider">Exercise</div>
                                         <div className="col-span-2 text-sm font-semibold text-slate-400 uppercase tracking-wider">Set</div>
@@ -752,99 +827,172 @@ const getflexcoins = async (username) => {
 
                                     {/* Enhanced Exercise Rows */}
                                     {exercises.map((exercise, exerciseIndex) => (
-                                        <div key={exercise.id} className="space-y-3 mb-10 p-8 bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-3xl border border-slate-600/20 backdrop-blur-sm hover:border-slate-600/40 transition-all duration-300">
-                                            {exercise.sets.map((set, setIndex) => (
-                                                <div key={set.id} className="grid grid-cols-11 gap-4 items-center group">
-                                                    <div className="col-span-1 text-lg font-bold text-slate-300">
-                                                        {setIndex === 0 ? exerciseIndex + 1 : ""}
+                                        <div key={exercise.id} className="space-y-3 mb-8 xl:mb-10 p-4 sm:p-6 xl:p-8 bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-3xl border border-slate-600/20 backdrop-blur-sm hover:border-slate-600/40 transition-all duration-300">
+                                            
+                                            {/* Mobile Exercise Header */}
+                                            <div className="lg:hidden mb-4">
+                                                <div className="flex items-center gap-3 mb-3">
+                                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                                                        {exerciseIndex + 1}
                                                     </div>
-                                                    <div className="col-span-4">
-                                                        {setIndex === 0 ? (
-                                                            <div className="flex items-center gap-3">
-                                                                <div className="flex-1 relative">
-                                                                    <Input
-                                                                        placeholder="Exercise name"
-                                                                        value={exercise.name}
-                                                                        readOnly
-                                                                        onChange={(e) => updateExerciseName(exercise.id, e.target.value)}
-                                                                        onClick={() => handleExerciseClick(exercise.name)}
-                                                                        className={`rounded-2xl font-semibold cursor-pointer transition-all duration-300 text-white placeholder:text-slate-500 text-lg py-3 flex-1 ${exercise.isLogged
-                                                                            ? 'bg-green-800/30 border-green-500/50 hover:border-green-400'
-                                                                            : 'bg-slate-800/50 border-slate-600/50 hover:border-blue-400'
-                                                                            }`}
-                                                                    />
-                                                                    {exercise.isLogged && (
-                                                                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                                                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                                                                <span className="text-white text-xs font-bold">✓</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
+                                                    <div className="flex-1 relative">
+                                                        <Input
+                                                            placeholder="Exercise name"
+                                                            value={exercise.name}
+                                                            readOnly
+                                                            onChange={(e) => updateExerciseName(exercise.id, e.target.value)}
+                                                            onClick={() => handleExerciseClick(exercise.name)}
+                                                            className={`rounded-2xl font-semibold cursor-pointer transition-all duration-300 text-white placeholder:text-slate-500 text-base py-3 flex-1 ${exercise.isLogged
+                                                                ? 'bg-green-800/30 border-green-500/50 hover:border-green-400'
+                                                                : 'bg-slate-800/50 border-slate-600/50 hover:border-blue-400'
+                                                                }`}
+                                                        />
+                                                        {exercise.isLogged && (
+                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                                                    <span className="text-white text-xs font-bold">✓</span>
                                                                 </div>
-
                                                             </div>
-                                                        ) : null}
+                                                        )}
                                                     </div>
-                                                    <div className="col-span-2">
-                                                        <div className="text-sm text-slate-300 bg-gradient-to-r from-slate-600/40 to-slate-700/40 px-4 py-3 rounded-xl text-center font-semibold border border-slate-600/30">
+                                                </div>
+                                            </div>
+
+                                            {/* Sets for Mobile */}
+                                            <div className="lg:hidden space-y-3">
+                                                {exercise.sets.map((set, setIndex) => (
+                                                    <div key={set.id} className="flex items-center gap-3 p-3 bg-slate-800/30 rounded-2xl">
+                                                        <div className="text-sm font-semibold text-slate-300 bg-slate-600/40 px-3 py-2 rounded-xl min-w-[60px] text-center">
                                                             Set {setIndex + 1}
                                                         </div>
-                                                    </div>
-                                                    <div className="col-span-2">
-                                                        <Input
-                                                            placeholder="0"
-                                                            value={set.repetitions}
-                                                            onChange={(e) => updateSet(exercise.id, set.id, "repetitions", e.target.value)}
-                                                            className="bg-slate-800/50 border-slate-600/50 rounded-2xl text-center font-semibold text-white placeholder:text-slate-500 py-3 hover:border-slate-500 transition-colors"
-                                                        />
-                                                    </div>
-                                                    <div className="col-span-2">
-                                                        <Input
-                                                            placeholder="0"
-                                                            value={set.weight}
-                                                            onChange={(e) => updateSet(exercise.id, set.id, "weight", e.target.value)}
-                                                            className="bg-slate-800/50 border-slate-600/50 rounded-2xl text-center font-semibold text-white placeholder:text-slate-500 py-3 hover:border-slate-500 transition-colors"
-                                                        />
-                                                    </div>
-                                                    {!exercise.isLogged && (<div className="col-span-1 flex gap-2">
-                                                        {exercise.sets.length > 1 && (
+                                                        <div className="flex-1 grid grid-cols-2 gap-3">
+                                                            <div>
+                                                                <label className="text-xs text-slate-400 mb-1 block">Reps</label>
+                                                                <Input
+                                                                    placeholder="0"
+                                                                    value={set.repetitions}
+                                                                    onChange={(e) => updateSet(exercise.id, set.id, "repetitions", e.target.value)}
+                                                                    className="bg-slate-800/50 border-slate-600/50 rounded-xl text-center font-semibold text-white placeholder:text-slate-500 py-2"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <label className="text-xs text-slate-400 mb-1 block">Weight</label>
+                                                                <Input
+                                                                    placeholder="0"
+                                                                    value={set.weight}
+                                                                    onChange={(e) => updateSet(exercise.id, set.id, "weight", e.target.value)}
+                                                                    className="bg-slate-800/50 border-slate-600/50 rounded-xl text-center font-semibold text-white placeholder:text-slate-500 py-2"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        {!exercise.isLogged && exercise.sets.length > 1 && (
                                                             <Button
                                                                 size="sm"
                                                                 variant="destructive"
                                                                 onClick={() => deleteSet(exercise.id, set.id)}
-                                                                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl px-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                                                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl p-2"
                                                             >
                                                                 <Trash2 className="w-4 h-4" />
                                                             </Button>
                                                         )}
-                                                    </div>)}
-                                                </div>
-                                            ))}
-                                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-5 shadow-xl border border-white/10 space-y-2">
-                                                <h1 className="text-xl font-bold text-white">In this exercise</h1>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Desktop Table View */}
+                                            <div className="hidden lg:block">
+                                                {exercise.sets.map((set, setIndex) => (
+                                                    <div key={set.id} className="grid grid-cols-11 gap-4 items-center group mb-3">
+                                                        <div className="col-span-1 text-lg font-bold text-slate-300">
+                                                            {setIndex === 0 ? exerciseIndex + 1 : ""}
+                                                        </div>
+                                                        <div className="col-span-4">
+                                                            {setIndex === 0 ? (
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="flex-1 relative">
+                                                                        <Input
+                                                                            placeholder="Exercise name"
+                                                                            value={exercise.name}
+                                                                            readOnly
+                                                                            onChange={(e) => updateExerciseName(exercise.id, e.target.value)}
+                                                                            onClick={() => handleExerciseClick(exercise.name)}
+                                                                            className={`rounded-2xl font-semibold cursor-pointer transition-all duration-300 text-white placeholder:text-slate-500 text-lg py-3 flex-1 ${exercise.isLogged
+                                                                                ? 'bg-green-800/30 border-green-500/50 hover:border-green-400'
+                                                                                : 'bg-slate-800/50 border-slate-600/50 hover:border-blue-400'
+                                                                                }`}
+                                                                        />
+                                                                        {exercise.isLogged && (
+                                                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                                                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                                                                    <span className="text-white text-xs font-bold">✓</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            ) : null}
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <div className="text-sm text-slate-300 bg-gradient-to-r from-slate-600/40 to-slate-700/40 px-4 py-3 rounded-xl text-center font-semibold border border-slate-600/30">
+                                                                Set {setIndex + 1}
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <Input
+                                                                placeholder="0"
+                                                                value={set.repetitions}
+                                                                onChange={(e) => updateSet(exercise.id, set.id, "repetitions", e.target.value)}
+                                                                className="bg-slate-800/50 border-slate-600/50 rounded-2xl text-center font-semibold text-white placeholder:text-slate-500 py-3 hover:border-slate-500 transition-colors"
+                                                            />
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <Input
+                                                                placeholder="0"
+                                                                value={set.weight}
+                                                                onChange={(e) => updateSet(exercise.id, set.id, "weight", e.target.value)}
+                                                                className="bg-slate-800/50 border-slate-600/50 rounded-2xl text-center font-semibold text-white placeholder:text-slate-500 py-3 hover:border-slate-500 transition-colors"
+                                                            />
+                                                        </div>
+                                                        {!exercise.isLogged && (<div className="col-span-1 flex gap-2">
+                                                            {exercise.sets.length > 1 && (
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="destructive"
+                                                                    onClick={() => deleteSet(exercise.id, set.id)}
+                                                                    className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl px-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                                                >
+                                                                    <Trash2 className="w-4 h-4" />
+                                                                </Button>
+                                                            )}
+                                                        </div>)}
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-4 sm:p-5 shadow-xl border border-white/10 space-y-2">
+                                                <h1 className="text-lg sm:text-xl font-bold text-white">In this exercise</h1>
                                                 <h2 className="text-sm text-gray-300 italic">{exercise.description}</h2>
 
-                                                <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-200">
-                                                    <span className="px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/30">
+                                                <div className="flex flex-wrap gap-2 sm:gap-4 mt-3 text-sm text-gray-200">
+                                                    <span className="px-2 sm:px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/30 text-xs sm:text-sm">
                                                         Category: <strong>{exercise.category}</strong>
                                                     </span>
-                                                    <span className="px-3 py-1 rounded-lg bg-blue-500/20 border border-blue-500/30">
+                                                    <span className="px-2 sm:px-3 py-1 rounded-lg bg-blue-500/20 border border-blue-500/30 text-xs sm:text-sm">
                                                         Sets: <strong>{exercise.sets.length}</strong>
                                                     </span>
-                                                    <span className="px-3 py-1 rounded-lg bg-green-500/20 border border-green-500/30">
+                                                    <span className="px-2 sm:px-3 py-1 rounded-lg bg-green-500/20 border border-green-500/30 text-xs sm:text-sm">
                                                         Reps: <strong>{exercise.sets[0]?.repetitions}</strong>
                                                     </span>
                                                 </div>
                                             </div>
 
                                             {/* Enhanced Add Set Button */}
-                                            <div className="flex justify-end mt-6">
-                                                <div className="flex gap-3">
+                                            <div className="flex justify-between sm:justify-end mt-4 sm:mt-6">
+                                                <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
                                                     <Button
-                                                        size="sm"
                                                         disabled={exercise.isLogged}
                                                         onClick={() => markExerciseDone(exercise.id)}
-                                                        className={`rounded-xl px-4 py-2 shadow-lg transition-all duration-300 ${exercise.isLogged
+                                                        className={`rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 sm:flex-none ${exercise.isLogged
                                                             ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-green-500/25'
                                                             : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-purple-500/25 hover:shadow-purple-500/40'
                                                             } text-white`}
@@ -852,17 +1000,18 @@ const getflexcoins = async (username) => {
                                                         <Activity className="w-4 h-4 mr-2" />
                                                         {exercise.isLogged ? 'Logged' : 'Log'}
                                                     </Button>
-                                                    {!exercise.isLogged && (<Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => addSet(exercise.id)}
-                                                        className="border-slate-600/50 text-slate-300 hover:bg-slate-700/30 hover:text-white hover:border-slate-500 rounded-2xl px-6 py-2 backdrop-blur-sm transition-all duration-300"
-                                                    >
-                                                        <Plus className="w-4 h-4 mr-2" />
-                                                        Add Set
-                                                    </Button>)}
+                                                    {!exercise.isLogged && (
+                                                        <Button
+                                                            variant="outline"
+                                                            onClick={() => addSet(exercise.id)}
+                                                            className="border-slate-600/50 text-slate-300 hover:bg-slate-700/30 hover:text-white hover:border-slate-500 rounded-2xl px-4 sm:px-6 py-2 backdrop-blur-sm transition-all duration-300 flex-1 sm:flex-none"
+                                                        >
+                                                            <Plus className="w-4 h-4 mr-2" />
+                                                            <span className="hidden sm:inline">Add Set</span>
+                                                            <span className="sm:hidden">Set</span>
+                                                        </Button>
+                                                    )}
                                                 </div>
-
                                             </div>
                                         </div>
                                     ))}
@@ -873,18 +1022,18 @@ const getflexcoins = async (username) => {
 
                     {/* Enhanced Right Column */}
                     {!loading && !error && (
-                        <div className="xl:col-span-1 space-y-6">
+                        <div className="xl:col-span-1 space-y-4 sm:space-y-6">
                             {/* Enhanced Video Player */}
                             <Card className="bg-slate-800/20 backdrop-blur-2xl border-slate-700/30 shadow-2xl rounded-3xl overflow-hidden">
-                                <div className="p-6">
-                                    <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                                            <Play className="w-5 h-5 text-white" />
+                                <div className="p-4 sm:p-6">
+                                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-3">
+                                        <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                                            <Play className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
                                         </div>
-                                        Exercise Tutorial
+                                        <span className="text-lg sm:text-2xl">Exercise Tutorial</span>
                                     </h3>
 
-                                    <div className="aspect-video bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl flex items-center justify-center mb-6 relative overflow-hidden shadow-2xl border border-slate-700/30">
+                                    <div className="aspect-video bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 relative overflow-hidden shadow-2xl border border-slate-700/30">
                                         {selectedExercise ? (
                                             (() => {
                                                 const exercise = exercises.find(ex => ex.name === selectedExercise);
@@ -909,9 +1058,9 @@ const getflexcoins = async (username) => {
                                                 );
                                             })()
                                         ) : (
-                                            <div className="text-center p-8">
-                                                <div className="w-24 h-24 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mb-6 mx-auto backdrop-blur-sm border border-slate-600/30">
-                                                    <Play className="w-12 h-12 text-blue-400 ml-1" />
+                                            <div className="text-center p-6 sm:p-8">
+                                                <div className="w-16 sm:w-24 h-16 sm:h-24 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mb-4 sm:mb-6 mx-auto backdrop-blur-sm border border-slate-600/30">
+                                                    <Play className="w-8 sm:w-12 h-8 sm:h-12 text-blue-400 ml-1" />
                                                 </div>
                                                 <p className="text-white text-xl font-semibold mb-3">Select an Exercise</p>
                                                 <p className="text-slate-400 text-sm leading-relaxed">Click on any exercise to watch tutorial</p>
