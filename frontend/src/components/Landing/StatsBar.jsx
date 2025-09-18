@@ -5,7 +5,7 @@ export function StatsBar() {
   const stats = [
     { icon: <Trophy className="w-6 h-6 text-blue-400" />, number: "100+", label: "Workout Splits Generated" },
     { icon: <Zap className="w-6 h-6 text-green-400" />, number: "24/7", label: "AI Support" },
-    { icon: <Users className="w-6 h-6 text-purple-400" />, number: "5,000+", label: "Active Students" }
+    { icon: <Users className="w-6 h-6 text-purple-400" />, number: "6+", label: "Active Students" }
   ];
 
   return (
