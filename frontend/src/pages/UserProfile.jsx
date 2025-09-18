@@ -88,6 +88,9 @@ function TimelineItem({ icon: Icon, title, description, time, color }) {
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
+  const username = "dhananjaymishra269FBL11kl";
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [flexcoins] = useState(1259);
 
   const userStats = {
     totalWorkouts: 142,
@@ -141,55 +144,91 @@ export default function UserProfile() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex relative overflow-hidden">
-      <AnimatedBackground />
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0D1421] to-[#111827] text-white flex relative overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+      </div>
       
       {/* Enhanced Sidebar */}
-      <div className="w-72 backdrop-blur-xl bg-black/20 border-r border-white/10 p-8 flex flex-col relative z-10">
-        {/* Logo */}
-        <div className="flex items-center gap-4 mb-16">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-lg">F</span>
-          </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Flexora
-          </span>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 space-y-3">
-          {[
-            { icon: Home, label: "Home", active: false },
-            { icon: Dumbbell, label: "Workout", active: false },
-            { icon: Apple, label: "Nutrition", active: false },
-            { icon: Users, label: "Community", active: false },
-            { icon: Coins, label: "FlexCoins", active: false }
-          ].map((item, index) => (
-            <div key={index} className="flex items-center gap-4 px-6 py-4 rounded-2xl text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-300 cursor-pointer group">
-              <item.icon size={22} className="group-hover:scale-110 transition-transform" />
-              <span className="font-medium">{item.label}</span>
-            </div>
-          ))}
-        </nav>
-
-        {/* Enhanced User Profile */}
-        <Card className="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-500/30" hover={false}>
-          <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-lg">A</span>
-          </div>
-          <div className="flex-1">
-            <div className="font-semibold text-white">Alex Johnson</div>
-            <div className="flex items-center gap-2 text-sm">
-              <Coins size={14} className="text-yellow-400" />
-              <span className="text-yellow-400 font-medium">1,259</span>
-              <span className="text-slate-400">FlexCoins</span>
-            </div>
-          </div>
-        </Card>
-      </div>
+      <aside className="w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-6 flex flex-col fixed top-0 left-0 h-full z-10 shadow-2xl">
+              {/* Logo with animation */}
+              <div className="flex items-center gap-4 mb-12 group cursor-pointer">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+                    <Dumbbell className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                </div>
+                <div>
+                  <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+                  <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
+                </div>
+              </div>
+      
+              {/* Time Display */}
+              <div className="mb-6 p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
+                <div className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
+                <div className="text-sm text-gray-400">
+                  {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
+                </div>
+              </div>
+      
+              {/* Enhanced Navigation */}
+              <nav className="flex-1 space-y-3">
+                {[
+                  { icon: Home, label: "Dashboard", color: "from-blue-500 to-cyan-500" },
+                  { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500" },
+                  { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500" },
+                  { icon: Users, label: "Community", color: "from-purple-500 to-pink-500" },
+                  { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500" },
+                ].map(({ icon: Icon, label, active, color }) => (
+                  <div
+                    key={label}
+                    className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
+                      ${active
+                        ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                        : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
+                      }`}
+                  >
+                    {active && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+                    )}
+                    <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
+                      <Icon className="w-5 h-5 relative z-10" />
+                    </div>
+                    <span className="font-semibold relative z-10">{label}</span>
+                    {active && <div className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
+                  </div>
+                ))}
+              </nav>
+      
+              {/* Enhanced Profile */}
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                <div className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+                  <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+                    <User className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-white truncate text-sm">
+                      {username}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
+                      <Coins className="w-3 h-3 text-amber-400" />
+                      <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                      <span>FlexCoins</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
 
       {/* Main Content */}
-      <div className="flex-1 p-10 relative z-10 overflow-y-auto">
+      <div className="flex-1 p-10 relative z-10 overflow-y-auto ml-72">
         {/* Breadcrumb */}
         <div className="flex items-center gap-3 mb-12 text-slate-300">
           <span className="hover:text-white transition-colors cursor-pointer">Home</span>

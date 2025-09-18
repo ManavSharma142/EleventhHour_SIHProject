@@ -9,6 +9,8 @@ import Workout from './pages/Workout';
 import Nutrition from './pages/Nutrition';
 import Community from './pages/Community';
 import UserProfile from './pages/UserProfile';
+import LogWorkout from './pages/Logpage';
+
 function App() {
   return (
     <Router>
@@ -23,6 +25,7 @@ function App() {
           <Route path='/community' element={<Community />} />
           <Route path='/nutrition' element={<Nutrition />} />
           <Route path='/profile' element={<UserProfile />} />
+          <Route path='/logworkout' element={<LogWorkout />} />
           
         </Routes>
       </div>

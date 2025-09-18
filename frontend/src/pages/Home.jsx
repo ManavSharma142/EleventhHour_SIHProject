@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import ActivityHeatmap from "../components/ActivityHeatmap";
 import useWebSocket from 'react-use-websocket';
+import { Link, useNavigate } from "react-router-dom";
+
 
 // The CircularProgress component is a helper for the visual elements
 const CircularProgress = ({ percentage, color, size = 120, strokeWidth = 8 }) => {
@@ -60,9 +62,9 @@ const CircularProgress = ({ percentage, color, size = 120, strokeWidth = 8 }) =>
 
 export default function ModernFitnessDashboard() {
   // Use a variable for the username to make it easier to change
-  const username = "dhananjaymishra269FBL11kl";
+  const [username, setusername] = useState("")
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://prod-sih-eleventhour-backend.onrender.com/wss/chatbot?username=${username}`);
-  const [flexcoins] = useState(1259);
+  const [flexcoins,setflexcoins] = useState(0);
   const [stepsCount, setStepsCount] = useState(0);
   const [targetSteps, setTargetSteps] = useState(0);
   const [calorieCount, setCalorieCount] = useState(0);
@@ -75,6 +77,41 @@ export default function ModernFitnessDashboard() {
   ]);
   const messagesEndRef = useRef(null);
   const [workoutSplit, setWorkoutSplit] = useState(null);
+
+
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const getUsername = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/validate", {
+          credentials: "include", // ⬅ send cookies
+        });
+
+        if (!res.ok) throw new Error("Failed to validate user");
+
+        const data = await res.json();
+
+        if (data?.status === "error") {
+          navigate("/login");
+          return;
+        }
+
+        if (data?.username) {
+          setusername(data.username);
+          console.log("Username:", data.username);
+          getflexcoins(data.username)
+        } else {
+          navigate("/login");
+        }
+      } catch (err) {
+        console.error("Error validating user:", err);
+        navigate("/login");
+      }
+    };
+
+    getUsername();
+  }, []);
 
   useEffect(() => {
     if (lastJsonMessage?.text) {
@@ -122,7 +159,27 @@ export default function ModernFitnessDashboard() {
         console.error("Failed to fetch workout data:", error);
       });
   }, [username]); // The username dependency ensures this runs if the username changes
+const getflexcoins = async (username) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8000/flexcoin?username=${username}`,
+      {
+        method: "GET",
+        credentials: "include", // include cookies if needed
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
+    const data = await response.json();
+    setflexcoins(data.coins)
+    return data; // This will be the response from your API
+  } catch (error) {
+    console.error("Error fetching flexcoins:", error);
+    return null;
+  }
+};
   // === MODIFIED: Animate counters based on fetched data ===
   useEffect(() => {
     const stepsTimer = setTimeout(() => {
@@ -167,19 +224,19 @@ export default function ModernFitnessDashboard() {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
-  
-const handleSendMessage = () => {
-  if (!chatInput.trim()) return;
 
-  // Add user message locally
-  setMessages(prev => [...prev, { type: "user", text: chatInput }]);
+  const handleSendMessage = () => {
+    if (!chatInput.trim()) return;
 
-  // Send to backend WebSocket as JSON
-  sendJsonMessage({ text: chatInput });
+    // Add user message locally
+    setMessages(prev => [...prev, { type: "user", text: chatInput }]);
 
-  // Clear the input
-  setChatInput("");
-};
+    // Send to backend WebSocket as JSON
+    sendJsonMessage({ text: chatInput });
+
+    // Clear the input
+    setChatInput("");
+  };
 
   // Find today's workout to display dynamically
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
@@ -227,13 +284,14 @@ const handleSendMessage = () => {
         {/* Enhanced Navigation */}
         <nav className="flex-1 space-y-3">
           {[
-            { icon: Home, label: "Dashboard", active: true, color: "from-blue-500 to-cyan-500" },
-            { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500" },
-            { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500" },
-            { icon: Users, label: "Community", color: "from-purple-500 to-pink-500" },
-            { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500" },
-          ].map(({ icon: Icon, label, active, color }) => (
-            <div
+            { icon: Home, label: "Dashboard", active: true, color: "from-blue-500 to-cyan-500",page: "/app" },
+            { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500",page: "/workout" },
+            { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500",page: "/nutrition" },
+            { icon: Users, label: "Community", color: "from-purple-500 to-pink-500",page: "/community" },
+            { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500",page:"/flexcoins"},
+          ].map(({ icon: Icon, label, active, color, page }) => (
+            <Link
+              to={page}
               key={label}
               className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                 ${active
@@ -249,7 +307,7 @@ const handleSendMessage = () => {
               </div>
               <span className="font-semibold relative z-10">{label}</span>
               {active && <div className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
-            </div>
+            </Link>
           ))}
         </nav>
 
@@ -434,17 +492,21 @@ const handleSendMessage = () => {
 
                 <div className="space-y-4">
                   <button className="w-full group relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-blue-500/30 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]">
-                    <span className="relative z-10 flex items-center justify-center gap-3">
+                    <Link 
+                    to={"/logworkout"}
+                    className="relative z-10 flex items-center justify-center gap-3">
                       <Zap className="w-6 h-6 group-hover:animate-pulse" />
                       Start Workout
-                    </span>
+                    </Link>
                   </button>
 
                   <button className="w-full group relative overflow-hidden bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-600 text-black font-bold text-lg px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-yellow-500/30 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]">
-                    <span className="relative z-10 flex items-center justify-center gap-3">
+                    <Link
+                    to={"/split-generator"}
+                    className="relative z-10 flex items-center justify-center gap-3">
                       <Sparkles className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
                       Generate New Split
-                    </span>
+                    </Link>
                   </button>
                 </div>
               </div>
@@ -580,8 +642,7 @@ const handleSendMessage = () => {
               <div className="flex flex-col justify-centre space-y-2">
                 {messages.map((message, index) => (
                   <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] ${
-                      message.type === 'user'
+                    <div className={`max-w-[85%] ${message.type === 'user'
                         ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-4'
                         : 'bg-gradient-to-r from-gray-700/80 to-gray-600/80 text-white border border-white/10 mr-4'
                       } px-5 py-4 rounded-3xl shadow-xl backdrop-blur-sm relative group`}>
@@ -607,18 +668,7 @@ const handleSendMessage = () => {
                 <div ref={messagesEndRef} />
 
                 {/* Typing indicator */}
-                <div className="flex justify-start">
-                  <div className="bg-gray-700/50 px-5 py-4 rounded-3xl border border-white/10 backdrop-blur-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
-                      </div>
-                      <span className="text-xs text-gray-400">GymBro is typing...</span>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
 
