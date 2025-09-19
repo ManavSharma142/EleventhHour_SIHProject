@@ -31,6 +31,8 @@ func Chatbot(prompt []*genai.Content, username string) {
 	username of the user is %s. you can use tools to get more information about the user.
 	use only this username %s to fetch data from database no other username.
 	if user asks for flexcoin, current workout split or active days, use the tools to get the information.
+	dont ask for confarmation about tool calls
+	dont mention username in chat
 	`, username, username)
 
 	stream := c.Models.GenerateContentStream(
@@ -96,7 +98,7 @@ func PostProsser(username string, toolres string, prompt []*genai.Content) {
 	`, username, toolres)
 	res, err := c.Models.GenerateContent(
 		ctx,
-		"gemini-2.5-flash",
+		"gemini-2.0-flash",
 		prompt,
 		&genai.GenerateContentConfig{
 			SystemInstruction: &genai.Content{

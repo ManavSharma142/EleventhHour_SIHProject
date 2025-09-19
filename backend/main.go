@@ -91,7 +91,6 @@ func main() {
 
 	r.HandleFunc("/profile", api.GetUserProfile).Methods("GET")        //for getting user profile
 	r.HandleFunc("/profile/update", api.UpdateProfile).Methods("POST") //for updating user profile
-
 	corsWrappedRouter := router.CorsMiddleware(r)
 
 	port := os.Getenv("PORT")
