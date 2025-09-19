@@ -26,9 +26,9 @@ function Card({ children, className, onClick, hover = true }) {
 function AnimatedBackground() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-blue-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
     </div>
   );
 }
@@ -79,8 +79,8 @@ function ArticleCard({ article, isExpanded, onToggle }) {
                 <Star size={16} className="text-yellow-400" fill="currentColor" />
               </div>
             )}
-            <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-              <Award size={16} className="text-purple-400" />
+            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-pink-500/20 border border-blue-500/30">
+              <Award size={16} className="text-blue-400" />
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ function ArticleCard({ article, isExpanded, onToggle }) {
             <button className="text-slate-400 hover:text-yellow-400 transition-colors">
               <Bookmark size={18} />
             </button>
-            <button className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium hover:shadow-lg transition-all">
+            <button className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-500 text-white text-sm font-medium hover:shadow-lg transition-all">
               {isExpanded ? 'Read Full Article' : 'Read More'}
             </button>
           </div>
@@ -120,7 +120,7 @@ function ChatMessage({ message, isUser }) {
   return (
     <div className={`flex items-start gap-3 ${isUser ? 'justify-end' : ''}`}>
       {!isUser && (
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
           {message.author[0]}
         </div>
       )}
@@ -129,7 +129,7 @@ function ChatMessage({ message, isUser }) {
         <div className={`
           px-4 py-3 rounded-2xl text-sm
           ${isUser
-            ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-br-md'
+            ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-br-md'
             : 'bg-white/10 border border-white/20 text-white rounded-bl-md'
           }
         `}>
@@ -174,7 +174,7 @@ export default function Community() {
         return;
       }
       try {
-        const res = await fetch("http://localhost:8000/validate", {
+        const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/validate", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -209,7 +209,7 @@ export default function Community() {
   const getflexcoins = async (username) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/flexcoin?username=${username}`,
+        `https://prod-sih-eleventhour-backend.onrender.com/flexcoin?username=${username}`,
         {
           method: "GET",
           headers: {
@@ -309,7 +309,7 @@ export default function Community() {
     <div className="min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0D1421] to-[#111827] text-white flex relative overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
@@ -318,13 +318,54 @@ export default function Community() {
         {/* Logo with animation */}
         <div className="flex items-center gap-4 mb-12 group cursor-pointer">
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <Dumbbell className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+  <svg
+    viewBox="0 0 58 58"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full rounded-2xl"
+  >
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+
+    {/* Background */}
+    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+
+    {/* Dumbbell icon */}
+    <g
+      transform="translate(17,17)"
+      className="origin-center"
+    >
+      <path
+        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  </svg>
+</div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
           </div>
           <div>
-            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
             <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
           </div>
         </div>
@@ -353,12 +394,12 @@ export default function Community() {
               key={label}
               className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                       ${active
-                  ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                  ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                   : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                 }`}
             >
               {active && (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
               )}
               <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
                 <Icon className="w-5 h-5 relative z-10" />
@@ -405,7 +446,7 @@ export default function Community() {
           <div className="mb-12">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent leading-tight">
+                <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-200 bg-clip-text text-transparent leading-tight">
                   Articles
                 </h1>
                 <p className="text-xl text-slate-300 leading-relaxed">
@@ -424,7 +465,7 @@ export default function Community() {
                   <div className="font-bold text-emerald-400">Training Science</div>
                 </div>
               </div>
-              <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30">
+              <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500/20 to-blue-500/20 border border-blue-500/30">
                 <MessageCircle className="text-blue-400" size={20} />
                 <div>
                   <div className="text-sm text-slate-300">Active Discussions</div>
@@ -456,7 +497,7 @@ export default function Community() {
             <div className="flex items-center gap-2 mt-4">
               <div className="flex -space-x-2">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 border-2 border-slate-800 flex items-center justify-center text-white text-xs font-bold">
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-500 border-2 border-slate-800 flex items-center justify-center text-white text-xs font-bold">
                     {String.fromCharCode(65 + i)}
                   </div>
                 ))}
@@ -485,7 +526,7 @@ export default function Community() {
               />
               <button
                 onClick={sendMessage}
-                className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl hover:shadow-lg transition-all flex-shrink-0"
+                className="p-3 bg-gradient-to-r from-blue-500 to-blue-500 text-white rounded-2xl hover:shadow-lg transition-all flex-shrink-0"
               >
                 <Send size={20} />
               </button>
