@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58">
   <defs>
-    <!-- Background gradient -->
+    <!-- Dark bluish gradient background -->
     <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="50%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#ec4899"/>
+      <stop offset="0%" stop-color="#0f172a"/> <!-- deep navy -->
+      <stop offset="50%" stop-color="#1e3a8a"/> <!-- royal blue -->
+      <stop offset="100%" stop-color="#3b82f6"/> <!-- cool blue -->
     </linearGradient>
   </defs>
 
   <!-- Rounded gradient background -->
   <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)"/>
 
-  <!-- Centered dumbbell icon -->
+  <!-- White dumbbell icon in center -->
   <g transform="translate(17,17) scale(1.0)">
     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/>

@@ -443,8 +443,8 @@ const getflexcoins = async (username) => {
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
             {/* Enhanced Animated Background */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-500/20 via-cyan-500/10 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-purple-500/20 via-pink-500/10 to-orange-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-500/20 via-cyan-500/10 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-500/20 via-pink-500/10 to-orange-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
                 <div className="absolute top-1/3 left-1/3 w-72 h-72 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
             </div>
 
@@ -461,7 +461,7 @@ const getflexcoins = async (username) => {
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-4 sm:p-8 rounded-3xl shadow-2xl border border-slate-700/50 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Workout Analytics</h2>
+                            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-400 bg-clip-text text-transparent">Workout Analytics</h2>
                             <Button onClick={() => setShowStatsModal(false)} variant="ghost" className="rounded-2xl">
                                 <X className="w-5 h-5" />
                             </Button>
@@ -490,13 +490,13 @@ const getflexcoins = async (username) => {
                                 </div>
                             </div>
 
-                            <div className="p-4 sm:p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30">
+                            <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-500/20 to-pink-500/20 rounded-2xl border border-blue-500/30">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <Clock className="w-6 sm:w-8 h-6 sm:h-8 text-purple-300" />
+                                    <Clock className="w-6 sm:w-8 h-6 sm:h-8 text-blue-300" />
                                     <div>
-                                        <h3 className="text-base sm:text-lg font-bold text-purple-300">Duration</h3>
+                                        <h3 className="text-base sm:text-lg font-bold text-blue-300">Duration</h3>
                                         <p className="text-2xl sm:text-3xl font-bold text-white">{formatTime(timer)}</p>
-                                        <p className="text-xs sm:text-sm text-purple-400">active time</p>
+                                        <p className="text-xs sm:text-sm text-blue-400">active time</p>
                                     </div>
                                 </div>
                             </div>
@@ -537,7 +537,7 @@ const getflexcoins = async (username) => {
 
                         <Button
                             onClick={() => setShowStatsModal(false)}
-                            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-2xl py-3"
+                            className="w-full bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 rounded-2xl py-3"
                         >
                             Close Analytics
                         </Button>
@@ -572,13 +572,54 @@ const getflexcoins = async (username) => {
                 {/* Logo with animation */}
                 <div className="flex items-center gap-4 mb-8 sm:mb-12 group cursor-pointer">
                     <div className="relative">
-                        <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-                            <Dumbbell className="w-5 sm:w-6 h-5 sm:h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+  <svg
+    viewBox="0 0 58 58"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full rounded-2xl"
+  >
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+
+    {/* Background */}
+    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+
+    {/* Dumbbell icon */}
+    <g
+      transform="translate(17,17)"
+      className="origin-center"
+    >
+      <path
+        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  </svg>
+</div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                     </div>
                     <div>
-                        <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+                        <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
                         <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
                     </div>
                 </div>
@@ -608,12 +649,12 @@ const getflexcoins = async (username) => {
                             onClick={() => setIsSidebarOpen(false)}
                             className={`group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                                   ${active
-                                    ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                                    ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                                     : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                                 }`}
                         >
                             {active && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
                             )}
                             <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
                                 <Icon className="w-4 sm:w-5 h-4 sm:h-5 relative z-10" />
@@ -701,7 +742,7 @@ const getflexcoins = async (username) => {
                                             key={day.day}
                                             onClick={() => changeDay(day.day)}
                                             className={`px-3 xl:px-4 py-2 rounded-xl transition-all duration-300 text-sm ${currentDay === day.day
-                                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                                                ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white shadow-lg'
                                                 : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:text-white'
                                                 }`}
                                         >
@@ -784,7 +825,7 @@ const getflexcoins = async (username) => {
                                                 key={day.day}
                                                 onClick={() => changeDay(day.day)}
                                                 className={`px-4 py-2 rounded-xl transition-all duration-300 text-sm whitespace-nowrap ${currentDay === day.day
-                                                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
+                                                    ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white shadow-lg'
                                                     : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:text-white'
                                                     }`}
                                             >
@@ -810,7 +851,7 @@ const getflexcoins = async (username) => {
                                                 }
                                             </p>
                                         </div>
-                                        <Button onClick={addExercise} className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl shadow-lg shadow-blue-500/25 px-4 sm:px-6 py-2 sm:py-3">
+                                        <Button onClick={addExercise} className="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 text-white rounded-2xl shadow-lg shadow-blue-500/25 px-4 sm:px-6 py-2 sm:py-3">
                                             <Plus className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
                                             <span className="hidden sm:inline">Add Exercise</span>
                                             <span className="sm:hidden">Add</span>
@@ -833,7 +874,7 @@ const getflexcoins = async (username) => {
                                             {/* Mobile Exercise Header */}
                                             <div className="lg:hidden mb-4">
                                                 <div className="flex items-center gap-3 mb-3">
-                                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">
                                                         {exerciseIndex + 1}
                                                     </div>
                                                     <div className="flex-1 relative">
@@ -975,7 +1016,7 @@ const getflexcoins = async (username) => {
                                                 <h2 className="text-sm text-gray-300 italic">{exercise.description}</h2>
 
                                                 <div className="flex flex-wrap gap-2 sm:gap-4 mt-3 text-sm text-gray-200">
-                                                    <span className="px-2 sm:px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/30 text-xs sm:text-sm">
+                                                    <span className="px-2 sm:px-3 py-1 rounded-lg bg-blue-500/20 border border-blue-500/30 text-xs sm:text-sm">
                                                         Category: <strong>{exercise.category}</strong>
                                                     </span>
                                                     <span className="px-2 sm:px-3 py-1 rounded-lg bg-blue-500/20 border border-blue-500/30 text-xs sm:text-sm">
@@ -995,7 +1036,7 @@ const getflexcoins = async (username) => {
                                                         onClick={() => markExerciseDone(exercise.id)}
                                                         className={`rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 sm:flex-none ${exercise.isLogged
                                                             ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-green-500/25'
-                                                            : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-purple-500/25 hover:shadow-purple-500/40'
+                                                            : 'bg-gradient-to-r from-blue-500 to-pink-500 hover:from-blue-600 hover:to-pink-600 shadow-blue-500/25 hover:shadow-blue-500/40'
                                                             } text-white`}
                                                     >
                                                         <Activity className="w-4 h-4 mr-2" />
@@ -1028,7 +1069,7 @@ const getflexcoins = async (username) => {
                             <Card className="bg-slate-800/20 backdrop-blur-2xl border-slate-700/30 shadow-2xl rounded-3xl overflow-hidden">
                                 <div className="p-4 sm:p-6">
                                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-3">
-                                        <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                                        <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-r from-blue-500 to-blue-500 rounded-xl flex items-center justify-center">
                                             <Play className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
                                         </div>
                                         <span className="text-lg sm:text-2xl">Exercise Tutorial</span>
@@ -1060,7 +1101,7 @@ const getflexcoins = async (username) => {
                                             })()
                                         ) : (
                                             <div className="text-center p-6 sm:p-8">
-                                                <div className="w-16 sm:w-24 h-16 sm:h-24 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mb-4 sm:mb-6 mx-auto backdrop-blur-sm border border-slate-600/30">
+                                                <div className="w-16 sm:w-24 h-16 sm:h-24 bg-gradient-to-br from-blue-500/20 to-blue-500/20 rounded-full flex items-center justify-center mb-4 sm:mb-6 mx-auto backdrop-blur-sm border border-slate-600/30">
                                                     <Play className="w-8 sm:w-12 h-8 sm:h-12 text-blue-400 ml-1" />
                                                 </div>
                                                 <p className="text-white text-xl font-semibold mb-3">Select an Exercise</p>
@@ -1092,7 +1133,7 @@ const getflexcoins = async (username) => {
                                             })()}
                                         </div>
 
-                                        <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl py-4 shadow-lg font-medium transition-all duration-300 hover:shadow-blue-500/25">
+                                        <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 text-white rounded-2xl py-4 shadow-lg font-medium transition-all duration-300 hover:shadow-blue-500/25">
                                             <Search className="w-5 h-5 mr-2" />
                                             Browse Exercise Library
                                         </Button>
@@ -1125,9 +1166,9 @@ const getflexcoins = async (username) => {
                                             </div>
                                             <div className="text-xs text-green-400/80 font-medium">Total Exercises</div>
                                         </div>
-                                        <div className="text-center p-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30 hover:scale-105 transition-transform duration-300">
-                                            <div className="text-3xl font-bold text-purple-300 mb-1">{completedExercises}</div>
-                                            <div className="text-xs text-purple-400/80 font-medium">Logged</div>
+                                        <div className="text-center p-4 bg-gradient-to-br from-blue-500/20 to-pink-500/20 rounded-2xl border border-blue-500/30 hover:scale-105 transition-transform duration-300">
+                                            <div className="text-3xl font-bold text-blue-300 mb-1">{completedExercises}</div>
+                                            <div className="text-xs text-blue-400/80 font-medium">Logged</div>
                                         </div>
                                         <div className="text-center p-4 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-2xl border border-amber-500/30 hover:scale-105 transition-transform duration-300">
                                             <div className="text-3xl font-bold text-amber-300 mb-1">{totalVolume.toLocaleString()}</div>
@@ -1143,7 +1184,7 @@ const getflexcoins = async (username) => {
                                         </div>
                                         <div className="w-full bg-slate-600/30 rounded-full h-3 overflow-hidden">
                                             <div
-                                                className="h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500 ease-out shadow-lg shadow-blue-500/25"
+                                                className="h-3 bg-gradient-to-r from-blue-500 to-blue-500 rounded-full transition-all duration-500 ease-out shadow-lg shadow-blue-500/25"
                                                 style={{ width: `${workoutProgress}%` }}
                                             ></div>
                                         </div>
@@ -1208,7 +1249,7 @@ const getflexcoins = async (username) => {
                 <div className="fixed bottom-8 right-8 z-50">
                     <Button
                         onClick={addExercise}
-                        className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-full shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-110"
+                        className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 rounded-full shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-110"
                     >
                         <Plus className="w-8 h-8 text-white" />
                     </Button>

@@ -185,13 +185,54 @@ export default function ModernWorkout() {
                 {/* Logo with animation */}
                 <div className="flex items-center gap-3 lg:gap-4 mb-8 lg:mb-12 group cursor-pointer">
                     <div className="relative">
-                        <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-                            <Dumbbell className="w-5 h-5 lg:w-6 lg:h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+  <svg
+    viewBox="0 0 58 58"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full rounded-2xl"
+  >
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+
+    {/* Background */}
+    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+
+    {/* Dumbbell icon */}
+    <g
+      transform="translate(17,17)"
+      className="origin-center"
+    >
+      <path
+        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  </svg>
+</div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                     </div>
                     <div>
-                        <span className="text-xl lg:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+                        <span className="text-xl lg:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
                         <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
                     </div>
                 </div>
@@ -221,12 +262,12 @@ export default function ModernWorkout() {
                             onClick={() => setSidebarOpen(false)}
                             className={`group flex items-center gap-3 lg:gap-4 px-3 lg:px-5 py-3 lg:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                                   ${active
-                                    ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                                    ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                                     : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                                 }`}
                         >
                             {active && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
                             )}
                             <div className={`relative p-1.5 lg:p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
                                 <Icon className="w-4 h-4 lg:w-5 lg:h-5 relative z-10" />
@@ -290,7 +331,7 @@ export default function ModernWorkout() {
                 {loading ? (
                     <div className="flex items-center justify-center h-64">
                         <div className="text-center">
-                            <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                             <p className="text-slate-400">Loading your personalized workout...</p>
                         </div>
                     </div>
@@ -300,7 +341,7 @@ export default function ModernWorkout() {
                         <div className="xl:col-span-1">
                             <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-4 lg:p-6 border border-slate-700/50 shadow-xl">
                                 <div className="flex items-center gap-2 mb-4">
-                                    <Calendar className="w-5 h-5 text-violet-400" />
+                                    <Calendar className="w-5 h-5 text-blue-400" />
                                     <h2 className="text-lg lg:text-xl font-bold">Weekly Split</h2>
                                 </div>
 
@@ -345,7 +386,7 @@ export default function ModernWorkout() {
                                                 <span className="text-xs text-slate-400">
                                                     {dayItem.workouts.length} exercises
                                                 </span>
-                                                <ChevronRight className={`w-4 h-4 transition-transform ${openDay === dayItem.day ? 'rotate-90 text-violet-400' : 'text-slate-400'
+                                                <ChevronRight className={`w-4 h-4 transition-transform ${openDay === dayItem.day ? 'rotate-90 text-blue-400' : 'text-slate-400'
                                                     }`} />
                                             </div>
                                         </div>
@@ -378,7 +419,7 @@ export default function ModernWorkout() {
                                                     placeholder="Search exercises..."
                                                     value={searchTerm}
                                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                                    className="bg-slate-800/60 border border-slate-600/50 pl-10 pr-4 py-3 rounded-xl outline-none focus:border-violet-500/50 focus:bg-slate-800/80 transition-all w-full sm:min-w-[250px]"
+                                                    className="bg-slate-800/60 border border-slate-600/50 pl-10 pr-4 py-3 rounded-xl outline-none focus:border-blue-500/50 focus:bg-slate-800/80 transition-all w-full sm:min-w-[250px]"
                                                 />
                                             </div>
 
@@ -387,7 +428,7 @@ export default function ModernWorkout() {
                                                 <select
                                                     value={filter}
                                                     onChange={(e) => setFilter(e.target.value)}
-                                                    className="bg-slate-800/60 border border-slate-600/50 pl-10 pr-8 py-3 rounded-xl outline-none focus:border-violet-500/50 appearance-none w-full sm:min-w-[150px]"
+                                                    className="bg-slate-800/60 border border-slate-600/50 pl-10 pr-8 py-3 rounded-xl outline-none focus:border-blue-500/50 appearance-none w-full sm:min-w-[150px]"
                                                 >
                                                     <option value="">All Categories</option>
                                                     {[...new Set(splitData.flatMap(d => d.workouts.map(w => w.exercisecategory)))].map(cat => (
@@ -401,7 +442,7 @@ export default function ModernWorkout() {
                                             <button
                                                 onClick={() => setViewMode("table")}
                                                 className={`p-3 rounded-lg transition-all ${viewMode === "table"
-                                                    ? "bg-violet-600 text-white shadow-lg"
+                                                    ? "bg-blue-600 text-white shadow-lg"
                                                     : "text-slate-400 hover:text-white hover:bg-slate-700/50"
                                                     }`}
                                             >
@@ -410,7 +451,7 @@ export default function ModernWorkout() {
                                             <button
                                                 onClick={() => setViewMode("card")}
                                                 className={`p-3 rounded-lg transition-all ${viewMode === "card"
-                                                    ? "bg-violet-600 text-white shadow-lg"
+                                                    ? "bg-blue-600 text-white shadow-lg"
                                                     : "text-slate-400 hover:text-white hover:bg-slate-700/50"
                                                     }`}
                                             >
@@ -426,7 +467,7 @@ export default function ModernWorkout() {
                                                 key={dayItem.day}
                                                 className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden"
                                             >
-                                                <div className="bg-gradient-to-r from-violet-600/20 to-purple-600/20 px-4 lg:px-6 py-4 border-b border-slate-700/50">
+                                                <div className="bg-gradient-to-r from-blue-600/20 to-blue-600/20 px-4 lg:px-6 py-4 border-b border-slate-700/50">
                                                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                                                         <div>
                                                             <h3 className="text-xl lg:text-2xl font-bold">{dayItem.day}</h3>
@@ -435,10 +476,7 @@ export default function ModernWorkout() {
                                                             </p>
                                                         </div>
                                                         <div className="flex items-center gap-2">
-                                                            <Target className="w-5 h-5 text-violet-400" />
-                                                            <span className="text-sm font-medium">
-                                                                {Math.round((completedExercises.size / dayItem.workouts.length) * 100)}% Complete
-                                                            </span>
+                                                            <Target className="w-5 h-5 text-blue-400" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -449,16 +487,16 @@ export default function ModernWorkout() {
                                                             {getFilteredExercises(dayItem.workouts).map((exercise, idx) => (
                                                                 <div
                                                                     key={exercise.title}
-                                                                    className={`group relative bg-slate-700/30 hover:bg-slate-700/50 border border-slate-600/30 rounded-xl p-4 lg:p-5 transition-all duration-300 hover:scale-[1.02] hover:border-violet-500/30 ${completedExercises.has(exercise.title) ? 'ring-2 ring-emerald-500/50 bg-emerald-500/10' : ''
+                                                                    className={`group relative bg-slate-700/30 hover:bg-slate-700/50 border border-slate-600/30 rounded-xl p-4 lg:p-5 transition-all duration-300 hover:scale-[1.02] hover:border-blue-500/30 ${completedExercises.has(exercise.title) ? 'ring-2 ring-emerald-500/50 bg-emerald-500/10' : ''
                                                                         }`}
                                                                 >
                                                                     <div className="flex items-start justify-between mb-3">
                                                                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                                                                            <span className="text-lg font-bold text-violet-400 flex-shrink-0">
+                                                                            <span className="text-lg font-bold text-blue-400 flex-shrink-0">
                                                                                 {idx + 1}
                                                                             </span>
                                                                             <div className="min-w-0 flex-1">
-                                                                                <h4 className="font-bold text-base lg:text-lg group-hover:text-violet-400 transition-colors truncate">
+                                                                                <h4 className="font-bold text-base lg:text-lg group-hover:text-blue-400 transition-colors truncate">
                                                                                     {exercise.title}
                                                                                 </h4>
                                                                                 <p className="text-sm text-slate-400 truncate">
@@ -466,15 +504,6 @@ export default function ModernWorkout() {
                                                                                 </p>
                                                                             </div>
                                                                         </div>
-                                                                        <button
-                                                                            onClick={() => toggleExerciseComplete(exercise.title)}
-                                                                            className={`p-2 rounded-full transition-all flex-shrink-0 ml-2 ${completedExercises.has(exercise.title)
-                                                                                ? 'bg-emerald-500 text-white'
-                                                                                : 'bg-slate-600/50 hover:bg-slate-600 text-slate-400'
-                                                                                }`}
-                                                                        >
-                                                                            <Star className={`w-4 h-4 ${completedExercises.has(exercise.title) ? 'fill-current' : ''}`} />
-                                                                        </button>
                                                                     </div>
 
                                                                     <div className="flex flex-wrap items-center gap-2 lg:gap-4 mb-4">
@@ -495,7 +524,7 @@ export default function ModernWorkout() {
                                                                                 href={exercise.link}
                                                                                 target="_blank"
                                                                                 rel="noopener noreferrer"
-                                                                                className="flex items-center gap-2 text-violet-400 hover:text-violet-300 text-sm font-medium transition-colors"
+                                                                                className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
                                                                             >
                                                                                 <Play className="w-4 h-4" />
                                                                                 <span className="hidden sm:inline">Watch Demo</span>
@@ -526,7 +555,7 @@ export default function ModernWorkout() {
                                                                                 className={`border-b border-slate-700/30 hover:bg-slate-700/20 transition-all ${completedExercises.has(exercise.title) ? 'bg-emerald-500/5' : ''
                                                                                     }`}
                                                                             >
-                                                                                <td className="p-2 lg:p-4 font-bold text-violet-400">{idx + 1}</td>
+                                                                                <td className="p-2 lg:p-4 font-bold text-blue-400">{idx + 1}</td>
                                                                                 <td className="p-2 lg:p-4 font-semibold">
                                                                                     <div className="max-w-[200px] truncate">{exercise.title}</div>
                                                                                 </td>
@@ -544,7 +573,7 @@ export default function ModernWorkout() {
                                                                                             href={exercise.link}
                                                                                             target="_blank"
                                                                                             rel="noopener noreferrer"
-                                                                                            className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-sm"
+                                                                                            className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-sm"
                                                                                         >
                                                                                             <Play className="w-3 h-3" />
                                                                                             <span className="hidden lg:inline">Watch</span>
