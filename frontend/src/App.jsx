@@ -11,6 +11,8 @@ import Community from './pages/Community';
 import UserProfile from './pages/UserProfile';
 import LogWorkout from './pages/Logpage';
 import OAuthSuccess from './pages/Oauth';
+import PrivacyPolicy from './pages/Privacy';
+import TermsOfService from './pages/Terms';
 
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
           <Route path='/profile' element={<UserProfile />} />
           <Route path='/logworkout' element={<LogWorkout />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
           
         </Routes>
       </div>

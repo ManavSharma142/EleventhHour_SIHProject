@@ -159,7 +159,7 @@ export default function ModernFitnessDashboard() {
       });
 
     // Fetch workout split
-    fetch(`http://localhost:8000/workouts/selected?username=${username}}`)
+    fetch(`http://localhost:8000/workouts/selected?username=${username}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -167,6 +167,7 @@ export default function ModernFitnessDashboard() {
         return response.json();
       })
       .then(data => {
+        console.log(data);
         setWorkoutSplit(data);
       })
       .catch(error => {

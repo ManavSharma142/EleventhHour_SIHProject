@@ -330,10 +330,43 @@ export default function SignUpPage() {
             </div>
 
             {/* Submit */}
-            <div>
+                <div>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="policy" className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="policy"
+                        name="privacy_policy"
+                        className="w-4 h-4"
+                        required
+                      />
+                      <span>
+                        I agree to the{" "}
+                        <a href="/privacy" target="_blank" className="text-blue-500 underline">
+                          Privacy Policy
+                        </a>
+                      </span>
+                    </label>
+
+                    <label htmlFor="terms" className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="terms"
+                        name="terms_of_service"
+                        className="w-4 h-4"
+                        required
+                      />
+                      <span>
+                        I agree to the{" "}
+                        <a href="/terms" target="_blank" className="text-blue-500 underline">
+                          Terms of Service
+                        </a>
+                      </span>
+                    </label>
+                  </div>
               <button
                 type="submit"
-                className="w-full rounded-md bg-[var(--primary-color)] py-3 px-4 text-base font-bold text-white shadow-lg hover:shadow-xl hover:opacity-90 transition-all"
+                className=" mt-5 w-full rounded-md bg-[var(--primary-color)] py-3 px-4 text-base font-bold text-white shadow-lg hover:shadow-xl hover:opacity-90 transition-all"
               >
                 Sign Up
               </button>

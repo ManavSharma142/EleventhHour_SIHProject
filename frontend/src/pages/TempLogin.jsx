@@ -25,56 +25,56 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch("http://localhost:8000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (!res.ok) throw new Error("Invalid credentials");
+      if (!res.ok) throw new Error("Invalid credentials");
 
-    const data = await res.json();
-    console.log("Login success:", data);
+      const data = await res.json();
+      console.log("Login success:", data);
 
-    // ✅ Save token to localStorage
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+      // ✅ Save token to localStorage
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      navigate("/app");
+    } catch (err) {
+      console.error("Login failed:", err);
+      alert("Login failed");
     }
-
-    navigate("/app");
-  } catch (err) {
-    console.error("Login failed:", err);
-    alert("Login failed");
-  }
-};
-
-
-const handleGoogleLogin = () => {
-  const popup = window.open(
-    "http://localhost:8000/google/login",
-    "googleLogin",
-    "width=500,height=600"
-  );
-
-  const receiveMessage = (event) => {
-    if (event.origin !== window.location.origin) return;
-
-    const { token, username } = event.data;
-    if (token) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", username);
-    }
-
-    window.removeEventListener("message", receiveMessage);
-    popup.close();
-    window.location.href = "/app";
   };
 
-  window.addEventListener("message", receiveMessage);
-};
+
+  const handleGoogleLogin = () => {
+    const popup = window.open(
+      "http://localhost:8000/google/login",
+      "googleLogin",
+      "width=500,height=600"
+    );
+
+    const receiveMessage = (event) => {
+      if (event.origin !== window.location.origin) return;
+
+      const { token, username } = event.data;
+      if (token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("username", username);
+      }
+
+      window.removeEventListener("message", receiveMessage);
+      popup.close();
+      window.location.href = "/app";
+    };
+
+    window.addEventListener("message", receiveMessage);
+  };
 
   return (
     <div className="bg-[#0B111D] text-white font-sans">
@@ -146,7 +146,7 @@ const handleGoogleLogin = () => {
                 </div>
 
                 <div>
-                  <button type="submit" className="flex w-full items-center justify-center rounded-lg bg-[var(--primary-color)] h-12 px-5 text-base font-bold text-white shadow-[0_4px_14px_0_rgb(13,64,165,0.4)] hover:bg-blue-600 hover:shadow-[0_6px_20px_0_rgb(13,64,165,0.5)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-[#0B111D] transition-all duration-300 ease-in-out">
+                  <button type="submit" className="mt-5 flex w-full items-center justify-center rounded-lg bg-[var(--primary-color)] h-12 px-5 text-base font-bold text-white shadow-[0_4px_14px_0_rgb(13,64,165,0.4)] hover:bg-blue-600 hover:shadow-[0_6px_20px_0_rgb(13,64,165,0.5)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-[#0B111D] transition-all duration-300 ease-in-out">
                     Sign In
                   </button>
                 </div>

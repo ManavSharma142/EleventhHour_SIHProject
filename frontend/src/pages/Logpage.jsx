@@ -31,6 +31,7 @@ export default function LogWorkout() {
     const [username, setusername] = useState("")
     const [currentTime, setCurrentTime] = useState(new Date());
     const [flexcoins,setflexcoins] = useState(0);
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
     
     // Mobile state
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -281,9 +282,9 @@ export default function LogWorkout() {
     const exerciseVideos = {
         "bench press": "sa",
         "squats": "aX-d",
-        "deadlift": "op9kVddnSso6Q",
-        "overhead press": "2yjwddXTZQDDI",
-        "barbell row": "9efgcAddjQe7E"
+        "deadlift": "op9kVddnS6Q",
+        "overhead press": "2yjwXTZQDDI",
+        "barbell row": "9efgcAjQe7E"
     }
 
     // Initialize data on component mount
