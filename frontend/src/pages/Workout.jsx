@@ -581,14 +581,14 @@ export default function ModernWorkout() {
                 {/* Floating Action Button */}
                 {openDay && (
                     <div className="fixed bottom-4 lg:bottom-8 right-4 lg:right-8 z-30">
-                        <button className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 lg:px-8 py-3 lg:py-4 rounded-2xl font-bold shadow-2xl shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 flex items-center gap-2 lg:gap-3 hover:scale-105">
+                        <Link to="/logworkout" className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 lg:px-8 py-3 lg:py-4 rounded-2xl font-bold shadow-2xl shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 flex items-center gap-2 lg:gap-3 hover:scale-105">
                             <Play className="w-4 lg:w-5 h-4 lg:h-5" />
                             <span className="hidden sm:inline">Start Workout</span>
                             <span className="sm:hidden">Start</span>
                             <div className="bg-white/20 px-2 py-1 rounded-lg text-xs">
                                 {completedExercises.size}/{splitData.find(d => d.day === openDay)?.workouts.length || 0}
                             </div>
-                        </button>
+                        </Link>
                     </div>
                 )}
 
