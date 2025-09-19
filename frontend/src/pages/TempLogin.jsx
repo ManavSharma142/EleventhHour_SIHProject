@@ -87,17 +87,6 @@ export default function LoginPage() {
               </div>
               <h2 className="text-xl font-bold leading-tight tracking-[-0.015em]">Flexora</h2>
             </div>
-            <div className="flex items-center gap-8">
-              <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#D1D5DB]">
-                <a className="hover:text-white transition-colors duration-300" href="#">Home</a>
-                <a className="hover:text-white transition-colors duration-300" href="#">Workouts</a>
-                <a className="hover:text-white transition-colors duration-300" href="#">Nutrition</a>
-                <a className="hover:text-white transition-colors duration-300" href="#">Community</a>
-              </nav>
-              <Link to="/signup" className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-[#232f48] hover:bg-[#2A3751] transition-all duration-300 ease-in-out text-white text-sm font-bold shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_6px_20px_0_rgb(0,0,0,0.2)]">
-                <span className="truncate">Sign Up</span>
-              </Link>
-            </div>
           </header>
 
           <main className="flex flex-1 items-center justify-center py-16">
