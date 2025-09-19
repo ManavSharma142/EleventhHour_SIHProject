@@ -41,7 +41,7 @@ func GenerateAIWorkoutSplits(request WorkoutRequest) AIWorkoutSplit {
 	ctx := context.Background()
 	g := genkit.Init(ctx,
 		genkit.WithPlugins(&googlegenai.GoogleAI{}),
-		genkit.WithDefaultModel("googleai/gemini-2.5-flash"),
+		genkit.WithDefaultModel("googleai/gemini-2.5-pro"),
 	)
 	getCustomDataTool := genkit.DefineTool(g, "getCustomData",
 		"Gets the Custom data for workout plans by searching the queries provided in the input in vector database and returns the relevant information",
