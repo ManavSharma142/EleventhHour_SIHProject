@@ -279,14 +279,14 @@ export default function ModernFitnessDashboard() {
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="menu-button fixed top-4 left-4 z-50 lg:hidden w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl hover:scale-105 transition-all duration-300"
+        className="menu-button fixed top-4 left-4 z-50 lg:hidden w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl hover:scale-105 transition-all duration-300"
       >
         {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
@@ -302,13 +302,54 @@ export default function ModernFitnessDashboard() {
         {/* Logo with animation */}
         <div className="flex items-center gap-4 mb-12 group cursor-pointer mt-12 lg:mt-0">
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <Dumbbell className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+  <svg
+    viewBox="0 0 58 58"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full rounded-2xl"
+  >
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+
+    {/* Background */}
+    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+
+    {/* Dumbbell icon */}
+    <g
+      transform="translate(17,17)"
+      className="origin-center"
+    >
+      <path
+        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  </svg>
+</div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
           </div>
           <div>
-            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
             <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
           </div>
         </div>
@@ -338,12 +379,12 @@ export default function ModernFitnessDashboard() {
               onClick={() => setSidebarOpen(false)}
               className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                 ${active
-                  ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                  ? "bg-gradient-to-r from-blue-700/20 to-blue-700/20 border border-blue-500/30 shadow-lg"
                   : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                 }`}
             >
               {active && (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
               )}
               <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
                 <Icon className="w-5 h-5 relative z-10" />
@@ -385,7 +426,7 @@ export default function ModernFitnessDashboard() {
             <div className="space-y-4 pt-16 lg:pt-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl lg:text-4xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-2">
+                  <h1 className="text-2xl lg:text-4xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent mb-2">
                     Welcome back! 👋
                   </h1>
                   <p className="text-gray-400 text-sm lg:text-lg">Ready to crush your goals today?</p>
@@ -395,10 +436,10 @@ export default function ModernFitnessDashboard() {
 
             {/* Motivational Quote - Enhanced */}
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-3xl blur-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-pink-500/10 to-blue-500/10 rounded-3xl blur-xl"></div>
               <div className="relative bg-gradient-to-r from-gray-800/60 to-gray-700/60 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-6 border border-white/10">
                 <div className="flex items-center gap-3 lg:gap-4">
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl lg:rounded-2xl flex items-center justify-center">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl lg:rounded-2xl flex items-center justify-center">
                     <Sparkles className="w-5 h-5 lg:w-6 lg:h-6" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -511,7 +552,7 @@ export default function ModernFitnessDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6">
               {/* Today's Workout - Enhanced */}
               <div className="lg:col-span-3 relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl lg:rounded-3xl blur-xl lg:blur-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-blue-500/10 rounded-2xl lg:rounded-3xl blur-xl lg:blur-2xl"></div>
                 <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-8 border border-white/10">
                   <div className="flex items-start justify-between mb-4 lg:mb-6">
                     <div className="flex-1">
@@ -544,7 +585,7 @@ export default function ModernFitnessDashboard() {
                   </div>
 
                   <div className="space-y-3 lg:space-y-4">
-                    <button className="w-full group relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 text-white font-bold text-sm lg:text-lg px-6 lg:px-8 py-3 lg:py-4 rounded-xl lg:rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-blue-500/30 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]">
+                    <button className="w-full group relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white font-bold text-sm lg:text-lg px-6 lg:px-8 py-3 lg:py-4 rounded-xl lg:rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-blue-500/30 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] before:transition-transform before:duration-700 hover:before:translate-x-[100%]">
                       <Link
                         to={"/logworkout"}
                         className="relative z-10 flex items-center justify-center gap-2 lg:gap-3">
@@ -567,16 +608,16 @@ export default function ModernFitnessDashboard() {
 
               {/* Mental Wellness - Enhanced */}
               <div className="lg:col-span-2 relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl lg:rounded-3xl blur-xl lg:blur-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-pink-500/10 rounded-2xl lg:rounded-3xl blur-xl lg:blur-2xl"></div>
                 <div className="relative h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-8 border border-white/10">
-                  <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-blue-500 to-blue-500 rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 lg:mb-6 group-hover:scale-110 transition-transform duration-300">
                     <Sparkles className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
                   </div>
                   <h3 className="text-lg lg:text-2xl font-bold text-white mb-2 lg:mb-3 text-center">Mental Wellness</h3>
                   <p className="text-gray-400 text-center mb-4 lg:mb-6 text-xs lg:text-sm leading-relaxed">
                     Take a moment to center yourself and find your inner strength
                   </p>
-                  <button className="group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl lg:rounded-2xl font-semibold text-sm lg:text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30">
+                  <button className="group bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-800 hover:to-blue-800 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl lg:rounded-2xl font-semibold text-sm lg:text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30">
                     <span className="flex items-center gap-2">
                       Explore Mindfulness
                       <Calendar className="w-3 h-3 lg:w-4 lg:h-4 group-hover:rotate-12 transition-transform duration-300" />
@@ -633,7 +674,7 @@ export default function ModernFitnessDashboard() {
           </div>
           <button
             onClick={() => setChatOpen(!chatOpen)}
-            className="fixed bottom-4 right-4 z-[51] lg:hidden w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition-all duration-300"
+            className="fixed bottom-4 right-4 z-[51] lg:hidden w-14 h-14 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition-all duration-300"
           >
             {chatOpen ? <X className="w-6 h-6" /> : <Sparkles className="w-6 h-6" />}
           </button>
@@ -651,10 +692,11 @@ export default function ModernFitnessDashboard() {
               lg:h-auto 
               lg:p-8 
               lg:z-auto
+              lg:overflow-y-hidden
               ${chatOpen ? 'fixed inset-0 z-50 p-4 block' : 'hidden'}
             `}>
 
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl lg:rounded-3xl blur-xl lg:blur-2xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 rounded-2xl lg:rounded-3xl blur-xl lg:blur-2xl"></div>
             {/* Main chat window with flexbox layout */}
             <div className="relative h-full flex flex-col bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/10 overflow-hidden">
 
@@ -663,7 +705,7 @@ export default function ModernFitnessDashboard() {
                 <div className="flex items-center gap-3 lg:gap-4">
                   {/* Enhanced AI Avatar */}
                   <div className="relative">
-                    <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl">
+                    <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -688,12 +730,12 @@ export default function ModernFitnessDashboard() {
                         />
                       </svg>
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl lg:rounded-2xl blur-lg lg:blur-xl opacity-40 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-blue-500 to-pink-500 rounded-xl lg:rounded-2xl blur-lg lg:blur-xl opacity-40 animate-pulse"></div>
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 lg:w-5 lg:h-5 bg-green-500 rounded-full border-2 border-gray-800 animate-pulse"></div>
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="text-xl lg:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
+                    <h3 className="text-xl lg:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent">
                       Gym Bro
                     </h3>
                     <div className="flex items-center gap-2 text-xs lg:text-sm">
@@ -716,12 +758,12 @@ export default function ModernFitnessDashboard() {
                   {messages.map((message, index) => (
                     <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-[85%] ${message.type === 'user'
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-2 lg:ml-4'
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-600 text-white ml-2 lg:ml-4'
                         : 'bg-gradient-to-r from-gray-700/80 to-gray-600/80 text-white border border-white/10 mr-2 lg:mr-4'
                         } px-3 lg:px-5 py-3 lg:py-4 rounded-2xl lg:rounded-3xl shadow-xl backdrop-blur-sm relative group`}>
                         {/* Message glow effect */}
                         {message.type === 'user' && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl lg:rounded-3xl blur-lg lg:blur-xl opacity-30 group-hover:opacity-40 transition-opacity duration-300"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-600 rounded-2xl lg:rounded-3xl blur-lg lg:blur-xl opacity-30 group-hover:opacity-40 transition-opacity duration-300"></div>
                         )}
 
                         <div className="relative z-10">
@@ -754,15 +796,15 @@ export default function ModernFitnessDashboard() {
                       placeholder="Ask me anything about fitness, nutrition, or your goals..."
                       className="w-full bg-gray-700/50 border border-white/20 rounded-xl lg:rounded-2xl px-4 lg:px-6 py-3 lg:py-4 text-xs lg:text-sm text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/50 focus:bg-gray-600/50 transition-all duration-300 backdrop-blur-sm"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-xl lg:rounded-2xl opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-500/5 rounded-xl lg:rounded-2xl opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                   </div>
 
                   <button
                     onClick={handleSendMessage}
                     disabled={!chatInput.trim()}
-                    className="group relative w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl lg:rounded-2xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl hover:shadow-blue-500/30"
+                    className="group relative w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-xl lg:rounded-2xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl hover:shadow-blue-500/30"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl lg:rounded-2xl blur-lg lg:blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-600 rounded-xl lg:rounded-2xl blur-lg lg:blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
                     <Send className="relative z-10 w-4 h-4 lg:w-5 lg:h-5 mx-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </button>
                 </div>

@@ -58,17 +58,18 @@ const PrivacyPolicy = () => {
               <li>Sample body measurements for feature showcase</li>
               <li>Test user profiles and preferences</li>
             </ul>
+<h3 className="text-xl font-medium text-gray-200 mb-3">Google Fit Integration</h3>
+<p className="text-gray-300 mb-4">
+  <strong>Important:</strong> This prototype uses actual integration with Google Fit APIs to collect health and fitness data:
+</p>
+<ul className="list-disc list-inside text-gray-300 space-y-2">
+  <li>Connects with your Google account to retrieve real fitness and activity data</li>
+  <li>Collects metrics such as steps, distance, calories, heart rate, and sleep data</li>
+  <li>Uses secure OAuth authentication provided by Google</li>
+  <li>Data is accessed only with your explicit consent during login</li>
+  <li>Data is used solely for demonstration and evaluation of this prototype</li>
+</ul>
 
-            <h3 className="text-xl font-medium text-gray-200 mb-3">Google Fit Integration (Simulated)</h3>
-            <p className="text-gray-300 mb-4">
-              <strong>Important:</strong> Google Fit integration in this prototype may be simulated or limited:
-            </p>
-            <ul className="list-disc list-inside text-gray-300 space-y-2">
-              <li>API integration is for demonstration purposes</li>
-              <li>Real Google Fit data access may be limited or mocked</li>
-              <li>Authentication flows are prototype implementations</li>
-              <li>Data synchronization may be simulated for demo purposes</li>
-            </ul>
           </section>
 
           {/* How We Use Your Information */}

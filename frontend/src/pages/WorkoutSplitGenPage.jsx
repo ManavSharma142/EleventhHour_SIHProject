@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Home, Dumbbell, Apple, Users, Play, Coins, User, Sparkles, Target, Clock, Calendar, Activity, ChevronRight, Zap, Award, TrendingUp, Menu, X } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { nav } from "framer-motion/client";
 
 // Mock PopularSplits component since it's imported but not defined
 const PopularSplits = () => (
   <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-3xl p-4 lg:p-6 border border-white/10 shadow-2xl">
     <div className="flex items-center gap-3 mb-4 lg:mb-6">
-      <div className="w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+      <div className="w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-r from-blue-500 to-blue-500 rounded-xl flex items-center justify-center">
         <TrendingUp className="w-3 h-3 lg:w-4 lg:h-4 text-white" />
       </div>
       <h3 className="text-base lg:text-lg font-bold text-white">Popular Splits</h3>
@@ -106,6 +107,7 @@ export default function FlexoraApp() {
 
       const data = await res.json();
       console.log(data);
+      navigate("/workout");
     } catch (error) {
       console.error("Error selecting split:", error);
     }
@@ -155,7 +157,7 @@ export default function FlexoraApp() {
     setGeneratedSplit(null);
 
     try {
-      const res = await fetch("https://prod-sih-eleventhour-backend.onrender.com/ai/workoutsplits", {
+      const res = await fetch("http://localhost:8000/ai/workoutsplits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -183,14 +185,14 @@ export default function FlexoraApp() {
       {/* Animated Background Particles */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-20 lg:-top-40 -right-20 lg:-right-40 w-40 h-40 lg:w-80 lg:h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-20 lg:-bottom-40 -left-20 lg:-left-40 w-40 h-40 lg:w-80 lg:h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-20 lg:-bottom-40 -left-20 lg:-left-40 w-40 h-40 lg:w-80 lg:h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-30 h-30 lg:w-60 lg:h-60 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl"
+        className="lg:hidden fixed top-4 left-4 z-50 p-3 bg-gradient-to-r from-blue-600 to-blue-600 rounded-2xl shadow-xl"
       >
         {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
@@ -208,13 +210,54 @@ export default function FlexoraApp() {
         {/* Logo with animation */}
         <div className="flex items-center gap-4 mb-8 lg:mb-12 group cursor-pointer mt-12 lg:mt-0">
           <div className="relative">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <Dumbbell className="w-5 h-5 lg:w-6 lg:h-6 text-white group-hover:rotate-45 transition-transform duration-300" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+  <svg
+    viewBox="0 0 58 58"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full rounded-2xl"
+  >
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+
+    {/* Background */}
+    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+
+    {/* Dumbbell icon */}
+    <g
+      transform="translate(17,17)"
+      className="origin-center"
+    >
+      <path
+        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  </svg>
+</div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
           </div>
           <div>
-            <span className="text-xl lg:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+            <span className="text-xl lg:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
             <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
           </div>
         </div>
@@ -244,12 +287,12 @@ export default function FlexoraApp() {
               onClick={() => setSidebarOpen(false)}
               className={`group flex items-center gap-3 lg:gap-4 px-4 lg:px-5 py-3 lg:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
                                   ${active
-                  ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                  ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                   : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                 }`}
             >
               {active && (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
               )}
               <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
                 <Icon className="w-4 h-4 lg:w-5 lg:h-5 relative z-10" />
@@ -316,7 +359,7 @@ export default function FlexoraApp() {
                   key={id}
                   onClick={() => setActiveTab(id)}
                   className={`flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 rounded-xl font-medium transition-all text-sm lg:text-base ${activeTab === id
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                    ? "bg-gradient-to-r from-blue-600 to-blue-600 text-white shadow-lg"
                     : "text-slate-400 hover:text-white hover:bg-white/5"
                     }`}
                 >
@@ -459,9 +502,9 @@ export default function FlexoraApp() {
                   <button
                     onClick={handleGenerate}
                     disabled={isGenerating}
-                    className="group relative px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-bold rounded-2xl shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed overflow-hidden w-full sm:w-auto"
+                    className="group relative px-6 lg:px-8 py-3 lg:py-4 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 text-white font-bold rounded-2xl shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed overflow-hidden w-full sm:w-auto"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-blue-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="relative flex items-center justify-center gap-3">
                       {isGenerating ? (
                         <>
@@ -476,7 +519,7 @@ export default function FlexoraApp() {
                       )}
                     </div>
                     {!isGenerating && (
-                      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
+                      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-600 via-blue-600 to-blue-600 blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
                     )}
                   </button>
                 </div>
@@ -509,7 +552,7 @@ export default function FlexoraApp() {
                     {[0, 1, 2].map((i) => (
                       <div
                         key={i}
-                        className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                        className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-500"
                         style={{
                           animation: `pulse 1.5s ease-in-out infinite ${i * 0.3}s`,
                         }}

@@ -15,10 +15,11 @@ const TermsOfService = () => {
           {/* Last Updated */}
           <div className="bg-gray-700 border-l-4 border-indigo-400 p-4 mb-8 rounded-r-lg">
             <p className="font-semibold text-gray-300">
-              <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+              <strong>Last Updated:</strong>{' '}
+              {new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
               })}
             </p>
           </div>
@@ -68,7 +69,7 @@ const TermsOfService = () => {
               This Flexora prototype demonstrates:
             </p>
             <ul className="list-disc list-inside text-gray-300 space-y-2">
-              <li>Integration concepts with Google Fit API (for demonstration purposes)</li>
+              <li>Integration with Google Fit APIs to collect real fitness data</li>
               <li>Fitness data tracking and visualization interfaces</li>
               <li>User dashboard and analytics mockups</li>
               <li>Goal setting and progress tracking features</li>
@@ -98,12 +99,12 @@ const TermsOfService = () => {
               Important information about data in this prototype:
             </p>
             <ul className="list-disc list-inside text-gray-300 space-y-2">
-              <li>This is a demonstration prototype - avoid entering real personal data</li>
+              <li>This is a demonstration prototype - avoid entering real personal data unless required for demo</li>
               <li>Any data entered may be used for demonstration and evaluation purposes</li>
-              <li>Google Fit integration is simulated for prototype demonstration</li>
+              <li>This prototype uses actual integration with Google Fit APIs to collect real fitness data (with your consent)</li>
               <li>Data storage is temporary and may be reset at any time</li>
               <li>No long-term data retention guarantees are provided</li>
-              <li>Use test data for demonstration purposes</li>
+              <li>Use test or limited data if you are concerned about privacy</li>
             </ul>
           </section>
 
@@ -114,7 +115,7 @@ const TermsOfService = () => {
             <ul className="list-disc list-inside text-gray-300 space-y-2">
               <li>Is not a finished product and may contain bugs or incomplete features</li>
               <li>Should not be used for actual fitness tracking or health decisions</li>
-              <li>May have limited or simulated functionality</li>
+              <li>May have limited or evolving functionality</li>
               <li>Is not suitable for production use or real-world deployment</li>
               <li>May experience downtime or technical issues during demonstration</li>
               <li>Does not guarantee data accuracy or system reliability</li>
@@ -131,7 +132,7 @@ const TermsOfService = () => {
               <ul className="list-disc list-inside space-y-2">
                 <li>Do not rely on this prototype for actual health or fitness decisions</li>
                 <li>This application is not a medical device or health service</li>
-                <li>All fitness data and recommendations are simulated for demonstration</li>
+                <li>All fitness data and recommendations are for demonstration</li>
                 <li>Consult healthcare professionals for actual fitness and health guidance</li>
                 <li>This prototype does not provide real medical advice or health monitoring</li>
               </ul>

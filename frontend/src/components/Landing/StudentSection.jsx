@@ -56,7 +56,7 @@ export function StudentSection() {
             </div>
 
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} viewport={{ once: true }}>
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all">
                 <Users className="w-5 h-5 mr-2" />
                 Join These Athletes
               </Button>
@@ -65,7 +65,7 @@ export function StudentSection() {
 
           {/* Right content - Visual */}
           <motion.div className="relative" initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }} viewport={{ once: true }}>
-            <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
+            <div className="bg-gradient-to-br from-blue-500/20 to-blue-800 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
               <div className="grid grid-cols-2 gap-6">
                 <motion.div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm" whileHover={{ scale: 1.05 }}>
                   <div className="text-3xl font-bold text-blue-400 mb-2">15min</div>
