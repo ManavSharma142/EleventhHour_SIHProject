@@ -423,8 +423,9 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Home, Dumbbell, Apple, Users, Coins, ChevronRight, Send,
   Heart, MessageCircle, Share2, Eye, Clock, User, X,
-  Filter, TrendingUp, Award, Star, ThumbsUp, Bookmark
+  Filter, TrendingUp, Award, Star, ThumbsUp, Bookmark,
 } from "lucide-react";
+import { Button } from "../components/ui/Button"
 // react-router-dom is not available in this environment, so we use placeholder components
 // In a real app, you would use: import { Link, useNavigate } from "react-router-dom";
 const Link = ({ to, children, ...props }) => <a href={to} {...props}>{children}</a>;
@@ -702,8 +703,66 @@ export default function Community() {
       sendMessage();
     }
   };
+  useEffect(() => {
+    const getUsername = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+      try {
+        const res = await fetch("http://localhost:8000/validate", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
+        if (!res.ok) throw new Error("Failed to validate user");
 
+        const data = await res.json();
+
+        if (data?.status === "error") {
+          navigate("/login");
+          return;
+        }
+
+        if (data?.username) {
+          setusername(data.username);
+          console.log("Username:", data.username);
+          getflexcoins(data.username)
+        } else {
+          navigate("/login");
+        }
+      } catch (err) {
+        console.error("Error validating user:", err);
+        navigate("/login");
+      }
+    };
+
+    getUsername();
+  }, []);
+const getflexcoins = async (username) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8000/flexcoin?username=${username}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+    setflexcoins(data.coins)
+    return data; // This will be the response from your API
+  } catch (error) {
+    console.error("Error fetching flexcoins:", error);
+    return null;
+  }
+};
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0D1421] to-[#111827] text-white flex flex-col lg:flex-row relative overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -713,85 +772,131 @@ export default function Community() {
       </div>
 
       {/* RESPONSIVE SIDEBAR/BOTTOM NAV */}
-      <aside className="
-        lg:w-72 bg-gradient-to-b from-[#0F1729]/80 to-[#0A1018]/80 backdrop-blur-xl border-white/10
-        lg:p-6 flex lg:flex-col fixed lg:top-0 lg:left-0 lg:h-full z-20 shadow-2xl
-        w-full bottom-0 left-0 h-20 p-2 border-t lg:border-t-0 lg:border-r
-      ">
-         <div className="hidden lg:flex items-center gap-4 mb-12 group cursor-pointer">
-          <div className="relative">
-            <div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg" className="w-full h-full rounded-2xl">
-                <defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#0f172a" /><stop offset="50%" stopColor="#1e3a8a" /><stop offset="100%" stopColor="#3b82f6" /></linearGradient></defs>
-                <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
-                <g transform="translate(17,17)" className="origin-center">
-                  <path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                  <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                </g>
-              </svg>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
-          </div>
-          <div>
-            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
-            <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
-          </div>
-        </div>
-        {/* Time Display */}
-        <div className="hidden lg:block mb-6 p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
-          <div className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-          </div>
-          <div className="text-sm text-gray-400">
-            {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
-          </div>
-        </div>
-         <nav className="flex-1 lg:space-y-3 flex flex-row lg:flex-col justify-around items-center w-full">
-           {[
-            { icon: Home, label: "Dashboard", color: "from-blue-500 to-cyan-500", page: "/app" },
-            { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500", page: "/workout" },
-            { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
-            { icon: Users, label: "Community", active: true, color: "from-purple-500 to-pink-500", page: "/community" },
-            { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
-           ].map(({ icon: Icon, label, active, color, page }) => (
-            <Link to={page} key={label} className={`group flex lg:flex-row flex-col items-center gap-1 lg:gap-4 lg:px-5 lg:py-4 p-2 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden w-1/5 lg:w-full ${active ? "bg-gradient-to-r from-purple-600/20 to-pink-600/20 lg:border border-purple-500/30 shadow-lg text-white" : "text-gray-300 hover:text-white hover:bg-white/5 lg:border border-transparent hover:border-white/10"}`}>
-               {active && <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-2xl"></div>}
-               <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
-                <Icon className="w-5 h-5 relative z-10" />
-               </div>
-               <span className="text-xs lg:text-base font-semibold relative z-10">{label}</span>
-               {active && <div className="absolute lg:right-4 top-1 lg:top-auto w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>}
-            </Link>
+            <aside className={`w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-4 sm:p-6 flex flex-col fixed top-0 left-0 h-full z-50 shadow-2xl transform transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                {/* Mobile Close Button */}
+                <Button 
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="lg:hidden absolute top-4 right-4 p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
+                >
+                    <X className="w-5 h-5" />
+                </Button>
 
-          ))}
-        </nav>
+                {/* Logo with animation */}
+                <div className="flex items-center gap-4 mb-8 sm:mb-12 group cursor-pointer">
+                    <div className="relative">
+<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+  <svg
+    viewBox="0 0 58 58"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full rounded-2xl"
+  >
+    <defs>
+      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
 
-        {/* Enhanced Profile */}
-        <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-          <Link to={"/profile"} className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
-            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
-              <User className="w-6 h-6" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-white truncate text-sm">
-                {username}
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-400">
-                <Coins className="w-3 h-3 text-amber-400" />
-                <span className="text-amber-400 font-semibold">{flexcoins}</span>
-                <span>FlexCoins</span>
-              </div>
-            </div>
-          </Link>
-        </div>
-           ))}
-         </nav>
-      </aside>
+    {/* Background */}
+    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
 
+    {/* Dumbbell icon */}
+    <g
+      transform="translate(17,17)"
+      className="origin-center"
+    >
+      <path
+        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  </svg>
+</div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                    </div>
+                    <div>
+                        <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+                        <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
+                    </div>
+                </div>
+
+                {/* Time Display */}
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
+                    <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                        {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-400">
+                        {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
+                    </div>
+                </div>
+
+                {/* Enhanced Navigation */}
+                <nav className="flex-1 space-y-2 sm:space-y-3">
+                    {[
+                        { icon: Home, label: "Dashboard", color: "from-blue-500 to-cyan-500", page: "/app" },
+                        { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500", page: "/workout" },
+                        { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
+                        { icon: Users, label: "Community", active: true, color: "from-purple-500 to-pink-500", page: "/community" },
+                        { icon: Coins, label: "FlexCoins (soon)", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+                    ].map(({ icon: Icon, label, active, color, page }) => (
+                        <Link
+                            to={page}
+                            key={label}
+                            onClick={() => setIsSidebarOpen(false)}
+                            className={`group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
+                                  ${active
+                                    ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
+                                    : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
+                                }`}
+                        >
+                            {active && (
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
+                            )}
+                            <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
+                                <Icon className="w-4 sm:w-5 h-4 sm:h-5 relative z-10" />
+                            </div>
+                            <span className="font-semibold relative z-10 text-sm sm:text-base">{label}</span>
+                            {active && <div className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
+                        </Link>
+                    ))}
+                </nav>
+
+                {/* Enhanced Profile */}
+                <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <Link to={"/profile"} className="relative flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+                            <User className="w-5 sm:w-6 h-5 sm:h-6" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="font-bold text-white truncate text-xs sm:text-sm">
+                                {username}
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-400">
+                                <Coins className="w-3 h-3 text-amber-400" />
+                                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                                <span>FlexCoins</span>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+            </aside>
       {/* Main Content */}
       <div className="flex-1 flex flex-col xl:flex-row p-6 lg:p-10 relative z-10 lg:ml-72 pb-28 lg:pb-10">
         {/* Articles Section */}
