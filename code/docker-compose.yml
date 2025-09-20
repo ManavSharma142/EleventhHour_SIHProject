@@ -3,13 +3,13 @@ version: "3.9"
 services:
   frontend:
     build:
-      context: ./frontend
+      context: ./flexora-frontend
       dockerfile: Dockerfile
     container_name: frontend
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/frontend
+      - ./flexora-frontend:/frontend
       - /frontend/node_modules
     command: ["npm", "run", "dev", "--", "--host"]
     depends_on:
@@ -17,11 +17,11 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./flexora-backend
       dockerfile: Dockerfile
     container_name: backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./flexora-backend:/app
     command: go run main.go
