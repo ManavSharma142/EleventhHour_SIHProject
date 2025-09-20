@@ -423,7 +423,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Home, Dumbbell, Apple, Users, Coins, ChevronRight, Send,
   Heart, MessageCircle, Share2, Eye, Clock, User, X,
-  Filter, TrendingUp, Award, Star, ThumbsUp, Bookmark,
+  Filter, TrendingUp, Award, Star, ThumbsUp, Bookmark,Menu
 } from "lucide-react";
 import { Button } from "../components/ui/Button"
 // react-router-dom is not available in this environment, so we use placeholder components
@@ -770,7 +770,12 @@ const getflexcoins = async (username) => {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
-
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
       {/* RESPONSIVE SIDEBAR/BOTTOM NAV */}
             <aside className={`w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-4 sm:p-6 flex flex-col fixed top-0 left-0 h-full z-50 shadow-2xl transform transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 {/* Mobile Close Button */}
@@ -899,8 +904,19 @@ const getflexcoins = async (username) => {
             </aside>
       {/* Main Content */}
       <div className="flex-1 flex flex-col xl:flex-row p-6 lg:p-10 relative z-10 lg:ml-72 pb-28 lg:pb-10">
+
         {/* Articles Section */}
         <div className="flex-1 xl:pr-10">
+          <div className="lg:hidden bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-4 flex items-center justify-between shadow-xl">
+                    <Button 
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
+                    >
+                        <Menu className="w-5 h-5" />
+                    </Button>
+          </div>
+
+          
           <div className="hidden md:flex items-center gap-3 mb-8 text-slate-300">
             <Link to="/app" className="hover:text-white transition-colors cursor-pointer">Home</Link>
             <ChevronRight size={18} />
