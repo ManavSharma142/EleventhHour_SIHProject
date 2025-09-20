@@ -48,7 +48,7 @@ Follow these steps to run the project locally:
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/ManavSharma142/EleventhHour_SIHProject.git
-cd flexora
+cd EleventhHour_SIHProject
 ```
 
 ### 2. Environment Setup
@@ -113,4 +113,5 @@ flexora/
 │   └── ...
 └── README.md
 ```
+
 
