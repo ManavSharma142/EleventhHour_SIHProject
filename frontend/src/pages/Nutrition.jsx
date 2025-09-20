@@ -599,6 +599,7 @@ import {
   Star,
   Plus,
   ArrowUpRight,
+  Menu,
   X,
 } from "lucide-react";
 // react-router-dom is not available in this environment, so we use placeholder components
@@ -1174,6 +1175,14 @@ const getflexcoins = async (username) => {
 
       {/* Enhanced Main Content - Responsive margin and padding */}
       <div className="flex-1 p-6 lg:p-10 relative z-10 lg:ml-72 pb-28 lg:pb-10">
+          <div className="lg:hidden bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-4 flex items-center justify-between shadow-xl">
+                    <Button 
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
+                    >
+                        <Menu className="w-5 h-5" />
+                    </Button>
+          </div>
         {/* Breadcrumb */}
         <div className="hidden md:flex items-center gap-3 mb-12 text-slate-300">
           <Link to={"/app"} className="hover:text-white transition-colors cursor-pointer">Home</Link>
