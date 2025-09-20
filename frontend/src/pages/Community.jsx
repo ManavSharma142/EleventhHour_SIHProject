@@ -765,6 +765,29 @@ export default function Community() {
                <span className="text-xs lg:text-base font-semibold relative z-10">{label}</span>
                {active && <div className="absolute lg:right-4 top-1 lg:top-auto w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>}
             </Link>
+
+          ))}
+        </nav>
+
+        {/* Enhanced Profile */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+          <Link to={"/profile"} className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+              <User className="w-6 h-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-white truncate text-sm">
+                {username}
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-400">
+                <Coins className="w-3 h-3 text-amber-400" />
+                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                <span>FlexCoins</span>
+              </div>
+            </div>
+          </Link>
+        </div>
            ))}
          </nav>
       </aside>
