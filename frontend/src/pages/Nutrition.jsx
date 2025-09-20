@@ -55,6 +55,14 @@ function RecipeCard({ recipe, isExpanded, onToggle }) {
             <h3 className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors">
               {recipe.name}
             </h3>
+            <div className="w-64 h-64 flex items-center justify-center overflow-hidden rounded-lg">
+              <img
+                src={recipe.imglink}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+            
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1 text-emerald-400">
                 <Clock size={14} />
@@ -199,6 +207,7 @@ export default function Nutrition() {
   const recipes = [
     {
       name: "Overnight Oats",
+      imglink: "https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fit,w_730,h_548/k%2FPhoto%2FRecipes%2F2025-02-overnight-oats%2Fovernight-oats-484",
       prepTime: "5min",
       difficulty: "Easy",
       rating: "4.8",
@@ -226,6 +235,7 @@ export default function Nutrition() {
     },
     {
       name: "Protein Bulking Smoothie (No whey)",
+      imglink: "https://ca.myprotein.com/images?url=https://blogscdn.thehut.net/app/uploads/sites/444/2020/10/BulkingShakes-FEATURE-1_1572368471_1604091319.jpg&auto=avif&width=1200&fit=crop",
       prepTime: "5min",
       difficulty: "Easy",
       rating: "4.9",
@@ -252,6 +262,7 @@ export default function Nutrition() {
     },
     {
       name: "Paneer Sandwich",
+      imglink: "https://greenbowl2soul.com/wp-content/uploads/2022/06/paneer-sandwich.jpg",
       prepTime: "15min",
       difficulty: "Medium",
       rating: "4.7",
@@ -279,6 +290,7 @@ export default function Nutrition() {
     },
     {
       name: "High Protein Chana Chaat (Recommened for post workout meal)",
+      imglink: "https://www.indianveggiedelight.com/wp-content/uploads/2025/06/roasted-chana-salad.jpg",
       prepTime: "15min",
       difficulty: "Medium",
       rating: "4.7",
@@ -305,6 +317,7 @@ export default function Nutrition() {
     },
     {
       name: "Paneer Sandwich",
+      imglink: "https://www.ruchikrandhap.com/wp-content/uploads/2017/09/Paneer-Corn-Spinach-Sandwich-4-1.jpg",
       prepTime: "15min",
       difficulty: "Medium",
       rating: "4.7",
@@ -332,6 +345,7 @@ export default function Nutrition() {
     },
     {
       name: "Paneer Sandwich",
+      imglink: "https://www.vegrecipesofindia.com/wp-content/uploads/2017/01/paneer-sandwich-recipe-1.jpg",
       prepTime: "15min",
       difficulty: "Medium",
       rating: "4.7",
@@ -490,7 +504,7 @@ export default function Nutrition() {
         {/* Enhanced Profile */}
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-          <div className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+          <Link to={"/profile"} className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
             <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
               <User className="w-6 h-6" />
             </div>
@@ -504,7 +518,7 @@ export default function Nutrition() {
                 <span>FlexCoins</span>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </aside>
 

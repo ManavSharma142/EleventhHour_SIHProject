@@ -281,7 +281,7 @@ export default function ModernWorkout() {
                 {/* Enhanced Profile */}
                 <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                    <div className="relative flex items-center gap-3 lg:gap-4 p-3 lg:p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+                    <Link to={"/profile"} className="relative flex items-center gap-3 lg:gap-4 p-3 lg:p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
                         <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl flex-shrink-0">
                             <User className="w-5 h-5 lg:w-6 lg:h-6" />
                         </div>
@@ -295,7 +295,7 @@ export default function ModernWorkout() {
                                 <span>FlexCoins</span>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </aside>
 
