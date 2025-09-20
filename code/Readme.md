@@ -4,8 +4,8 @@ A comprehensive fitness application that combines AI-powered workout planning, r
 
 ## Tasks Accomplished
 
-- [x] **AI Chat Bot Integration:** Implemented intelligent workout assistant with RAG (Retrieval-Augmented Generation) for personalized fitness advice
-- [x] **AI Split Generator:** Created smart workout split generation system tailored to user preferences and fitness goals  
+- [x] **AI Chat Bot Integration:** Implemented intelligent workout assistant with tools
+- [x] **AI Split Generator:** Created smart workout split generation system tailored to user preferences and fitness goals with RAG (Retrieval-Augmented Generation)  
 - [x] **Workout Management System:** Built comprehensive workout logging and tracking functionality with progress monitoring
 - [x] **FlexCoins Gamification:** Developed reward system with FlexCoins to motivate users and track achievements
 - [x] **Full-Stack Architecture:** Implemented robust backend with GoLang and responsive frontend with React
@@ -113,3 +113,4 @@ flexora/
 │   └── ...
 └── README.md
 ```
+
