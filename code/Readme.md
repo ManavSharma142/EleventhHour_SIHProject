@@ -1,6 +1,6 @@
 # Flexora - AI-Powered Fitness Companion 💪
 
-A comprehensive fitness application that combines AI-powered workout planning, real-time pose detection, and gamified fitness tracking to create an engaging workout experience.
+A comprehensive fitness application that combines AI-powered workout planning, and gamified fitness tracking to create an engaging workout experience.
 
 ## Tasks Accomplished
 
@@ -33,10 +33,10 @@ This project leverages the following technologies:
 
 - **AI Chat Bot with RAG:** Intelligent fitness assistant that provides personalized workout advice using retrieval-augmented generation
 - **AI Split Generator:** Smart algorithm that creates customized workout splits based on user goals, experience level, and preferences
-- **OpenCV Pose Detection:** Real-time form analysis and rep counting using computer vision for accurate workout tracking
+- **OpenCV Pose Detection (future scope):** Real-time form analysis and rep counting using computer vision for accurate workout tracking
 - **Workout Logging System:** Comprehensive tracking of exercises, sets, reps, and progress with detailed analytics
 - **FlexCoins Gamification:** Reward system that incentivizes consistent workouts and achievement milestones
-- **Real-time Features:** WebSocket integration for live chat, notifications, and pose detection feedback
+- **Real-time Features:** WebSocket integration for live chat and ai chat bot
 - **Progress Analytics:** Detailed insights into workout performance, strength gains, and fitness journey progression
 - **Community Features:** Social elements including leaderboards and workout sharing capabilities
 
@@ -113,5 +113,6 @@ flexora/
 │   └── ...
 └── README.md
 ```
+
 
 
