@@ -10,6 +10,7 @@ import (
 	"server/api/connect"
 	"server/auth"
 	"server/chatbot"
+	communitychat "server/community-chat"
 	"server/database"
 	"server/router"
 	"server/splitsgen"
@@ -91,6 +92,10 @@ func main() {
 
 	r.HandleFunc("/profile", api.GetUserProfile).Methods("GET")        //for getting user profile
 	r.HandleFunc("/profile/update", api.UpdateProfile).Methods("POST") //for updating user profile
+	r.HandleFunc("/communintychat", communitychat.HandleChatbot)
+
+	go communitychat.BroadCastMsg()
+
 	corsWrappedRouter := router.CorsMiddleware(r)
 
 	port := os.Getenv("PORT")

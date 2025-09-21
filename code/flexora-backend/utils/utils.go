@@ -46,3 +46,13 @@ var LiveConn = make(map[*websocket.Conn]bool)
 var ConnUser = make(map[*websocket.Conn]string)
 var UserConn = make(map[string]*websocket.Conn)
 var Memory = make(map[string][]*genai.Content)
+
+type Message struct {
+	Username string `json:"username"`
+	Text     string `json:"text"`
+}
+
+var ChatConn = make(map[*websocket.Conn]bool)
+var ChatUser = make(map[*websocket.Conn]string)
+var ChatUserConn = make(map[string]*websocket.Conn)
+var CommunityChatMsg = make(chan (Message))
