@@ -6,8 +6,9 @@ import {
 } from "lucide-react";
 // react-router-dom is not available in this environment, so we use placeholder components
 // In a real app, you would use: import { Link, useNavigate } from "react-router-dom";
-const Link = ({ to, children, ...props }) => <a href={to} {...props}>{children}</a>;
-const useNavigate = () => (path) => console.log(`Navigating to ${path}`);
+import { Link, useNavigate } from "react-router-dom";
+
+
 
 // Enhanced Card component with glassmorphism effect
 function Card({ children, className, onClick, hover = true }) {
