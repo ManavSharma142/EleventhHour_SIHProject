@@ -33,7 +33,7 @@ func HandleChatbot(w http.ResponseWriter, r *http.Request) {
 	utils.ChatConn[conn] = true
 	utils.ChatUser[conn] = username
 	utils.ChatUserConn[username] = conn
-	log.Println("New WebSocket Connection from IP:", r.RemoteAddr, utils.Yellow(" username: ", username))
+	log.Println("New WebSocket Connection from IP:", r.RemoteAddr, utils.Yellow(" username: ", username), "Total Connections:", CountConn())
 	defer func() {
 		log.Println(utils.Magenta("Cleaning up user: ", username))
 		delete(utils.ChatConn, conn)
@@ -53,7 +53,7 @@ func HandleChatbot(w http.ResponseWriter, r *http.Request) {
 }
 func CountConn() int {
 	count := 0
-	for _, j := range utils.LiveConn {
+	for _, j := range utils.ChatConn {
 		if j {
 			count++
 		}
