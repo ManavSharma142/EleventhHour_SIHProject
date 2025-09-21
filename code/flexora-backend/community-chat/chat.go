@@ -51,3 +51,12 @@ func HandleChatbot(w http.ResponseWriter, r *http.Request) {
 		utils.CommunityChatMsg <- msg
 	}
 }
+func CountConn() int {
+	count := 0
+	for _, j := range utils.LiveConn {
+		if j {
+			count++
+		}
+	}
+	return count
+}
