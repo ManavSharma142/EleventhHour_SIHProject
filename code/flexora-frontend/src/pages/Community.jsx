@@ -108,7 +108,7 @@ function ArticleCard({ article, isExpanded, onToggle }) {
 }
 
 // Enhanced Chat Message Component
-function ChatMessage({ message, isUser, messagesEndRef }) {
+function ChatMessage({ message, isUser }) {
   return (
     <div className={`flex items-start gap-3 ${isUser ? 'justify-end' : ''}`}>
       {!isUser && (
@@ -137,11 +137,10 @@ function ChatMessage({ message, isUser, messagesEndRef }) {
 function ChatSection({ messages, newMessage, setNewMessage, sendMessage, handleKeyPress, onClose }) {
   const messagesEndRef = useRef(null);
   useEffect(() => {
-    // Only scroll when a new message is actually added
-    if (messages.length > 7) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
+    // Scroll to the latest message whenever messages change
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   return (
     <div className="backdrop-blur-xl bg-black/70 flex flex-col h-full w-full">
       {/* Chat Header */}
@@ -157,16 +156,15 @@ function ChatSection({ messages, newMessage, setNewMessage, sendMessage, handleK
         )}
       </div>
       {/* Chat Messages */}
-      
       <div className="flex-1 p-6 space-y-6 overflow-y-auto scrollbar-hide">
         {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} isUser={message.isUser} messagesEndRef={messagesEndRef} />
+          <ChatMessage key={message.id} message={message} isUser={message.isUser} />
         ))}
-        
+        {/* Empty div to reference for scrolling */}
+        <div ref={messagesEndRef} />
       </div>
       {/* Enhanced Chat Input */}
       <div className="p-6 border-t border-white/10 bg-black/30">
-      
         <div className="flex gap-3">
           <input
             value={newMessage}
@@ -192,13 +190,7 @@ export default function Community() {
   const [expandedArticle, setExpandedArticle] = useState(0); // expand first article by default
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "I'm doing my exam preparation so can't do gym", author: "User1", time: "2:30 PM", isUser: false },
-    { id: 2, text: "Same bro", author: "User2", time: "2:31 PM", isUser: false },
-    { id: 3, text: "Instead you can do quick 20min Workout from FLexora App !", author: "User3", time: "2:32 PM", isUser: false },
-    { id: 4, text: "What's Flexora ?", author: "User4", time: "2:33 PM", isUser: false },
-    { id: 5, text: "Flexora is an amazing fitness app with personalised Ai workout plans, diet and much more !", author: "User5", time: "2:34 PM", isUser: false },
-    { id: 6, text: "I'll try it asap !", author: "You", time: "2:35 PM", isUser: true },
-    { id: 7, text: "Anyone from Delhi hitting the gym this weekend?", author: "GymBro", time: "6:55 PM", isUser: false },
+    { id: 1, text: "Flexora is really goood!", author: "SIH", time: "2:30 PM", isUser: false },
   ]);
   const [newMessage, setNewMessage] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date('2025-09-20T18:54:00'));
@@ -500,7 +492,7 @@ export default function Community() {
               key={label}
               onClick={() => setIsSidebarOpen(false)}
               className={`group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
-                  ${active
+                ${active
                   ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                   : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                 }`}
@@ -538,10 +530,10 @@ export default function Community() {
         </div>
       </aside>
       {/* Main Content */}
-      <div className="flex-1 flex flex-col xl:flex-row p-6 lg:p-10 relative z-10 lg:ml-72 pb-28 lg:pb-10">
+      <div className="flex-1 flex flex-col p-6 lg:p-10 lg:pr-28 relative z-10 lg:ml-72 xl:mr-96 pb-28 lg:pb-10">
 
         {/* Articles Section */}
-        <div className="flex-1 xl:pr-10">
+        <div className="flex-1">
           <div className="lg:hidden bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-4 flex items-center justify-between shadow-xl">
             <button
               onClick={() => setIsSidebarOpen(true)}
@@ -581,9 +573,11 @@ export default function Community() {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Desktop Chat Section */}
-        <div className="hidden xl:flex w-96 border-l border-white/10 flex-col rounded-2xl overflow-hidden h-full max-h-[calc(100vh-5rem)] bg-white/5">
+      {/* Desktop Chat Section - FIXED POSITIONING */}
+      <div className="hidden xl:block fixed right-0 top-0 h-full w-[30rem] p-6">
+        <div className="border-l border-white/10 flex flex-col rounded-2xl overflow-hidden h-full max-h-[calc(100vh-5rem)] bg-white/5">
           <ChatSection
             messages={messages}
             newMessage={newMessage}
@@ -592,23 +586,23 @@ export default function Community() {
             handleKeyPress={handleKeyPress}
           />
         </div>
-
-        {/* Mobile Chat Overlay */}
-        {isChatOpen && (
-          <div className="xl:hidden fixed inset-0 bg-black/50 z-30 animate-in fade-in-0">
-            <div className="fixed inset-0 z-40">
-              <ChatSection
-                messages={messages}
-                newMessage={newMessage}
-                setNewMessage={setNewMessage}
-                sendMessage={sendMessage}
-                handleKeyPress={handleKeyPress}
-                onClose={() => setIsChatOpen(false)}
-              />
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Mobile Chat Overlay */}
+      {isChatOpen && (
+        <div className="xl:hidden fixed inset-0 bg-black/50 z-30 animate-in fade-in-0">
+          <div className="fixed inset-0 z-40">
+            <ChatSection
+              messages={messages}
+              newMessage={newMessage}
+              setNewMessage={setNewMessage}
+              sendMessage={sendMessage}
+              handleKeyPress={handleKeyPress}
+              onClose={() => setIsChatOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
