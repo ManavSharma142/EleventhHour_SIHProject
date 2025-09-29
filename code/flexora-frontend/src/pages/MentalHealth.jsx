@@ -27,14 +27,81 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+// Placeholder data/utilities for the sidebar content that was missing
+
 
 export default function MentalWellness() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [timerActive, setTimerActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // Renamed from isSidebarOpen (used in the JSX) to sidebarOpen (used in the state)
+  const [sidebarOpen, setSidebarOpen] = useState(false); 
+  const [placeholderUsername, setusername] = useState("");
+const [placeholderFlexcoins, setflexcoins] = useState(0);
+  // Added state for current time to support the sidebar's time display
+  const [currentTime, setCurrentTime] = useState(new Date()); 
+  useEffect(() => {
+    const getUsername = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
 
+      try {
+        const res = await fetch("http://localhost:8000/validate", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to validate user");
+
+        const data = await res.json();
+
+        if (data?.status === "error") {
+          navigate("/login");
+          return;
+        }
+
+        if (data?.username) {
+          setusername(data.username);
+          console.log("Username:", data.username);
+          getflexcoins(data.username);
+        } else {
+          navigate("/login");
+        }
+      } catch (err) {
+        console.error("Error validating user:", err);
+        navigate("/login");
+      }
+    };
+
+    getUsername();
+  }, []);
+
+    const getflexcoins = async (username) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/flexcoin?username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+      setflexcoins(data.coins)
+      return data; // This will be the response from your API
+    } catch (error) {
+      console.error("Error fetching flexcoins:", error);
+      return null;
+    }
+  };
   const wellnessPlans = [
     {
       id: 1,
@@ -204,6 +271,14 @@ export default function MentalWellness() {
     }
     return () => clearInterval(interval);
   }, [timerActive, timeRemaining]);
+  
+  // Effect to update current time every minute
+  useEffect(() => {
+      const timer = setInterval(() => {
+          setCurrentTime(new Date());
+      }, 60000); // Update every minute
+      return () => clearInterval(timer);
+  }, []);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -238,13 +313,18 @@ export default function MentalWellness() {
         />
       )}
 
-      {/* Sidebar */}
-      <aside
-        className={`w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-6 flex flex-col fixed top-0 left-0 h-full z-50 shadow-2xl transition-transform duration-300 lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex items-center gap-4 mb-12 group cursor-pointer mt-12 lg:mt-0">
+      {/* Sidebar - **FIXED: Replaced isSidebarOpen with sidebarOpen and removed Button component** */}
+      <aside className={`w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-4 sm:p-6 flex flex-col fixed top-0 left-0 h-full z-50 shadow-2xl transform transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        {/* Mobile Close Button - **FIXED: Replaced Button with standard button element** */}
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="lg:hidden absolute top-4 right-4 p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Logo with animation */}
+        <div className="flex items-center gap-4 mb-8 sm:mb-12 group cursor-pointer">
           <div className="relative">
             <div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
               <svg
@@ -259,8 +339,15 @@ export default function MentalWellness() {
                     <stop offset="100%" stopColor="#3b82f6" />
                   </linearGradient>
                 </defs>
+
+                {/* Background */}
                 <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
-                <g transform="translate(17,17)">
+
+                {/* Dumbbell icon */}
+                <g
+                  transform="translate(17,17)"
+                  className="origin-center"
+                >
                   <path
                     d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
                     stroke="white"
@@ -269,18 +356,8 @@ export default function MentalWellness() {
                     strokeLinejoin="round"
                     fill="none"
                   />
-                  <path
-                    d="m2.5 21.5 1.4-1.4"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="m20.1 3.9 1.4-1.4"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
+                  <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                  <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
                   <path
                     d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
                     stroke="white"
@@ -289,86 +366,74 @@ export default function MentalWellness() {
                     strokeLinejoin="round"
                     fill="none"
                   />
-                  <path
-                    d="m9.6 14.4 4.8-4.8"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
+                  <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
                 </g>
               </svg>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
           </div>
           <div>
-            <span className="text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">
-              Flexora
-            </span>
-            <div className="text-xs text-gray-400 font-medium">
-              Mental Wellness
-            </div>
+            <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-white via-blue-100 to-blue-100 bg-clip-text text-transparent tracking-tight">Flexora</span>
+            <div className="text-xs text-gray-400 font-medium">Fitness Reimagined</div>
           </div>
         </div>
 
-        <nav className="flex-1 space-y-3">
+        {/* Time Display - **FIXED: Used currentTime state** */}
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-gray-800/40 to-gray-700/40 rounded-2xl border border-white/10 backdrop-blur-sm">
+          <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </div>
+          <div className="text-xs sm:text-sm text-gray-400">
+            {currentTime.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
+          </div>
+        </div>
+
+        {/* Enhanced Navigation */}
+        <nav className="flex-1 space-y-2 sm:space-y-3">
           {[
-            { icon: Home, label: "Dashboard", page: "/app" },
-            { icon: Dumbbell, label: "Workouts", page: "/workout" },
-            { icon: Apple, label: "Nutrition", page: "/nutrition" },
-            { icon: Users, label: "Community", page: "/community" },
-            { icon: Coins, label: "FlexCoins", page: "/flexcoins" },
-            {
-              icon: Brain,
-              label: "Mental Wellness",
-              active: true,
-              color: "from-purple-500 to-pink-500",
-              page: "/mental-wellness"
-            },
+            { icon: Home, label: "Dashboard", color: "from-blue-500 to-cyan-500", page: "/app" },
+            { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500", page: "/workout" },
+            { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
+            { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
+            { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
           ].map(({ icon: Icon, label, active, color, page }) => (
             <Link
               to={page}
               key={label}
               onClick={() => setSidebarOpen(false)}
-              className={`group flex items-center gap-4 px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
-                ${
-                  active
-                    ? "bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 shadow-lg"
-                    : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
+              className={`group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
+                ${active
+                  ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
+                  : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                 }`}
             >
               {active && (
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-600/10 rounded-2xl"></div>
               )}
-              <div
-                className={`relative p-2 rounded-xl ${
-                  active
-                    ? `bg-gradient-to-r ${color}`
-                    : "bg-gray-700/50 group-hover:bg-gray-600/50"
-                } transition-all duration-300`}
-              >
-                <Icon className="w-5 h-5 relative z-10" />
+              <div className={`relative p-2 rounded-xl ${active ? `bg-gradient-to-r ${color}` : 'bg-gray-700/50 group-hover:bg-gray-600/50'} transition-all duration-300`}>
+                <Icon className="w-4 sm:w-5 h-4 sm:h-5 relative z-10" />
               </div>
-              <span className="font-semibold relative z-10">{label}</span>
-              {active && (
-                <div className="absolute right-4 w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-              )}
+              <span className="font-semibold relative z-10 text-sm sm:text-base">{label}</span>
+              {active && <div className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>}
             </Link>
           ))}
         </nav>
 
+        {/* Enhanced Profile - **FIXED: Used placeholder variables** */}
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-          <Link to="/profile" className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
-              <User className="w-6 h-6" />
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+          <Link to={"/profile"} className="relative flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
+            <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+              <User className="w-5 sm:w-6 h-5 sm:h-6" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-bold text-white truncate text-sm">
-                Your Profile
+              <div className="font-bold text-white truncate text-xs sm:text-sm">
+                {placeholderUsername}
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400">
-                <Heart className="w-3 h-3 text-pink-400" />
-               
+                <Coins className="w-3 h-3 text-amber-400" />
+                <span className="text-amber-400 font-semibold">{placeholderFlexcoins.toFixed(2)}</span>
+                <span>FlexCoins</span>
               </div>
             </div>
           </Link>
@@ -527,16 +592,16 @@ export default function MentalWellness() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[60] flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[60] flex items-center justify-center p-4 scrollbar-hide"
           onClick={() => setSelectedPlan(null)}
         >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative max-w-4xl w-full bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-2xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="relative max-w-4xl w-full scrollbar-hide bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-2xl rounded-2xl lg:rounded-3xl border border-white/20 shadow-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-gradient-to-r from-gray-800/95 to-gray-900/95 backdrop-blur-xl border-b border-white/10 p-4 lg:p-6 z-10">
+            <div className="sticky top-0 bg-gradient-to-r from-gray-800/95 to-gray-900/95 backdrop-blur-xl border-b border-white/10 p-4 lg:p-6 z-10 scrollbar-hide">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-3 lg:gap-4 flex-1">
                   <div
@@ -635,12 +700,12 @@ export default function MentalWellness() {
                 </h3>
                 <ul className="space-y-3">
                   {selectedPlan.benefits.map((benefit, index) => (
-                     <li key={index} className="flex items-start gap-3">
-                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
-                       <p className="text-gray-300 leading-relaxed text-sm lg:text-base">
-                         {benefit}
-                       </p>
-                     </li>
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
+                      <p className="text-gray-300 leading-relaxed text-sm lg:text-base">
+                        {benefit}
+                      </p>
+                    </li>
                   ))}
                 </ul>
               </div>

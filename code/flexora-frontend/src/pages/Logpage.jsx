@@ -447,8 +447,10 @@ export default function LogWorkout() {
     const handleExerciseClick = (exerciseName) => {
         setSelectedExercise(exerciseName)
         const videoKey = exerciseName.toLowerCase()
-        setCurrentVideo(exerciseVideos[videoKey] || "dQw4w9WgXcQ")
+        setCurrentVideo(exerciseVideos[videoKey] || "dQw4w9dsadadWgXcQ")
     }
+
+    const [cameraOpen,setcamara] = useState(false)
 
     const completedExercises = exercises.filter(exercise => exercise.isLogged).length
     const totalExercises = exercises.length
@@ -656,7 +658,7 @@ export default function LogWorkout() {
                         { icon: Dumbbell, label: "Workouts", active: true, color: "from-green-500 to-emerald-500", page: "/workout" },
                         { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
                         { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
-                        { icon: Coins, label: "FlexCoins (soon)", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+                        { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
                     ].map(({ icon: Icon, label, active, color, page }) => (
                         <Link
                             to={page}
@@ -700,6 +702,40 @@ export default function LogWorkout() {
                     </Link>
                 </div>
             </aside>
+
+            {cameraOpen && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-6 sm:p-8 rounded-3xl shadow-2xl border border-blue-500/50 max-w-lg w-full text-center">
+                        <h3 className="text-2xl font-bold text-blue-400 mb-4 flex items-center justify-center gap-2">
+                            <Zap className="w-6 h-6" /> AI Form Verification
+                        </h3>
+                        <p className="text-slate-300 mb-6 text-sm sm:text-base">
+                            Please position your device to capture your lift for FlexCoin validation. 
+                            (Camera simulation active.)
+                        </p>
+                        {/* Simulated Camera Feed */}
+                        <div className="aspect-video bg-slate-900 border-4 border-dashed border-blue-500/50 rounded-2xl flex items-center justify-center mb-6">
+                            <Dumbbell className="w-16 h-16 text-blue-500 animate-pulse" />
+                            <p className="text-xl text-slate-500 ml-4">Camera Initializing...</p>
+                        </div>
+                        <Button 
+                            onClick={() => setcamara(false)} 
+                            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-2xl py-3"
+                        >
+                            <X className="w-5 h-5 mr-2" />
+                            Close Camera / Skip Verification
+                        </Button>
+                        <Button 
+                            onClick={() => setcamara(false)} 
+                            className="w-full bg-gradient-to-r mt-2 from-green-500 to-green-500 hover:from-green-600 hover:to-green-600 rounded-2xl py-3"
+                        >
+                            <Activity className="w-4 h-4 mr-2" />
+                            Log
+                        </Button>
+                    </div>
+                </div>
+            )}
+            
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col relative z-10 lg:ml-72">
@@ -866,11 +902,6 @@ export default function LogWorkout() {
                                                 }
                                             </p>
                                         </div>
-                                        <Button onClick={addExercise} className="bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 text-white rounded-2xl shadow-lg shadow-blue-500/25 px-4 sm:px-6 py-2 sm:py-3">
-                                            <Plus className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
-                                            <span className="hidden sm:inline">Add Exercise</span>
-                                            <span className="sm:hidden">Add</span>
-                                        </Button>
                                     </div>
 
                                     {/* Desktop Table Header */}
@@ -1069,7 +1100,7 @@ export default function LogWorkout() {
                                                             </Button>
                                                             {/* Rated Log Button */}
                                                             <Button
-                                                                onClick={() => logExercise(exercise.id, true)}
+                                                                onClick={() => setcamara(true)}
                                                                 // On mobile, they both use flex-1 to split the space equally
                                                                 className="rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 bg-gradient-to-r from-blue-500 to-pink-500 hover:from-blue-600 hover:to-pink-600 shadow-blue-500/25 hover:shadow-blue-500/40 text-white"
                                                             >
@@ -1283,15 +1314,6 @@ export default function LogWorkout() {
                     )}
                 </div>
 
-                {/* Enhanced Floating Action Button */}
-                <div className="fixed bottom-8 right-8 z-50">
-                    <Button
-                        onClick={addExercise}
-                        className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 rounded-full shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-110"
-                    >
-                        <Plus className="w-8 h-8 text-white" />
-                    </Button>
-                </div>
             </div>
         </div>
     )

@@ -1128,7 +1128,7 @@ const getflexcoins = async (username) => {
                         { icon: Dumbbell, label: "Workouts",  color: "from-green-500 to-emerald-500", page: "/workout" },
                         { icon: Apple, label: "Nutrition",active: true, color: "from-orange-500 to-yellow-500", page: "/nutrition" },
                         { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
-                        { icon: Coins, label: "FlexCoins (soon)", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+                        { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
                         // { icon: Brain, label: "Mental Wellbeing", color: "", page: "/mental-health"},
                     ].map(({ icon: Icon, label, active, color, page }) => (
                         <Link
@@ -1166,7 +1166,7 @@ const getflexcoins = async (username) => {
                             </div>
                             <div className="flex items-center gap-2 text-xs text-gray-400">
                                 <Coins className="w-3 h-3 text-amber-400" />
-                                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                                <span className="text-amber-400 font-semibold">{flexcoins.toFixed(3)}</span>
                                 <span>FlexCoins</span>
                             </div>
                         </div>

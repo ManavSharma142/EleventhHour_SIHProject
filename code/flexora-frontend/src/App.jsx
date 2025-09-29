@@ -16,6 +16,8 @@ import TermsOfService from './pages/Terms';
 import Features from './pages/Features';
 import FAQs from './pages/FAQs';
 import MentalWellness from './pages/MentalHealth';
+import FlexcoinStore from './pages/FlexcoinStore';
+
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
           <Route path="/features" element={<Features />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/mental-health" element={<MentalWellness />} />
+          <Route path='/flexcoins' element={<FlexcoinStore />} />
         </Routes>
       </div>
     </Router>

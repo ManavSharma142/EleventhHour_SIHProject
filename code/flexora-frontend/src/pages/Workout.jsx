@@ -306,7 +306,7 @@ export default function ModernWorkout() {
                         { icon: Dumbbell, label: "Workouts", active: true, color: "from-green-500 to-emerald-500", page: "/workout" },
                         { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
                         { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
-                        { icon: Coins, label: "FlexCoins (soon)", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+                        { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
                     ].map(({ icon: Icon, label, active, color, page }) => (
                         <Link
                             to={page}
