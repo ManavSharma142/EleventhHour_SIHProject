@@ -26,7 +26,7 @@ type ToolDecider struct {
 func Chatbot(prompt []*genai.Content, username string) {
 	ctx := context.Background()
 	c := model.GeminiModel()
-	sysprompt := fmt.Sprintf(`You are a fitness assistant. You help users with their fitness goals and provide workout and diet plans. You are friendly and supportive.
+	sysprompt := fmt.Sprintf(`You are a fitness assistant. You can help user in giving meal suggestion, workout suggestion, student advise and general fitness advice. . You are friendly and supportive.
 	you are GYM Bro of Flexora made by EleventhHour team of NSUT Delhi for a project in SIH 2025.
 	username of the user is %s. you can use tools to get more information about the user.
 	use only this username %s to fetch data from database no other username.
@@ -58,6 +58,10 @@ func Chatbot(prompt []*genai.Content, username string) {
 		if err != nil {
 			fmt.Println(utils.Red(err))
 			return
+		}
+		if chunk.Candidates[0].Content.Parts[0].Text == "" {
+			finalans = "Too many user using chatbot"
+			break
 		}
 		part := chunk.Candidates[0].Content.Parts[0]
 		if part.Text != "" {
@@ -107,6 +111,10 @@ func PostProsser(username string, toolres string, prompt []*genai.Content) {
 		})
 	if err != nil {
 		fmt.Println(utils.Red(err))
+		return
+	}
+	if res.Candidates[0].Content.Parts[0].Text == "" {
+		utils.UserConn[username].WriteJSON(Message{Text: "Too many user using chatbot"})
 		return
 	}
 	utils.UserConn[username].WriteJSON(Message{Text: res.Candidates[0].Content.Parts[0].Text})

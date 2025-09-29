@@ -90,9 +90,10 @@ func main() {
 
 	r.HandleFunc("/wss/chatbot", chatbot.HandleChatbot) //for chatbot WebSocket connection
 
-	r.HandleFunc("/profile", api.GetUserProfile).Methods("GET")        //for getting user profile
-	r.HandleFunc("/profile/update", api.UpdateProfile).Methods("POST") //for updating user profile
-	r.HandleFunc("/communintychat", communitychat.HandleChatbot)
+	r.HandleFunc("/profile", api.GetUserProfile).Methods("GET")         //for getting user profile
+	r.HandleFunc("/profile/update", api.UpdateProfile).Methods("POST")  //for updating user profile
+	r.HandleFunc("/communintychat", communitychat.HandleChatbot)        //for realtime chat
+	r.HandleFunc("/leaderboard", api.GetLeaderBoardData).Methods("GET") //for leadeboard
 
 	go communitychat.BroadCastMsg()
 

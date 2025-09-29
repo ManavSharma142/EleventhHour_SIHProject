@@ -87,8 +87,10 @@ type dbschemaProgress struct {
 	Updated  time.Time `bson:"updated"`
 }
 type fitcoinschema struct {
-	Username string `bson:"username"`
-	Flexcoin int    `bson:"flexcoin"`
+	Username string  `bson:"username"`
+	Flexcoin float64 `bson:"flexcoin"`
+	LastStep int     `bson:"laststep"`
+	Updated  time.Time
 }
 
 func MarkDoneProgress(w http.ResponseWriter, r *http.Request) {
@@ -128,19 +130,19 @@ func MarkDoneProgress(w http.ResponseWriter, r *http.Request) {
 	var fitcoinschemadb fitcoinschema
 	err = database.Flexcoinscoll.FindOne(context.TODO(), bson.M{"username": req.Username}).Decode(&fitcoinschemadb)
 	if err != nil {
-		_, err = database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": req.Username, "flexcoin": flexcoin})
+		_, err = database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": req.Username, "flexcoin": flexcoin, "laststep": 0, "updated": time.Now()})
 		if err != nil {
 			http.Error(w, "Failed to insert new flexcoin", http.StatusInternalServerError)
 			return
 		}
 	} else {
-		newflexcoin := fitcoinschemadb.Flexcoin + flexcoin
+		newflexcoin := fitcoinschemadb.Flexcoin + float64(flexcoin)
 		_, err = database.Flexcoinscoll.DeleteOne(ctx, bson.M{"username": req.Username})
 		if err != nil {
 			http.Error(w, "Failed to delete old flexcoin", http.StatusInternalServerError)
 			return
 		}
-		_, err = database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": req.Username, "flexcoin": newflexcoin})
+		_, err = database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": req.Username, "flexcoin": newflexcoin, "laststep": fitcoinschemadb.LastStep, "updated": fitcoinschemadb.Updated})
 		if err != nil {
 			http.Error(w, "Failed to insert new flexcoin", http.StatusInternalServerError)
 			return

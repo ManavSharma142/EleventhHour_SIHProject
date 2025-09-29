@@ -37,7 +37,7 @@ func Validate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("User validated:", claim.Username)
+	//log.Println("User validated:", claim.Username)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{

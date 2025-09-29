@@ -41,6 +41,7 @@ func HandleChatbot(w http.ResponseWriter, r *http.Request) {
 		delete(utils.ChatUser, conn)
 		conn.Close()
 	}()
+	utils.ChatUserConn[username].WriteJSON(map[string]string{"sysTotaluser": fmt.Sprint(CountConn())})
 	for {
 		var msg utils.Message
 		err := conn.ReadJSON(&msg)

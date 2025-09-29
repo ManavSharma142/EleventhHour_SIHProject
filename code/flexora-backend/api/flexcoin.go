@@ -11,8 +11,10 @@ import (
 )
 
 type fitcoinschema struct {
-	Username string `bson:"username"`
-	Flexcoin int    `bson:"flexcoin"`
+	Username string  `bson:"username"`
+	Flexcoin float64 `bson:"flexcoin"`
+	LastStep int     `bson:"laststep"`
+	Updated  time.Time
 }
 
 func FlexCoinHandler(w http.ResponseWriter, r *http.Request) {

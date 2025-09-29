@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
 
 	"server/database"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/oauth2"
 )
 
@@ -59,6 +61,7 @@ func GoogleFitTodayHandler(w http.ResponseWriter, r *http.Request) {
 
 	token, err := GetAccessToken(user.OAuth)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "failed to refresh token", http.StatusInternalServerError)
 		return
 	}
@@ -108,12 +111,51 @@ func GoogleFitTodayHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
+	//fmt.Println("Steps:", steps, "Calories:", calories)
 	result := map[string]interface{}{
 		"steps": steps,
 		"cal":   calories,
 	}
-
+	FlexcoinStep(result, username)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
+}
+
+type fitcoinschema struct {
+	Username string  `bson:"username"`
+	Flexcoin float64 `bson:"flexcoin"`
+	LastStep int     `bson:"laststep"`
+	Updated  time.Time
+}
+
+func FlexcoinStep(result map[string]interface{}, username string) {
+	steps := result["steps"].(int)
+	if username == "" {
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	// Build filter
+	filter := bson.M{
+		"username": username,
+	}
+	var dbresult fitcoinschema
+	err := database.Flexcoinscoll.FindOne(ctx, filter).Decode(&dbresult)
+	if err != nil {
+		database.Flexcoinscoll.InsertOne(ctx, bson.M{"username": username, "flexcoin": 0.01 * float64(steps), "laststep": steps, "updated": time.Now()})
+		return
+	}
+	now := time.Now()
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	yesterday := today.Add(-24 * time.Hour)
+
+	if dbresult.Updated.After(yesterday) && dbresult.Updated.Before(today) {
+		database.Flexcoinscoll.UpdateOne(ctx, filter, bson.M{"$set": bson.M{"flexcoin": dbresult.Flexcoin + 0.01*float64(steps), "laststep": steps, "updated": now}})
+		return
+	} else {
+		newSteps := steps - dbresult.LastStep
+		database.Flexcoinscoll.UpdateOne(ctx, filter, bson.M{"$set": bson.M{"flexcoin": dbresult.Flexcoin + 0.01*float64(newSteps), "laststep": steps, "updated": now}})
+		return
+	}
 }

@@ -80,6 +80,7 @@ export default function ModernFitnessDashboard() {
   const messagesEndRef = useRef(null);
   const [workoutSplit, setWorkoutSplit] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -253,7 +254,31 @@ export default function ModernFitnessDashboard() {
     // Clear the input
     setChatInput("");
   };
-
+// === NEW: Fetch Leaderboard data ===
+useEffect(() => {
+    fetch('http://localhost:8000/leaderboard')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response for leaderboard was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Map the fetched data to include rank and color for styling
+        const rankedData = data.map((item, index) => ({
+          ...item,
+          rank: index + 1,
+          color: index === 0 ? "from-yellow-400 to-orange-400" :
+                 index === 1 ? "from-gray-300 to-gray-400" :
+                 index === 2 ? "from-amber-600 to-yellow-600" :
+                 "from-blue-400 to-cyan-400", // Default color for others
+        }));
+        setLeaderboardData(rankedData);
+      })
+      .catch(error => {
+        console.error("Failed to fetch leaderboard data:", error);
+      });
+  }, []);
   // Find today's workout to display dynamically
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   const todayWorkout = workoutSplit?.day.find(d => d.day === today);
@@ -644,29 +669,21 @@ export default function ModernFitnessDashboard() {
                   <h3 className="text-lg lg:text-2xl font-bold text-white">Weekly Leaderboard</h3>
                 </div>
                 <div className="space-y-3 lg:space-y-4">
-                  {[
-                    { name: "Manav Sharma", xp: 696969, rank: 1, color: "from-yellow-400 to-orange-400" },
-                    { name: "Khalil", xp: 100000, rank: 2, color: "from-gray-300 to-gray-400" },
-                    { name: "John Cena", xp: 6000, rank: 3, color: "from-amber-600 to-yellow-600" },
-                    { name: "Dhananjay Mishra", xp: -1000, rank: 4, color: "from-red-400 to-pink-400" },
-                  ].map((user, index) => (
-                    <div key={user.name} className="flex items-center justify-between p-3 lg:p-4 bg-gray-700/30 rounded-xl lg:rounded-2xl border border-white/5 hover:bg-gray-700/50 transition-all duration-300 group/item">
-                      <div className="flex items-center gap-3 lg:gap-4">
-                        <div className={`w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r ${user.color} rounded-lg lg:rounded-xl flex items-center justify-center font-bold text-black text-sm lg:text-lg`}>
-                          {user.rank}
-                        </div>
-                        <div>
-                          <div className="text-white font-semibold text-sm lg:text-base">{user.name}</div>
-                          <div className="text-xs lg:text-sm text-gray-400">Fitness Enthusiast</div>
-                        </div>
+                  {leaderboardData.map((user) => (
+                      <div key={user.username} className="...">
+                          {/* ... other elements ... */}
+                          <div>
+                              <div className="text-white font-semibold text-sm lg:text-base">{user.username}</div>
+                              <div className="text-xs lg:text-sm text-gray-400">Fitness Enthusiast</div>
+                          </div>
+                          {/* ... other elements ... */}
+                          <div className="text-right">
+                              <div className={`text-sm lg:text-lg font-bold bg-gradient-to-r ${user.color} bg-clip-text text-transparent`}>
+                                  {user.flexcoin.toLocaleString()} XP
+                              </div>
+                              <div className="text-xs text-gray-500">total FlexCoin XP</div>
+                          </div>
                       </div>
-                      <div className="text-right">
-                        <div className={`text-sm lg:text-lg font-bold bg-gradient-to-r ${user.color} bg-clip-text text-transparent`}>
-                          {user.xp >= 0 ? '+' : ''}{user.xp.toLocaleString()} XP
-                        </div>
-                        <div className="text-xs text-gray-500">this week</div>
-                      </div>
-                    </div>
                   ))}
                 </div>
               </div>

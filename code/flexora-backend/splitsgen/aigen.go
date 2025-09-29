@@ -97,6 +97,10 @@ func GenerateAIWorkoutSplits(request WorkoutRequest) AIWorkoutSplit {
 				- Titles within a day must be unique (append numbers if needed).
 				- Call getCustomData at least once; adapt info, never output raw.
 				- Output must be strict JSON only, no markdown or text.
+				- Always return exactly the number of days requested by the user (DaysPerWeek). 
+					If DaysPerWeek = 7, return exactly 7 days (Monday through Sunday) and dont use rest put some exercise. 
+					If any of those days are rest, include them as 'Rest' but do not skip the day.
+					It is compulsary to do workout for give DaysPerWeek days. 
 				`),
 		)
 		if err != nil {
@@ -151,13 +155,10 @@ func retryGenerateAIWorkoutSplits(request WorkoutRequest) AIWorkoutSplit {
 			- Always return exactly the number of days requested by the user (DaysPerWeek). 
 				If DaysPerWeek = 7, return exactly 7 days (Monday through Sunday) and dont use rest put some exercise. 
 				If any of those days are rest, include them as 'Rest' but do not skip the day.
-
+				It is compulsary to do workout for give DaysPerWeek days. 
 			2. Make 3 to 7 exercises per workout day depending on the user's time and goal.
-
 			3. "title" and "exercisecategory" should match. For "Rest" days, give exactly one workout with title="Rest", exercisecategory="Rest", and empty exercisedesc.
-
 			4. Use the vector database info (`+ragOutput+`) only as a **reference**. Adapt and refine it to fit the users exact request.
-
 			5. If the provided info is not relevant, create the workout plan yourself.
 
 			Your output must be strictly valid JSON, no markdown or explanations.
