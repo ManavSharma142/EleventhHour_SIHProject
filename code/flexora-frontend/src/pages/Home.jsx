@@ -19,6 +19,7 @@ import {
   Menu,
   X,
   Brain,
+  LogOut,
 } from "lucide-react";
 import ActivityHeatmap from "../components/ActivityHeatmap";
 import useWebSocket from 'react-use-websocket';
