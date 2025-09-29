@@ -18,11 +18,12 @@ import {
   Calendar,
   Menu,
   X,
-  LogOut,
+  Brain,
 } from "lucide-react";
 import ActivityHeatmap from "../components/ActivityHeatmap";
 import useWebSocket from 'react-use-websocket';
 import { Link, useNavigate } from "react-router-dom";
+import MentalWellness from "./MentalHealth"; 
 
 // The CircularProgress component is a helper for the visual elements
 const CircularProgress = ({ percentage, color, size = 120, strokeWidth = 8 }) => {
@@ -402,7 +403,8 @@ export default function ModernFitnessDashboard() {
             { icon: Dumbbell, label: "Workouts", color: "from-green-500 to-emerald-500", page: "/workout" },
             { icon: Apple, label: "Nutrition", color: "from-orange-500 to-yellow-500", page: "/nutrition" },
             { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
-            { icon: Coins, label: "FlexCoins (soon)", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+            { icon: Coins, label: "FlexCoins", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+            
           ].map(({ icon: Icon, label, active, color, page }) => (
             <Link
               to={page}
@@ -657,7 +659,7 @@ export default function ModernFitnessDashboard() {
                   </p>
                   <button className="group bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-800 hover:to-blue-800 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl lg:rounded-2xl font-semibold text-sm lg:text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30">
                     <span className="flex items-center gap-2">
-                      Explore Mindfulness
+                      <a href="/mental-health">Explore Mindfulness</a>
                       <Calendar className="w-3 h-3 lg:w-4 lg:h-4 group-hover:rotate-12 transition-transform duration-300" />
                     </span>
                   </button>
