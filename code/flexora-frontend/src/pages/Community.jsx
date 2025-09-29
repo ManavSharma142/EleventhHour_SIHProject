@@ -194,7 +194,7 @@ export default function Community() {
     { id: 1, text: "Flexora is really goood!", author: "SIH", time: "2:30 PM", isUser: false },
   ]);
   const [newMessage, setNewMessage] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date('2025-09-20T18:54:00'));
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [flexcoins, setflexcoins] = useState(1250);
   const navigate = useNavigate();
   const [username, setusername] = useState("User");

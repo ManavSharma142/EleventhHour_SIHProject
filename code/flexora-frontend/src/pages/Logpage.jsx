@@ -451,7 +451,7 @@ export default function LogWorkout() {
     }
 
     const [cameraOpen,setcamara] = useState(false)
-
+    const [currid,setcurrid] = useState()
     const completedExercises = exercises.filter(exercise => exercise.isLogged).length
     const totalExercises = exercises.length
     const workoutProgress = totalExercises > 0 ? (completedExercises / totalExercises) * 100 : 0
@@ -726,7 +726,9 @@ export default function LogWorkout() {
                             Close Camera / Skip Verification
                         </Button>
                         <Button 
-                            onClick={() => setcamara(false)} 
+                            onClick={() => {
+                                logExercise(currid, true)
+                                setcamara(false)}} 
                             className="w-full bg-gradient-to-r mt-2 from-green-500 to-green-500 hover:from-green-600 hover:to-green-600 rounded-2xl py-3"
                         >
                             <Activity className="w-4 h-4 mr-2" />
@@ -1100,7 +1102,10 @@ export default function LogWorkout() {
                                                             </Button>
                                                             {/* Rated Log Button */}
                                                             <Button
-                                                                onClick={() => setcamara(true)}
+                                                                onClick={() => {
+                                                                    setcurrid(exercise.id)
+                                                                    setcamara(true)
+                                                                }}
                                                                 // On mobile, they both use flex-1 to split the space equally
                                                                 className="rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 bg-gradient-to-r from-blue-500 to-pink-500 hover:from-blue-600 hover:to-pink-600 shadow-blue-500/25 hover:shadow-blue-500/40 text-white"
                                                             >
