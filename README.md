@@ -20,6 +20,6 @@ This README provides an overview of the project, including team details, relevan
 ## Project Links
 
 - **SIH Presentation:** [Final SIH Presentation](https://github.com/ManavSharma142/EleventhHour_SIHProject/blob/main/files/SIHPPT.pptx)
-- **Video Demonstration:** [Watch Video](https://youtu.be/CJlPYOPFoWY?si=FIh_WcMn59BFOwre)
+- **Video Demonstration:** [Watch Video](https://www.youtube.com/watch?v=CJlPYOPFoWY)
 - **Live Deployment:** [View Deployment](https://flexora-eleventhour.vercel.app/)
 - **Source Code:** [GitHub Repository](https://github.com/ManavSharma142/EleventhHour_SIHProject/tree/main/code)
