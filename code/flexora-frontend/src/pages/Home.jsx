@@ -18,6 +18,7 @@ import {
   Calendar,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 import ActivityHeatmap from "../components/ActivityHeatmap";
 import useWebSocket from 'react-use-websocket';
@@ -64,7 +65,7 @@ const CircularProgress = ({ percentage, color, size = 120, strokeWidth = 8 }) =>
 export default function ModernFitnessDashboard() {
   // Use a variable for the username to make it easier to change
   const [username, setusername] = useState("")
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://prod-sih-eleventhour-backend.onrender.com/wss/chatbot?username=${username}`);
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://localhost:8000/wss/chatbot?username=${username}`);
   const [flexcoins, setflexcoins] = useState(0);
   const [stepsCount, setStepsCount] = useState(0);
   const [targetSteps, setTargetSteps] = useState(0);
@@ -254,8 +255,8 @@ export default function ModernFitnessDashboard() {
     // Clear the input
     setChatInput("");
   };
-// === NEW: Fetch Leaderboard data ===
-useEffect(() => {
+  // === NEW: Fetch Leaderboard data ===
+  useEffect(() => {
     fetch('http://localhost:8000/leaderboard')
       .then(response => {
         if (!response.ok) {
@@ -269,9 +270,9 @@ useEffect(() => {
           ...item,
           rank: index + 1,
           color: index === 0 ? "from-yellow-400 to-orange-400" :
-                 index === 1 ? "from-gray-300 to-gray-400" :
-                 index === 2 ? "from-amber-600 to-yellow-600" :
-                 "from-blue-400 to-cyan-400", // Default color for others
+            index === 1 ? "from-gray-300 to-gray-400" :
+              index === 2 ? "from-amber-600 to-yellow-600" :
+                "from-blue-400 to-cyan-400", // Default color for others
         }));
         setLeaderboardData(rankedData);
       })
@@ -298,6 +299,11 @@ useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [sidebarOpen]);
+
+  const handlelogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0D1421] to-[#111827] text-white overflow-hidden">
@@ -327,50 +333,50 @@ useEffect(() => {
         {/* Logo with animation */}
         <div className="flex items-center gap-4 mb-12 group cursor-pointer mt-12 lg:mt-0">
           <div className="relative">
-<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
-  <svg
-    viewBox="0 0 58 58"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full h-full rounded-2xl"
-  >
-    <defs>
-      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#0f172a" />
-        <stop offset="50%" stopColor="#1e3a8a" />
-        <stop offset="100%" stopColor="#3b82f6" />
-      </linearGradient>
-    </defs>
+            <div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+              <svg
+                viewBox="0 0 58 58"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-full h-full rounded-2xl"
+              >
+                <defs>
+                  <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#0f172a" />
+                    <stop offset="50%" stopColor="#1e3a8a" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                  </linearGradient>
+                </defs>
 
-    {/* Background */}
-    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+                {/* Background */}
+                <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
 
-    {/* Dumbbell icon */}
-    <g
-      transform="translate(17,17)"
-      className="origin-center"
-    >
-      <path
-        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path
-        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    </g>
-  </svg>
-</div>
+                {/* Dumbbell icon */}
+                <g
+                  transform="translate(17,17)"
+                  className="origin-center"
+                >
+                  <path
+                    d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+                  <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                  <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                  <path
+                    d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+                    stroke="white"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+                  <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                </g>
+              </svg>
+            </div>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
           </div>
           <div>
@@ -421,7 +427,7 @@ useEffect(() => {
         </nav>
 
         {/* Enhanced Profile */}
-        <div className="relative group">
+        <div className="relative group pb-3">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
           <Link to={"/profile"} className="relative flex items-center gap-4 p-4 bg-gradient-to-r from-[#1A1F2E] to-[#1E2331] rounded-2xl border border-white/10 backdrop-blur-sm">
             <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
@@ -433,12 +439,19 @@ useEffect(() => {
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400">
                 <Coins className="w-3 h-3 text-amber-400" />
-                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                <span className="text-amber-400 font-semibold">{flexcoins.toFixed(3)}</span>
                 <span>FlexCoins</span>
               </div>
             </div>
           </Link>
         </div>
+        <button
+          onClick={handlelogout}
+          className="w-full flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 hover:text-red-300 transition-all duration-300 group"
+        >
+          <LogOut className="w-5 h-5 group-hover:translate-x-[-2px] transition-transform duration-300" />
+          <span className="font-semibold">Logout</span>
+        </button>
       </aside>
 
       {/* === Enhanced Main Content === */}
@@ -518,7 +531,7 @@ useEffect(() => {
                         {stepsCount.toLocaleString()}
                       </p>
                       <p className="text-xs lg:text-sm text-gray-400">
-                        of {targetSteps.toLocaleString()} steps
+                        of 6000 steps
                       </p>
                     </div>
                   </div>
@@ -565,7 +578,7 @@ useEffect(() => {
                         {calorieCount.toLocaleString()}
                       </p>
                       <p className="text-xs lg:text-sm text-gray-400">
-                        of {targetCalories.toLocaleString()} cal goal
+                        of 2500 cal goal
                       </p>
                     </div>
                   </div>
@@ -669,22 +682,43 @@ useEffect(() => {
                   <h3 className="text-lg lg:text-2xl font-bold text-white">Weekly Leaderboard</h3>
                 </div>
                 <div className="space-y-3 lg:space-y-4">
-                  {leaderboardData.map((user) => (
-                      <div key={user.username} className="...">
-                          {/* ... other elements ... */}
-                          <div>
-                              <div className="text-white font-semibold text-sm lg:text-base">{user.username}</div>
-                              <div className="text-xs lg:text-sm text-gray-400">Fitness Enthusiast</div>
-                          </div>
-                          {/* ... other elements ... */}
-                          <div className="text-right">
-                              <div className={`text-sm lg:text-lg font-bold bg-gradient-to-r ${user.color} bg-clip-text text-transparent`}>
-                                  {user.flexcoin.toLocaleString()} XP
-                              </div>
-                              <div className="text-xs text-gray-500">total FlexCoin XP</div>
-                          </div>
+                  <div className="p-1">
+                    <div className="w-full">
+                      {/* Header */}
+                      <div className="flex justify-between items-center px-4 lg:px-6 py-3 border-b border-gray-700/30 mb-2">
+                        <h2 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wider">Username</h2>
+                        <h2 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wider">FlexCoin XP</h2>
                       </div>
-                  ))}
+
+                      {/* Leaderboard Items */}
+                      {leaderboardData.map((user, index) => (
+                        <div key={user.username} className="flex justify-between items-center px-4 lg:px-6 py-4 hover:bg-gray-800/30 transition-colors border-b border-gray-800/50">
+                          {/* Left Side - User Info */}
+                          <div className="flex items-center gap-3">
+                            <div className="text-gray-400 font-bold text-lg lg:text-xl w-8">
+                              #{index + 1}
+                            </div>
+                            <div>
+                              <div className="text-white font-semibold text-sm lg:text-lg">
+                                {user.username}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Fitness Enthusiast
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Right Side - XP */}
+                          <div className="text-right">
+                            <div className={`text-xl lg:text-2xl font-bold bg-gradient-to-r ${user.color} bg-clip-text text-transparent`}>
+                              {user.flexcoin.toLocaleString()}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>

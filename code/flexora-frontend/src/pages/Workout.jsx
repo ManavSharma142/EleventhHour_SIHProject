@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
     Home,
     Dumbbell,
@@ -22,7 +21,8 @@ import {
     Settings,
     Bell,
     Menu,
-    X
+    X,
+    Trash2 // Added Trash2 icon for delete action
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -37,9 +37,90 @@ export default function ModernWorkout() {
     const [currentTime, setCurrentTime] = useState(new Date());
     const [flexcoins, setflexcoins] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [username, setusername] = useState("")
+    const [username, setUsername] = useState("") // Renamed for consistency
     const navigate = useNavigate();
 
+    // Utility function to fetch workout data
+    const fetchWorkout = useCallback(async (user) => {
+        try {
+            const res = await fetch(
+                `http://localhost:8000/workouts/selected?username=${user}`
+            );
+            const data = await res.json();
+            setSplitData(data.day || []);
+            setOpenDay(null); // Close any open day after fetching/re-fetching
+        } catch (err) {
+            console.error("Error fetching workout data:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    // Utility function to fetch flexcoins
+    const getflexcoins = async (user) => {
+        try {
+            const response = await fetch(
+                `http://localhost:8000/flexcoin?username=${user}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            const data = await response.json();
+            setflexcoins(data.coins)
+            return data;
+        } catch (error) {
+            console.error("Error fetching flexcoins:", error);
+            return null;
+        }
+    };
+
+    // New function to handle split deletion
+    const deleteCurrentSplit = async () => {
+        if (!username) {
+            alert("Username not found. Cannot delete split.");
+            return;
+        }
+
+        const isConfirmed = window.confirm(
+            "Are you sure you want to delete your current workout split? This action cannot be undone."
+        );
+
+        if (!isConfirmed) return;
+
+        try {
+            const res = await fetch(
+                `http://localhost:8000/workouts/unselect?username=${username}`,
+                {
+                    method: "GET", // Using GET as specified, but POST/DELETE is typically better for destructive actions
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || "Failed to delete workout split");
+            }
+
+            // Successfully deleted, now re-fetch the workout data to update the UI
+            alert("Workout split deleted successfully!");
+            setSplitData([]); // Clear local state immediately
+            setOpenDay(null); // Close any open day
+            setCompletedExercises(new Set()); // Reset completed exercises
+            fetchWorkout(username); // Re-fetch to confirm and show empty state
+        } catch (err) {
+            console.error("Error deleting workout split:", err);
+            alert(`Error: ${err.message}`);
+        }
+    };
+
+
+    // Initial data fetch and user validation
     useEffect(() => {
         const getUsername = async () => {
             const token = localStorage.getItem("token");
@@ -59,19 +140,16 @@ export default function ModernWorkout() {
 
                 const data = await res.json();
 
-                if (data?.status === "error") {
+                if (data?.status === "error" || !data?.username) {
                     navigate("/login");
                     return;
                 }
 
-                if (data?.username) {
-                    setusername(data.username);
-                    console.log("Username:", data.username);
-                    fetchWorkout(data.username);
-                    getflexcoins(data.username)
-                } else {
-                    navigate("/login");
-                }
+                setUsername(data.username);
+                // console.log("Username:", data.username);
+                fetchWorkout(data.username);
+                getflexcoins(data.username)
+                
             } catch (err) {
                 console.error("Error validating user:", err);
                 navigate("/login");
@@ -79,42 +157,16 @@ export default function ModernWorkout() {
         };
 
         getUsername();
+    }, [fetchWorkout, navigate]); // Added fetchWorkout and navigate to dependency array
+
+    // Clock update effect
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
     }, []);
-
-    const getflexcoins = async (username) => {
-        try {
-            const response = await fetch(
-                `http://localhost:8000/flexcoin?username=${username}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            const data = await response.json();
-            setflexcoins(data.coins)
-            return data;
-        } catch (error) {
-            console.error("Error fetching flexcoins:", error);
-            return null;
-        }
-    };
-
-    async function fetchWorkout(user) {
-        try {
-            const res = await fetch(
-                `http://localhost:8000/workouts/selected?username=${user}`
-            );
-            const data = await res.json();
-            setSplitData(data.day || []);
-        } catch (err) {
-            console.error("Error fetching workout data:", err);
-        } finally {
-            setLoading(false);
-        }
-    }
 
     const getFilteredExercises = (workouts) => {
         return workouts.filter(
@@ -186,48 +238,48 @@ export default function ModernWorkout() {
                 <div className="flex items-center gap-3 lg:gap-4 mb-8 lg:mb-12 group cursor-pointer">
                     <div className="relative">
 <div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
-  <svg
-    viewBox="0 0 58 58"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full h-full rounded-2xl"
-  >
-    <defs>
-      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#0f172a" />
-        <stop offset="50%" stopColor="#1e3a8a" />
-        <stop offset="100%" stopColor="#3b82f6" />
-      </linearGradient>
-    </defs>
-
-    {/* Background */}
-    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
-
-    {/* Dumbbell icon */}
-    <g
-      transform="translate(17,17)"
-      className="origin-center"
+    <svg
+        viewBox="0 0 58 58"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full rounded-2xl"
     >
-      <path
-        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path
-        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    </g>
-  </svg>
+        <defs>
+            <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#0f172a" />
+                <stop offset="50%" stopColor="#1e3a8a" />
+                <stop offset="100%" stopColor="#3b82f6" />
+            </linearGradient>
+        </defs>
+
+        {/* Background */}
+        <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+
+        {/* Dumbbell icon */}
+        <g
+            transform="translate(17,17)"
+            className="origin-center"
+        >
+            <path
+                d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+            <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            <path
+                d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
+            <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        </g>
+    </svg>
 </div>
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                     </div>
@@ -261,7 +313,7 @@ export default function ModernWorkout() {
                             key={label}
                             onClick={() => setSidebarOpen(false)}
                             className={`group flex items-center gap-3 lg:gap-4 px-3 lg:px-5 py-3 lg:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
-                                  ${active
+                                ${active
                                     ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                                     : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                                 }`}
@@ -291,7 +343,7 @@ export default function ModernWorkout() {
                             </div>
                             <div className="flex items-center gap-2 text-xs text-gray-400">
                                 <Coins className="w-3 h-3 text-amber-400 flex-shrink-0" />
-                                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                                <span className="text-amber-400 font-semibold">{flexcoins.toFixed(3)}</span>
                                 <span>FlexCoins</span>
                             </div>
                         </div>
@@ -346,51 +398,57 @@ export default function ModernWorkout() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    {splitData.map((dayItem, index) => (
-                                        <div
-                                            key={dayItem.day}
-                                            onClick={() => {
-                                                setOpenDay(openDay === dayItem.day ? null : dayItem.day);
-                                                setSidebarOpen(false);
-                                            }}
-                                            className={`group p-3 lg:p-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.02] ${openDay === dayItem.day
-                                                ? "bg-white/10 shadow-lg"
-                                                : "bg-slate-700/30 hover:bg-slate-700/50"
-                                                }`}
-                                        >
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="font-semibold text-sm">
-                                                    {dayItem.day}
-                                                </span>
-                                                <div className="flex items-center gap-1">
-                                                    <Clock className="w-3 h-3 text-slate-400" />
-                                                    <span className="text-xs text-slate-400">45m</span>
+                                    {splitData.length > 0 ? (
+                                        splitData.map((dayItem, index) => (
+                                            <div
+                                                key={dayItem.day}
+                                                onClick={() => {
+                                                    setOpenDay(openDay === dayItem.day ? null : dayItem.day);
+                                                    setSidebarOpen(false);
+                                                }}
+                                                className={`group p-3 lg:p-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.02] ${openDay === dayItem.day
+                                                    ? "bg-white/10 shadow-lg"
+                                                    : "bg-slate-700/30 hover:bg-slate-700/50"
+                                                    }`}
+                                            >
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="font-semibold text-sm">
+                                                        {dayItem.day}
+                                                    </span>
+                                                    <div className="flex items-center gap-1">
+                                                        <Clock className="w-3 h-3 text-slate-400" />
+                                                        <span className="text-xs text-slate-400">45m</span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {[...new Set(dayItem.workouts.map(w => w.exercisecategory))].slice(0, 2).map((category, idx) => (
+                                                        <span
+                                                            key={idx}
+                                                            className="px-2 py-1 text-xs rounded-full bg-slate-600/50 text-slate-300"
+                                                        >
+                                                            {category}
+                                                        </span>
+                                                    ))}
+                                                    {[...new Set(dayItem.workouts.map(w => w.exercisecategory))].length > 2 && (
+                                                        <span className="px-2 py-1 text-xs rounded-full bg-slate-600/50 text-slate-300">
+                                                            +{[...new Set(dayItem.workouts.map(w => w.exercisecategory))].length - 2}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="mt-3 flex items-center justify-between">
+                                                    <span className="text-xs text-slate-400">
+                                                        {dayItem.workouts.length} exercises
+                                                    </span>
+                                                    <ChevronRight className={`w-4 h-4 transition-transform ${openDay === dayItem.day ? 'rotate-90 text-blue-400' : 'text-slate-400'
+                                                        }`} />
                                                 </div>
                                             </div>
-                                            <div className="flex flex-wrap gap-1">
-                                                {[...new Set(dayItem.workouts.map(w => w.exercisecategory))].slice(0, 2).map((category, idx) => (
-                                                    <span
-                                                        key={idx}
-                                                        className="px-2 py-1 text-xs rounded-full bg-slate-600/50 text-slate-300"
-                                                    >
-                                                        {category}
-                                                    </span>
-                                                ))}
-                                                {[...new Set(dayItem.workouts.map(w => w.exercisecategory))].length > 2 && (
-                                                    <span className="px-2 py-1 text-xs rounded-full bg-slate-600/50 text-slate-300">
-                                                        +{[...new Set(dayItem.workouts.map(w => w.exercisecategory))].length - 2}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <div className="mt-3 flex items-center justify-between">
-                                                <span className="text-xs text-slate-400">
-                                                    {dayItem.workouts.length} exercises
-                                                </span>
-                                                <ChevronRight className={`w-4 h-4 transition-transform ${openDay === dayItem.day ? 'rotate-90 text-blue-400' : 'text-slate-400'
-                                                    }`} />
-                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center p-4 bg-slate-700/30 rounded-xl">
+                                            <p className="text-slate-400 text-sm">No split selected.</p>
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
 
                                 <div className="mt-6 space-y-3">
@@ -401,6 +459,19 @@ export default function ModernWorkout() {
                                         <span className="hidden sm:inline">Generate New Split</span>
                                         <span className="sm:hidden">New Split</span>
                                     </Link>
+                                    
+                                    {/* --- Delete Current Split Button --- */}
+                                    {splitData.length > 0 && (
+                                        <button
+                                            onClick={deleteCurrentSplit}
+                                            className="w-full bg-red-600/70 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-red-500/25 transition-all flex items-center justify-center gap-2 text-sm lg:text-base"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            <span className="hidden sm:inline">Delete Current Split</span>
+                                            <span className="sm:hidden">Delete Split</span>
+                                        </button>
+                                    )}
+                                    {/* --------------------------------- */}
                                 </div>
                             </div>
                         </div>
@@ -544,6 +615,9 @@ export default function ModernWorkout() {
                                                                 <table className="w-full">
                                                                     <thead>
                                                                         <tr className="border-b border-slate-700/50">
+                                                                            <th className="text-left p-2 lg:p-4 font-semibold text-slate-300">#</th>
+                                                                            <th className="text-left p-2 lg:p-4 font-semibold text-slate-300">Exercise</th>
+                                                                            <th className="text-left p-2 lg:p-4 font-semibold text-slate-300">Category</th>
                                                                             <th className="text-left p-2 lg:p-4 font-semibold text-slate-300">Sets × Reps</th>
                                                                             <th className="text-left p-2 lg:p-4 font-semibold text-slate-300">Demo</th>
                                                                         </tr>
@@ -594,13 +668,24 @@ export default function ModernWorkout() {
                                 </>
                             )}
 
-                            {!openDay && (
+                            {/* No Split Selected / No Split Data */}
+                            {!openDay && splitData.length === 0 && (
+                                <div className="text-center py-16">
+                                    <div className="w-16 lg:w-20 h-16 lg:h-20 bg-slate-800/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                        <Dumbbell className="w-8 lg:w-10 h-8 lg:h-10 text-slate-400" />
+                                    </div>
+                                    <h3 className="text-xl lg:text-2xl font-bold mb-2">No Workout Split Selected</h3>
+                                    <p className="text-slate-400">Tap **Generate New Split** to create your personalized training plan!</p>
+                                </div>
+                            )}
+
+                            {!openDay && splitData.length > 0 && (
                                 <div className="text-center py-16">
                                     <div className="w-16 lg:w-20 h-16 lg:h-20 bg-slate-800/40 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                         <Calendar className="w-8 lg:w-10 h-8 lg:h-10 text-slate-400" />
                                     </div>
                                     <h3 className="text-lg lg:text-xl font-bold mb-2">Select a Workout Day</h3>
-                                    <p className="text-slate-400">Choose a day from your weekly split to view exercises</p>
+                                    <p className="text-slate-400">Choose a day from your weekly split on the left to view exercises.</p>
                                 </div>
                             )}
                         </div>

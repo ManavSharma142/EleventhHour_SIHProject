@@ -78,6 +78,7 @@ func main() {
 	r.HandleFunc("/workouts/select", splitsgen.SelectWorkoutSplit).Methods("POST")     //for selecting a workout split
 	r.HandleFunc("/workouts/markdone", splitsgen.MarkDoneProgress).Methods("POST")     //for marking progress (Lock)
 	r.HandleFunc("/workouts/progress", splitsgen.GetUserProgress).Methods("GET")       //for getting user progress
+	r.HandleFunc("/workouts/unselect", splitsgen.UnselectWorkoutSplit).Methods("GET")  //for unselecting a workout
 
 	r.HandleFunc("/googlefit", auth.GoogleFitTodayHandler).Methods("GET") //for getting today's Google Fit data
 	r.HandleFunc("/connect/googlefit", connect.GoogleLogin).Methods("GET")

@@ -678,7 +678,7 @@ const getflexcoins = async (username) => {
                             </div>
                             <div className="flex items-center gap-2 text-xs text-gray-400">
                                 <Coins className="w-3 h-3 text-amber-400" />
-                                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                                <span className="text-amber-400 font-semibold">{flexcoins.toFixed(3)}</span>
                                 <span>FlexCoins</span>
                             </div>
                         </div>

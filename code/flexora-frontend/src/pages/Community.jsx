@@ -135,7 +135,7 @@ function ChatMessage({ message, isUser }) {
 }
 
 // Chat Component for responsiveness
-function ChatSection({ messages, newMessage, setNewMessage, sendMessage, handleKeyPress, onClose }) {
+function ChatSection({ messages, newMessage, setNewMessage, sendMessage, handleKeyPress, onClose, totaluser }) {
   const messagesEndRef = useRef(null);
   useEffect(() => {
     // Scroll to the latest message whenever messages change
@@ -148,7 +148,7 @@ function ChatSection({ messages, newMessage, setNewMessage, sendMessage, handleK
       <div className="p-6 border-b border-white/10 flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-white mb-1">Community Chat</h2>
-          <p className="text-sm text-slate-400">12 members online</p>
+          <p className="text-sm text-slate-400">{totaluser} members online</p>
         </div>
         {onClose && (
           <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors">
@@ -199,6 +199,7 @@ export default function Community() {
   const navigate = useNavigate();
   const [username, setusername] = useState("User");
   const [ws, setWs] = useState(null);
+  const [totaluser, setTotaluser] = useState(1);
 
 
 
@@ -244,7 +245,10 @@ export default function Community() {
               const receivedMessage = JSON.parse(event.data);
               const now = new Date();
               const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+              if (receivedMessage?.sysTotaluser != NaN){
+                setTotaluser(receivedMessage.sysTotaluser);
+                return;
+              }
               setMessages(prevMessages => {
                 const newMsg = {
                   id: prevMessages.length + 1,
@@ -523,7 +527,7 @@ export default function Community() {
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400">
                 <Coins className="w-3 h-3 text-amber-400" />
-                <span className="text-amber-400 font-semibold">{flexcoins}</span>
+                <span className="text-amber-400 font-semibold">{flexcoins.toFixed(3)}</span>
                 <span>FlexCoins</span>
               </div>
             </div>
@@ -585,6 +589,7 @@ export default function Community() {
             setNewMessage={setNewMessage}
             sendMessage={sendMessage}
             handleKeyPress={handleKeyPress}
+            totaluser={totaluser/2}
           />
         </div>
       </div>

@@ -229,3 +229,12 @@ func GetUserProgress(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(progress)
 }
+
+func UnselectWorkoutSplit(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	username := r.URL.Query().Get("username")
+	filer := bson.M{"username": username}
+	update := bson.M{"$set": bson.M{"split": ""}}
+	database.Dbcoll.UpdateOne(context.TODO(), filer, update)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Split unselected successfully"})
+}

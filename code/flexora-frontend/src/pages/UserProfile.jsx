@@ -332,7 +332,7 @@ export default function UserProfile() {
                 {userData?.username || 'Loading...'}
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400">
-                <span className="text-amber-400 font-semibold">{userData?.exp || 0}</span>
+                <span className="text-amber-400 font-semibold">{userData?.exp || "Newbie"}</span>
               </div>
             </div>
           </div>

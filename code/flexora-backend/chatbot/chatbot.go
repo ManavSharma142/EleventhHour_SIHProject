@@ -59,7 +59,7 @@ func Chatbot(prompt []*genai.Content, username string) {
 			fmt.Println(utils.Red(err))
 			return
 		}
-		if chunk.Candidates[0].Content.Parts[0].Text == "" {
+		if chunk.Candidates[0].Content.Parts[0].Text == "" && chunk.Candidates[0].Content.Parts[0].FunctionCall.Args == nil {
 			finalans = "Too many user using chatbot"
 			break
 		}
