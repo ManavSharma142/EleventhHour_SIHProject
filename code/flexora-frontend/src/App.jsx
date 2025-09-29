@@ -13,7 +13,7 @@ import LogWorkout from './pages/Logpage';
 import OAuthSuccess from './pages/Oauth';
 import PrivacyPolicy from './pages/Privacy';
 import TermsOfService from './pages/Terms';
-// import Features from './pages/Features';
+import Features from './pages/Features';
 import FAQs from './pages/FAQs';
 
 
@@ -35,7 +35,7 @@ function App() {
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
-          {/* <Route path="/features" element={<Features />} /> */}
+          <Route path="/features" element={<Features />} />
           <Route path="/faqs" element={<FAQs />} />
         </Routes>
       </div>
