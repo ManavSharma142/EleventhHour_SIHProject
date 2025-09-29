@@ -601,6 +601,7 @@ import {
   ArrowUpRight,
   Menu,
   X,
+  Brain,
 } from "lucide-react";
 // react-router-dom is not available in this environment, so we use placeholder components
 // In a real app, you would use: import { Link, useNavigate } from "react-router-dom";
@@ -845,7 +846,6 @@ export default function Nutrition() {
     {
       name: "Protein Bulking Smoothie (No whey)",
       imglink: "https://ca.myprotein.com/images?url=https://blogscdn.thehut.net/app/uploads/sites/444/2020/10/BulkingShakes-FEATURE-1_1572368471_1604091319.jpg&auto=avif&width=1200&fit=crop",
-      name: "Protein Bulking Smoothie",
       prepTime: "5min",
       difficulty: "Easy",
       rating: "4.9",
@@ -1129,6 +1129,7 @@ const getflexcoins = async (username) => {
                         { icon: Apple, label: "Nutrition",active: true, color: "from-orange-500 to-yellow-500", page: "/nutrition" },
                         { icon: Users, label: "Community", color: "from-purple-500 to-pink-500", page: "/community" },
                         { icon: Coins, label: "FlexCoins (soon)", color: "from-amber-500 to-orange-500", page: "/flexcoins" },
+                        // { icon: Brain, label: "Mental Wellbeing", color: "", page: "/mental-health"},
                     ].map(({ icon: Icon, label, active, color, page }) => (
                         <Link
                             to={page}

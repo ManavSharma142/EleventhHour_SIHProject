@@ -15,7 +15,7 @@ import PrivacyPolicy from './pages/Privacy';
 import TermsOfService from './pages/Terms';
 import Features from './pages/Features';
 import FAQs from './pages/FAQs';
-
+import MentalWellness from './pages/MentalHealth';
 
 function App() {
   return (
@@ -37,6 +37,7 @@ function App() {
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/features" element={<Features />} />
           <Route path="/faqs" element={<FAQs />} />
+          <Route path="/mental-health" element={<MentalWellness />} />
         </Routes>
       </div>
     </Router>
