@@ -30,9 +30,9 @@ export default function LogWorkout() {
     const [totalVolume, setTotalVolume] = useState(0)
     const [username, setusername] = useState("")
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [flexcoins,setflexcoins] = useState(0);
+    const [flexcoins, setflexcoins] = useState(0);
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-    
+
     // Mobile state
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -133,7 +133,7 @@ export default function LogWorkout() {
         } catch (error) {
             console.error("Error setting active day:", error);
         }
-};
+    };
 
     const fetchWorkoutProgress = async () => {
         try {
@@ -194,7 +194,12 @@ export default function LogWorkout() {
         }
     };
 
-    const markExerciseDone = async (exerciseId) => {
+    /**
+     * Replaced markExerciseDone with logExercise to implement Unrated/Rated Log feature.
+     * @param {number} exerciseId - The ID of the exercise to log.
+     * @param {boolean} isRated - True for Rated Log (grants FlexCoins/active day, implies camera), false for Unrated Log.
+     */
+    const logExercise = async (exerciseId, isRated) => {
         try {
             const exercise = exercises.find(ex => ex.id === exerciseId);
             if (!exercise) return;
@@ -210,7 +215,9 @@ export default function LogWorkout() {
 
             // Get current progress and add new exercise data
             const currentProgress = workoutProgressData.length > 0 ? workoutProgressData[0].exercise : [];
-            const updatedExercise = [...currentProgress, exerciseData];
+            // Remove existing log for this exercise if present (to allow overwriting/updating)
+            const filteredProgress = currentProgress.filter(loggedEx => typeof loggedEx === 'object' && loggedEx.exercisename !== exercise.name);
+            const updatedExercise = [...filteredProgress, exerciseData];
 
             const response = await fetch('http://localhost:8000/workouts/markdone', {
                 method: 'POST',
@@ -226,7 +233,7 @@ export default function LogWorkout() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to mark exercise as done');
+                throw new Error('Failed to log exercise');
             }
 
             // Update local state to mark exercise as logged
@@ -238,15 +245,23 @@ export default function LogWorkout() {
                 )
             );
 
-            // Show success message
-            alert(`Successfully logged ${exercise.name} with ${exercise.sets.length} sets!`);
-            getflexcoins(username)
-            setactiveday(username)
+            const logType = isRated ? 'Rated' : 'Unrated';
+
+            // --- Conditional Logic for FlexCoins/Camera/Active Day ---
+            if (isRated) {
+                alert(`Successfully logged ${exercise.name} as ${logType}! Opening camera for form verification (simulated). You earned FlexCoins!`);
+                getflexcoins(username) // FlexCoins granted
+                setactiveday(username) // Mark active day
+            } else {
+                alert(`Successfully logged ${exercise.name} as ${logType}. No FlexCoins earned (unrated).`);
+                // No FlexCoins, No active day mark
+            }
+            // --- End Conditional Logic ---
 
             // Refresh progress data
             await fetchWorkoutProgress();
         } catch (err) {
-            console.error('Error marking exercise as done:', err);
+            console.error('Error logging exercise:', err);
             alert('Failed to log exercise. Please try again.');
         }
     };
@@ -328,26 +343,26 @@ export default function LogWorkout() {
         }, 0)
         setTotalVolume(volume)
     }, [exercises])
-const getflexcoins = async (username) => {
-  try {
-    const response = await fetch(
-      `http://localhost:8000/flexcoin?username=${username}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const getflexcoins = async (username) => {
+        try {
+            const response = await fetch(
+                `http://localhost:8000/flexcoin?username=${username}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
-    const data = await response.json();
-    setflexcoins(data.coins)
-    return data; // This will be the response from your API
-  } catch (error) {
-    console.error("Error fetching flexcoins:", error);
-    return null;
-  }
-};
+            const data = await response.json();
+            setflexcoins(data.coins)
+            return data; // This will be the response from your API
+        } catch (error) {
+            console.error("Error fetching flexcoins:", error);
+            return null;
+        }
+    };
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
@@ -450,7 +465,7 @@ const getflexcoins = async (username) => {
 
             {/* Mobile Overlay */}
             {isSidebarOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 />
@@ -562,7 +577,7 @@ const getflexcoins = async (username) => {
             {/* Enhanced Sidebar */}
             <aside className={`w-72 bg-gradient-to-b from-[#0F1729] to-[#0A1018] backdrop-blur-xl border-r border-white/10 p-4 sm:p-6 flex flex-col fixed top-0 left-0 h-full z-50 shadow-2xl transform transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 {/* Mobile Close Button */}
-                <Button 
+                <Button
                     onClick={() => setIsSidebarOpen(false)}
                     className="lg:hidden absolute top-4 right-4 p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
                 >
@@ -572,50 +587,50 @@ const getflexcoins = async (username) => {
                 {/* Logo with animation */}
                 <div className="flex items-center gap-4 mb-8 sm:mb-12 group cursor-pointer">
                     <div className="relative">
-<div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
-  <svg
-    viewBox="0 0 58 58"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full h-full rounded-2xl"
-  >
-    <defs>
-      <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#0f172a" />
-        <stop offset="50%" stopColor="#1e3a8a" />
-        <stop offset="100%" stopColor="#3b82f6" />
-      </linearGradient>
-    </defs>
+                        <div className="w-14 h-14 rounded-2xl shadow-2xl group-hover:scale-110 transition-all duration-300">
+                            <svg
+                                viewBox="0 0 58 58"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-full h-full rounded-2xl"
+                            >
+                                <defs>
+                                    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stopColor="#0f172a" />
+                                        <stop offset="50%" stopColor="#1e3a8a" />
+                                        <stop offset="100%" stopColor="#3b82f6" />
+                                    </linearGradient>
+                                </defs>
 
-    {/* Background */}
-    <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
+                                {/* Background */}
+                                <rect x="0" y="0" width="58" height="58" rx="14" fill="url(#grad)" />
 
-    {/* Dumbbell icon */}
-    <g
-      transform="translate(17,17)"
-      className="origin-center"
-    >
-      <path
-        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <path
-        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
-    </g>
-  </svg>
-</div>
+                                {/* Dumbbell icon */}
+                                <g
+                                    transform="translate(17,17)"
+                                    className="origin-center"
+                                >
+                                    <path
+                                        d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"
+                                        stroke="white"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        fill="none"
+                                    />
+                                    <path d="m2.5 21.5 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                                    <path d="m20.1 3.9 1.4-1.4" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                                    <path
+                                        d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"
+                                        stroke="white"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        fill="none"
+                                    />
+                                    <path d="m9.6 14.4 4.8-4.8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                                </g>
+                            </svg>
+                        </div>
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                     </div>
                     <div>
@@ -648,7 +663,7 @@ const getflexcoins = async (username) => {
                             key={label}
                             onClick={() => setIsSidebarOpen(false)}
                             className={`group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden
-                                  ${active
+                                ${active
                                     ? "bg-gradient-to-r from-blue-600/20 to-blue-600/20 border border-blue-500/30 shadow-lg"
                                     : "text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                                 }`}
@@ -690,7 +705,7 @@ const getflexcoins = async (username) => {
             <div className="flex-1 flex flex-col relative z-10 lg:ml-72">
                 {/* Mobile Header with Menu Button */}
                 <div className="lg:hidden bg-slate-800/20 backdrop-blur-2xl border-b border-slate-700/30 p-4 flex items-center justify-between shadow-xl">
-                    <Button 
+                    <Button
                         onClick={() => setIsSidebarOpen(true)}
                         className="p-2 bg-slate-700/50 hover:bg-slate-600/50 rounded-xl"
                     >
@@ -870,7 +885,7 @@ const getflexcoins = async (username) => {
                                     {/* Enhanced Exercise Rows */}
                                     {exercises.map((exercise, exerciseIndex) => (
                                         <div key={exercise.id} className="space-y-3 mb-8 xl:mb-10 p-4 sm:p-6 xl:p-8 bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-3xl border border-slate-600/20 backdrop-blur-sm hover:border-slate-600/40 transition-all duration-300">
-                                            
+
                                             {/* Mobile Exercise Header */}
                                             <div className="lg:hidden mb-4">
                                                 <div className="flex items-center gap-3 mb-3">
@@ -944,13 +959,13 @@ const getflexcoins = async (username) => {
                                             {/* Desktop Table View */}
                                             <div className="hidden lg:block">
                                                 {exercise.sets.map((set, setIndex) => (
-                                                    <div key={set.id} className="grid grid-cols-11 gap-4 items-center group mb-3">
+                                                    <div key={set.id} className="grid grid-cols-11 gap-2 items-center group mb-3">
                                                         <div className="col-span-1 text-lg font-bold text-slate-300">
                                                             {setIndex === 0 ? exerciseIndex + 1 : ""}
                                                         </div>
                                                         <div className="col-span-4">
                                                             {setIndex === 0 ? (
-                                                                <div className="flex items-center gap-3">
+                                                                <div className="flex items-center gap-1">
                                                                     <div className="flex-1 relative">
                                                                         <Input
                                                                             placeholder="Exercise name"
@@ -975,7 +990,7 @@ const getflexcoins = async (username) => {
                                                             ) : null}
                                                         </div>
                                                         <div className="col-span-2">
-                                                            <div className="text-sm text-slate-300 bg-gradient-to-r from-slate-600/40 to-slate-700/40 px-4 py-3 rounded-xl text-center font-semibold border border-slate-600/30">
+                                                            <div className="text-sm text-slate-300 bg-gradient-to-r from-slate-600/40 to-slate-700/40 px-4 py-1 rounded-xl text-center font-semibold border border-slate-600/30">
                                                                 Set {setIndex + 1}
                                                             </div>
                                                         </div>
@@ -1028,32 +1043,55 @@ const getflexcoins = async (username) => {
                                                 </div>
                                             </div>
 
-                                            {/* Enhanced Add Set Button */}
+                                            {/* Enhanced Log/Add Set Buttons */}
                                             <div className="flex justify-between sm:justify-end mt-4 sm:mt-6">
-                                                <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
-                                                    <Button
-                                                        disabled={exercise.isLogged}
-                                                        onClick={() => markExerciseDone(exercise.id)}
-                                                        className={`rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 sm:flex-none ${exercise.isLogged
-                                                            ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-green-500/25'
-                                                            : 'bg-gradient-to-r from-blue-500 to-pink-500 hover:from-blue-600 hover:to-pink-600 shadow-blue-500/25 hover:shadow-blue-500/40'
-                                                            } text-white`}
-                                                    >
-                                                        <Activity className="w-4 h-4 mr-2" />
-                                                        {exercise.isLogged ? 'Logged' : 'Log'}
-                                                    </Button>
-                                                    {!exercise.isLogged && (
+                                                {/* This container holds the two main log buttons. We make it take 2/3 of the space on mobile. */}
+                                                <div className="flex gap-2 w-full sm:w-auto">
+                                                    {exercise.isLogged ? (
                                                         <Button
-                                                            variant="outline"
-                                                            onClick={() => addSet(exercise.id)}
-                                                            className="border-slate-600/50 text-slate-300 hover:bg-slate-700/30 hover:text-white hover:border-slate-500 rounded-2xl px-4 sm:px-6 py-2 backdrop-blur-sm transition-all duration-300 flex-1 sm:flex-none"
+                                                            disabled
+                                                            // Ensure it always takes full width when it's the only button in this group
+                                                            className="rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white"
                                                         >
-                                                            <Plus className="w-4 h-4 mr-2" />
-                                                            <span className="hidden sm:inline">Add Set</span>
-                                                            <span className="sm:hidden">Set</span>
+                                                            <Activity className="w-4 h-4 mr-2" />
+                                                            Logged
                                                         </Button>
+                                                    ) : (
+                                                        <>
+                                                            {/* Unrated Log Button */}
+                                                            <Button
+                                                                onClick={() => logExercise(exercise.id, false)}
+                                                                // On mobile, they both use flex-1 to split the space equally
+                                                                className="rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 bg-slate-700/50 hover:bg-slate-600/50 border border-slate-500/50 text-slate-200"
+                                                            >
+                                                                <Activity className="w-4 h-4 mr-2" />
+                                                                Unrated Log
+                                                            </Button>
+                                                            {/* Rated Log Button */}
+                                                            <Button
+                                                                onClick={() => logExercise(exercise.id, true)}
+                                                                // On mobile, they both use flex-1 to split the space equally
+                                                                className="rounded-xl px-3 sm:px-4 py-2 shadow-lg transition-all duration-300 flex-1 bg-gradient-to-r from-blue-500 to-pink-500 hover:from-blue-600 hover:to-pink-600 shadow-blue-500/25 hover:shadow-blue-500/40 text-white"
+                                                            >
+                                                                <Zap className="w-4 h-4 mr-2" />
+                                                                Rated Log
+                                                            </Button>
+                                                        </>
                                                     )}
                                                 </div>
+                                                {/* This container holds the +Set button */}
+                                                {!exercise.isLogged && (
+                                                    <Button
+                                                        variant="outline"
+                                                        onClick={() => addSet(exercise.id)}
+                                                        // Use flex-none to let the content size it, or use w-1/3 if you want it to be 1/3 of the screen width
+                                                        className="border-slate-600/50 ml-2 text-slate-300 hover:bg-slate-700/30 hover:text-white hover:border-slate-500 rounded-2xl px-4 py-2 backdrop-blur-sm transition-all duration-300 flex-none"
+                                                    >
+                                                        <Plus className="w-4 h-4 mr-2" />
+                                                        <span className="hidden sm:inline">Add Set</span>
+                                                        <span className="sm:hidden">Set</span>
+                                                    </Button>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
