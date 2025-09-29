@@ -58,7 +58,7 @@ export function StudentSection() {
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} viewport={{ once: true }}>
               <Button size="lg" className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all">
                 <Users className="w-5 h-5 mr-2" />
-                Join These Athletes
+                <a href="/login">Join These Athletes</a>
               </Button>
             </motion.div>
           </motion.div>

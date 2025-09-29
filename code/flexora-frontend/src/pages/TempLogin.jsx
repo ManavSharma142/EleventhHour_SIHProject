@@ -106,12 +106,23 @@ export default function LoginPage() {
       <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         <div className="flex h-full grow flex-col">
           <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#2A3751] px-10 py-4">
+            {/* This div is for the left side */}
             <div className="flex items-center gap-4">
               <div className="size-7 text-[var(--primary-color)]">
                 <FlexoraLogo />
               </div>
-              <h2 className="text-xl font-bold leading-tight tracking-[-0.015em]">Flexora</h2>
+              <h2 className="text-xl font-bold leading-tight tracking-[-0.015em]">
+                Flexora
+              </h2>
             </div>
+
+            {/* This is now the right side. I've also styled it to look like a button. */}
+            <a
+              href="/signup"
+              className="flex cursor-pointer items-center justify-center rounded-md h-10 px-5 bg-transparent border border-white text-white text-sm font-bold hover:bg-white hover:text-black transition-colors duration-300"
+            >
+              Sign Up
+            </a>
           </header>
 
           <main className="flex flex-1 items-center justify-center py-16">

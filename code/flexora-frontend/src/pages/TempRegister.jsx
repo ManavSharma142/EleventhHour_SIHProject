@@ -69,7 +69,6 @@ export default function SignUpPage() {
       const res = await fetch("http://localhost:8000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
           username: formData.username,
           password: formData.password,
@@ -126,7 +125,7 @@ export default function SignUpPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-2">
-              {/* Name (not sent to backend) */}
+              {/* Name */}
               <div className="sm:col-span-2">
                 <label
                   className="block text-sm font-medium text-[var(--text-secondary)] mb-1"
@@ -256,15 +255,15 @@ export default function SignUpPage() {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="form-input form-input-with-icon select-input"
+                    className="form-input form-input-with-icon select-input text-white"
                   >
-                    <option disabled value="">
+                    <option disabled value="" className="text-gray-500">
                       Select Gender
                     </option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Non-binary">Non-binary</option>
-                    <option value="Prefer not to say">
+                    <option value="Male" className="bg-[var(--secondary-color)]">Male</option>
+                    <option value="Female" className="bg-[var(--secondary-color)]">Female</option>
+                    <option value="Non-binary" className="bg-[var(--secondary-color)]">Non-binary</option>
+                    <option value="Prefer not to say" className="bg-[var(--secondary-color)]">
                       Prefer not to say
                     </option>
                   </select>
@@ -286,17 +285,17 @@ export default function SignUpPage() {
                     name="fitnessGoal"
                     value={formData.fitnessGoal}
                     onChange={handleChange}
-                    className="form-input form-input-with-icon select-input"
+                    className="form-input form-input-with-icon select-input text-white"
                   >
-                    <option disabled value="">
+                    <option disabled value="" className="text-gray-500">
                       Select Fitness Goal
                     </option>
-                    <option value="Lose Weight">Lose Weight</option>
-                    <option value="Build Muscle">Build Muscle</option>
-                    <option value="Improve Endurance">
+                    <option value="Lose Weight" className="bg-[var(--secondary-color)]">Lose Weight</option>
+                    <option value="Build Muscle" className="bg-[var(--secondary-color)]">Build Muscle</option>
+                    <option value="Improve Endurance" className="bg-[var(--secondary-color)]">
                       Improve Endurance
                     </option>
-                    <option value="Stay Active">Stay Active</option>
+                    <option value="Stay Active" className="bg-[var(--secondary-color)]">Stay Active</option>
                   </select>
                 </div>
               </div>
@@ -316,54 +315,54 @@ export default function SignUpPage() {
                     name="experience"
                     value={formData.experience}
                     onChange={handleChange}
-                    className="form-input form-input-with-icon select-input"
+                    className="form-input form-input-with-icon select-input text-white"
                   >
-                    <option disabled value="">
+                    <option disabled value="" className="text-gray-500">
                       Select Level
                     </option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
+                    <option value="Beginner" className="bg-[var(--secondary-color)]">Beginner</option>
+                    <option value="Intermediate" className="bg-[var(--secondary-color)]">Intermediate</option>
+                    <option value="Advanced" className="bg-[var(--secondary-color)]">Advanced</option>
                   </select>
                 </div>
               </div>
             </div>
 
             {/* Submit */}
-                <div>
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="policy" className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id="policy"
-                        name="privacy_policy"
-                        className="w-4 h-4"
-                        required
-                      />
-                      <span>
-                        I agree to the{" "}
-                        <a href="/privacy" target="_blank" className="text-blue-500 underline">
-                          Privacy Policy
-                        </a>
-                      </span>
-                    </label>
+            <div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="policy" className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="policy"
+                    name="privacy_policy"
+                    className="w-4 h-4"
+                    required
+                  />
+                  <span>
+                    I agree to the{" "}
+                    <a href="/privacy" target="_blank" className="text-blue-500 underline">
+                      Privacy Policy
+                    </a>
+                  </span>
+                </label>
 
-                    <label htmlFor="terms" className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id="terms"
-                        name="terms_of_service"
-                        className="w-4 h-4"
-                        required
-                      />
-                      <span>
-                        I agree to the{" "}
-                        <a href="/terms" target="_blank" className="text-blue-500 underline">
-                          Terms of Service
-                        </a>
-                      </span>
-                    </label>
-                  </div>
+                <label htmlFor="terms" className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    name="terms_of_service"
+                    className="w-4 h-4"
+                    required
+                  />
+                  <span>
+                    I agree to the{" "}
+                    <a href="/terms" target="_blank" className="text-blue-500 underline">
+                      Terms of Service
+                    </a>
+                  </span>
+                </label>
+              </div>
               <button
                 type="submit"
                 className=" mt-5 w-full rounded-md bg-[var(--primary-color)] py-3 px-4 text-base font-bold text-white shadow-lg hover:shadow-xl hover:opacity-90 transition-all"
